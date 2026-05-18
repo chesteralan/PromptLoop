@@ -18,7 +18,6 @@ export const router = createHashRouter([
     children: [
       { index: true, element: <DashboardPage /> },
       { path: 'dashboard', element: <DashboardPage /> },
-      { path: 'workflows/new', element: <WorkflowEditorPage /> },
       { path: 'workflows/:workflowId', element: <WorkflowEditorPage /> },
       { path: 'workflows/:workflowId/execute', element: <ExecutionViewerPage /> },
       { path: 'settings', element: <SettingsPage /> },
