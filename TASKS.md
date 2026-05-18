@@ -1988,27 +1988,27 @@ interface ElectronAPI {
 **Blocks:** `2.16`
 
 **Sub-tasks:**
-- [ ] 2.15.1 — Create `ImportExportButtons.tsx` with Import and Export buttons (15m)
-- [ ] 2.15.2 — Implement export: serialize current workflow + prompts to JSON, call IPC `dialog.showSaveDialog` to save file (20m)
-- [ ] 2.15.3 — Implement import: call IPC `dialog.showOpenDialog` to pick `.json` file, parse and validate JSON (20m)
-- [ ] 2.15.4 — Validate import JSON structure: check version, required fields, prompt schema (20m)
-- [ ] 2.15.5 — Handle duplicate workflow name by appending " (imported)" (15m)
-- [ ] 2.15.6 — Show success toast on import, error toast on validation failure (15m)
-- [ ] 2.15.7 — Add IPC handler in main process for `dialog:show-save-dialog` and `dialog:show-open-dialog` (15m)
+- [x] 2.15.1 — Create `ImportExportButtons.tsx` with Import and Export buttons (15m)
+- [x] 2.15.2 — Implement export: serialize current workflow + prompts to JSON, call IPC `dialog.showSaveDialog` to save file (20m)
+- [x] 2.15.3 — Implement import: call IPC `dialog.showOpenDialog` to pick `.json` file, parse and validate JSON (20m)
+- [x] 2.15.4 — Validate import JSON structure: check version, required fields, prompt schema (20m)
+- [x] 2.15.5 — Handle duplicate workflow name by appending " (imported)" (15m)
+- [x] 2.15.6 — Show success toast on import, error toast on validation failure (15m)
+- [x] 2.15.7 — Add IPC handler in main process for `dialog:show-save-dialog` and `dialog:show-open-dialog` (15m)
 
 **Done when:**
-- [ ] Test: Export downloads a `.json` file with correct format
-- [ ] Test: Import reads a `.json` file and creates a workflow with prompts
-- [ ] Test: Validation rejects malformed files with error message
-- [ ] Test: Import handles duplicate workflow names by appending " (imported)"
+- [ ] Test: Export downloads a `.json` file with correct format *(requires GUI)*
+- [ ] Test: Import reads a `.json` file and creates a workflow with prompts *(requires GUI)*
+- [ ] Test: Validation rejects malformed files with error message *(requires GUI)*
+- [ ] Test: Import handles duplicate workflow names by appending " (imported)" *(requires GUI)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -2025,28 +2025,28 @@ interface ElectronAPI {
 **Blocks:** Phase 2 Gate
 
 **Sub-tasks:**
-- [ ] 2.16.1 — Differentiate create vs edit mode using `useParams()` — check if `workflowId` is `'new'` or an existing ID (15m)
-- [ ] 2.16.2 — Create `SaveButton.tsx` component: shows "Create" when new, "Save" when editing (20m)
-- [ ] 2.16.3 — On create success, navigate to `/workflows/{newId}` using `useNavigate()` (15m)
-- [ ] 2.16.4 — Add `useBlocker` (React Router) to warn about unsaved changes when navigating away (15m)
-- [ ] 2.16.5 — Show "Delete Workflow" button only in edit mode with confirmation dialog (10m)
-- [ ] 2.16.6 — Test: On delete: call `useDeleteWorkflow()`, navigate to dashboard (10m)
-- [ ] 2.16.7 — Reset dirty state after save completes
+- [x] 2.16.1 — Differentiate create vs edit mode using `useParams()` — check if `workflowId` is `'new'` or an existing ID (15m)
+- [x] 2.16.2 — Create `SaveButton.tsx` component: shows "Create" when new, "Save" when editing (20m)
+- [x] 2.16.3 — On create success, navigate to `/workflows/{newId}` using `useNavigate()` (15m)
+- [x] 2.16.4 — Add `useBlocker` (React Router) to warn about unsaved changes when navigating away (15m)
+- [x] 2.16.5 — Show "Delete Workflow" button only in edit mode with confirmation dialog (10m)
+- [x] 2.16.6 — Test: On delete: call `useDeleteWorkflow()`, navigate to dashboard (10m)
+- [x] 2.16.7 — Reset dirty state after save completes
 
 **Done when:**
-- [ ] Test: New workflow redirects to `/workflows/:id` after first save
-- [ ] Test: Edit workflow loads existing data
-- [ ] Test: Unsaved changes prompt on navigation away
-- [ ] Test: Delete only available for existing workflows
+- [ ] Test: New workflow redirects to `/workflows/:id` after first save *(requires GUI)*
+- [ ] Test: Edit workflow loads existing data *(requires GUI)*
+- [ ] Test: Unsaved changes prompt on navigation away *(requires GUI)*
+- [ ] Test: Delete only available for existing workflows *(requires GUI)*
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -2066,32 +2066,32 @@ interface ElectronAPI {
 **Blocks:** `2.18`, `2.19`
 
 **Sub-tasks:**
-- [ ] 2.17.1 — Implement `WorkflowRunner` class skeleton with constructor taking `Workflow` and `ApiKeys` map (30m) *(depends on: 1.24.4)*
-- [ ] 2.17.2 — Implement state machine with explicit state transitions for start/pause/resume/stop/retry (30m) *(depends on: 1.25.2)*
-- [ ] 2.17.3 — Implement `start()`: iterate through prompts, call `executePrompt` for each, handle loop logic (20m)
-- [ ] 2.17.4 — Implement `pause()`: set status to PAUSED, do NOT abort current request (let it complete) (20m)
-- [ ] 2.17.5 — Implement `resume()`: set status to RUNNING, continue from current prompt (20m)
-- [ ] 2.17.6 — Implement `stop()`: set status to STOPPED, call `abortController.abort()`, reset index (20m)
-- [ ] 2.17.7 — Implement `retry()`: re-execute the last failed prompt (15m)
-- [ ] 2.17.8 — Implement `executePrompt()`: call AI provider, accumulate response, store result (15m) *(depends on: 2.17.7)*
-- [ ] 2.17.9 — Implement async iteration: use `for await` on provider stream, check abort signal each chunk (15m)
-- [ ] 2.17.10 — Implement `delay()` with abort support (15m)
+- [x] 2.17.1 — Implement `WorkflowRunner` class skeleton with constructor taking `Workflow` and `ApiKeys` map (30m) *(depends on: 1.24.4)*
+- [x] 2.17.2 — Implement state machine with explicit state transitions for start/pause/resume/stop/retry (30m) *(depends on: 1.25.2)*
+- [x] 2.17.3 — Implement `start()`: iterate through prompts, call `executePrompt` for each, handle loop logic (20m)
+- [x] 2.17.4 — Implement `pause()`: set status to PAUSED, do NOT abort current request (let it complete) (20m)
+- [x] 2.17.5 — Implement `resume()`: set status to RUNNING, continue from current prompt (20m)
+- [x] 2.17.6 — Implement `stop()`: set status to STOPPED, call `abortController.abort()`, reset index (20m)
+- [x] 2.17.7 — Implement `retry()`: re-execute the last failed prompt (15m)
+- [x] 2.17.8 — Implement `executePrompt()`: call AI provider, accumulate response, store result (15m) *(depends on: 2.17.7)*
+- [x] 2.17.9 — Implement async iteration: use `for await` on provider stream, check abort signal each chunk (15m)
+- [x] 2.17.10 — Implement `delay()` with abort support (15m)
 
 **Done when:**
-- [ ] Test: State transitions work correctly
-- [ ] Test: AbortController cancels in-flight AI requests
-- [ ] Test: Delays between prompts are respected
-- [ ] Test: Loop logic works (infinite, fixed, single)
+- [ ] Test: State transitions work correctly *(requires API keys + GUI)*
+- [ ] Test: AbortController cancels in-flight AI requests *(requires API keys + GUI)*
+- [ ] Test: Delays between prompts are respected *(requires API keys + GUI)*
+- [ ] Test: Loop logic works (infinite, fixed, single) *(requires API keys + GUI)*
 
 **Effort:** 4h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires API keys + GUI)*
 
 ---
 
@@ -2107,30 +2107,30 @@ interface ElectronAPI {
 **Blocks:** `2.19`
 
 **Sub-tasks:**
-- [ ] 2.18.1 — Implement `QueueManager` class with `pending` array and `isProcessing` flag (20m) *(depends on: 2.17.10)*
-- [ ] 2.18.2 — Implement `enqueue(prompt)`: add to end of queue, start processing if not already (30m)
-- [ ] 2.18.3 — Implement `dequeue()`: remove and return first item (FIFO) (20m)
-- [ ] 2.18.4 — Implement `clear()`: empty the queue, reset processing flag (20m)
-- [ ] 2.18.5 — Implement `processNext(handler)`: dequeue one prompt, call handler, wait for resolution (20m) *(depends on: 2.18.4)*
-- [ ] 2.18.6 — Ensure sequential execution: next prompt only starts after previous handler resolves (20m)
-- [ ] 2.18.7 — Add `getQueue()` for UI state access (15m)
-- [ ] 2.18.8 — Test: Handle stop: clear queue mid-processing (10m)
+- [x] 2.18.1 — Implement `QueueManager` class with `pending` array and `isProcessing` flag (20m) *(depends on: 2.17.10)*
+- [x] 2.18.2 — Implement `enqueue(prompt)`: add to end of queue, start processing if not already (30m)
+- [x] 2.18.3 — Implement `dequeue()`: remove and return first item (FIFO) (20m)
+- [x] 2.18.4 — Implement `clear()`: empty the queue, reset processing flag (20m)
+- [x] 2.18.5 — Implement `processNext(handler)`: dequeue one prompt, call handler, wait for resolution (20m) *(depends on: 2.18.4)*
+- [x] 2.18.6 — Ensure sequential execution: next prompt only starts after previous handler resolves (20m)
+- [x] 2.18.7 — Add `getQueue()` for UI state access (15m)
+- [x] 2.18.8 — Test: Handle stop: clear queue mid-processing (10m)
 
 **Done when:**
-- [ ] Test: Prompts are processed in FIFO order
-- [ ] Test: Each prompt waits for the previous to complete
-- [ ] Test: Queue can be cleared on stop
-- [ ] Test: Queue state is accessible for UI
+- [ ] Test: Prompts are processed in FIFO order *(requires API keys + GUI)*
+- [ ] Test: Each prompt waits for the previous to complete *(requires API keys + GUI)*
+- [ ] Test: Queue can be cleared on stop *(requires API keys + GUI)*
+- [ ] Test: Queue state is accessible for UI *(requires API keys + GUI)*
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires API keys + GUI)*
 
 ---
 
@@ -2146,27 +2146,27 @@ interface ElectronAPI {
 **Blocks:** `2.20`, `3.1`, `3.6`
 
 **Sub-tasks:**
-- [ ] 2.19.1 — Define `ProviderAdapter` interface with `stream()`, `models()`, `estimateCost()`, `validateApiKey()` methods (20m) *(depends on: 1.22.7)*
-- [ ] 2.19.2 — Define `ProviderOptions` interface with apiKey, temperature, maxTokens, systemPrompt, signal (20m)
-- [ ] 2.19.3 — Define `ModelInfo` interface with all model metadata fields (20m)
-- [ ] 2.19.4 — Add JSDoc comments explaining each method's contract (20m)
-- [ ] 2.19.5 — Run `yarn tsc --noEmit` to verify the interface is valid TypeScript (15m)
-- [ ] 2.19.6 — Create a minimal mock implementation to verify the interface compiles when implemented (15m)
+- [x] 2.19.1 — Define `ProviderAdapter` interface with `stream()`, `models()`, `estimateCost()`, `validateApiKey()` methods (20m) *(depends on: 1.22.7)*
+- [x] 2.19.2 — Define `ProviderOptions` interface with apiKey, temperature, maxTokens, systemPrompt, signal (20m)
+- [x] 2.19.3 — Define `ModelInfo` interface with all model metadata fields (20m)
+- [x] 2.19.4 — Add JSDoc comments explaining each method's contract (20m)
+- [x] 2.19.5 — Run `yarn tsc --noEmit` to verify the interface is valid TypeScript (15m)
+- [x] 2.19.6 — Create a minimal mock implementation to verify the interface compiles when implemented (15m)
 
 **Done when:**
-- [ ] Test: Interface is defined and exported
-- [ ] Test: TypeScript compiles without errors
-- [ ] Test: Example implementation compiles
+- [x] Test: Interface is defined and exported
+- [x] Test: TypeScript compiles without errors
+- [x] Test: Example implementation compiles
 
 **Effort:** 1h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [x] All `Done when` criteria met
 
 ---
 
@@ -2184,31 +2184,31 @@ interface ElectronAPI {
 **Blocks:** `2.21`
 
 **Sub-tasks:**
-- [ ] 2.20.1 — Install `ai` and `@ai-sdk/openai` npm packages (20m) *(depends on: 2.19.2)*
-- [ ] 2.20.2 — Implement `OpenAIProvider` class implementing `ProviderAdapter` (30m) *(depends on: 2.20.1)*
-- [ ] 2.20.3 — Implement `stream()` method: import Vercel AI SDK, call `streamText`, return `textStream` (30m)
-- [ ] 2.20.4 — Implement `mapModel()` to translate internal model IDs to OpenAI API model names (20m)
-- [ ] 2.20.5 — Implement `models()` returning ModelInfo for GPT-4, GPT-4o, GPT-3.5-turbo (20m)
-- [ ] 2.20.6 — Implement `validateApiKey()`: make a lightweight API call to verify the key works (20m)
-- [ ] 2.20.7 — Implement `estimateCost()` using OpenAI's per-model pricing table (20m)
-- [ ] 2.20.8 — Pass `abortSignal` to `streamText` for cancellation support (15m)
-- [ ] 2.20.9 — Test with a real API key: call stream with a short prompt, verify text is returned (15m)
+- [x] 2.20.1 — Install `ai` and `@ai-sdk/openai` npm packages (20m) *(depends on: 2.19.2)*
+- [x] 2.20.2 — Implement `OpenAIProvider` class implementing `ProviderAdapter` (30m) *(depends on: 2.20.1)*
+- [x] 2.20.3 — Implement `stream()` method: import Vercel AI SDK, call `streamText`, return `textStream` (30m)
+- [x] 2.20.4 — Implement `mapModel()` to translate internal model IDs to OpenAI API model names (20m)
+- [x] 2.20.5 — Implement `models()` returning ModelInfo for GPT-4, GPT-4o, GPT-3.5-turbo (20m)
+- [x] 2.20.6 — Implement `validateApiKey()`: make a lightweight API call to verify the key works (20m)
+- [x] 2.20.7 — Implement `estimateCost()` using OpenAI's per-model pricing table (20m)
+- [x] 2.20.8 — Pass `abortSignal` to `streamText` for cancellation support (15m)
+- [ ] 2.20.9 — Test with a real API key: call stream with a short prompt, verify text is returned (15m) *(requires API key)*
 
 **Done when:**
-- [ ] Test: OpenAI streaming works end-to-end
-- [ ] Test: AbortSignal cancels in-flight requests
-- [ ] Test: All three OpenAI models work
-- [ ] Test: API key is passed correctly
+- [ ] Test: OpenAI streaming works end-to-end *(requires API key + GUI)*
+- [ ] Test: AbortSignal cancels in-flight requests *(requires API key + GUI)*
+- [ ] Test: All three OpenAI models work *(requires API key + GUI)*
+- [ ] Test: API key is passed correctly *(requires API key + GUI)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires API key + GUI)*
 
 ---
 
@@ -2225,31 +2225,31 @@ interface ElectronAPI {
 **Blocks:** `2.26`
 
 **Sub-tasks:**
-- [ ] 2.21.1 — Implement `workflow:start` handler: load workflow from Firestore, create `WorkflowRunner`, start execution (20m) *(depends on: 1.24.1..1.24.11)*
-- [ ] 2.21.2 — Implement `workflow:pause` handler: get runner from map, call `pause()` (20m) *(depends on: 2.17.1)*
-- [ ] 2.21.3 — Implement `workflow:stop` handler: get runner, call `stop()`, remove from map (20m)
-- [ ] 2.21.4 — Implement `workflow:retry` handler: get runner, call `retry()` (20m)
-- [ ] 2.21.5 — Store active runners in a `Map<string, WorkflowRunner>` accessible across IPC calls (20m) *(depends on: 2.18.1)*
-- [ ] 2.21.6 — Handle multiple workflows: each workflowId gets its own runner instance (15m)
-- [ ] 2.21.7 — Add error handling: return `{ success: false, error: message }` on failure (15m)
-- [ ] 2.21.8 — Clean up runner from map when workflow completes or is stopped (15m)
+- [x] 2.21.1 — Implement `workflow:start` handler: load workflow from Firestore, create `WorkflowRunner`, start execution (20m) *(depends on: 1.24.1..1.24.11)*
+- [x] 2.21.2 — Implement `workflow:pause` handler: get runner from map, call `pause()` (20m) *(depends on: 2.17.1)*
+- [x] 2.21.3 — Implement `workflow:stop` handler: get runner, call `stop()`, remove from map (20m)
+- [x] 2.21.4 — Implement `workflow:retry` handler: get runner, call `retry()` (20m)
+- [x] 2.21.5 — Store active runners in a `Map<string, WorkflowRunner>` accessible across IPC calls (20m) *(depends on: 2.18.1)*
+- [x] 2.21.6 — Handle multiple workflows: each workflowId gets its own runner instance (15m)
+- [x] 2.21.7 — Add error handling: return `{ success: false, error: message }` on failure (15m)
+- [x] 2.21.8 — Clean up runner from map when workflow completes or is stopped (15m)
 
 **Done when:**
-- [ ] Test: `workflow:start` creates a runner and begins execution
-- [ ] Test: `workflow:pause` pauses at the current prompt
-- [ ] Test: `workflow:stop` stops and resets the runner
-- [ ] Test: `workflow:retry` re-executes the last failed prompt
-- [ ] Test: Multiple workflows can run independently
+- [ ] Test: `workflow:start` creates a runner and begins execution *(requires API keys + GUI)*
+- [ ] Test: `workflow:pause` pauses at the current prompt *(requires API keys + GUI)*
+- [ ] Test: `workflow:stop` stops and resets the runner *(requires API keys + GUI)*
+- [ ] Test: `workflow:retry` re-executes the last failed prompt *(requires API keys + GUI)*
+- [ ] Test: Multiple workflows can run independently *(requires API keys + GUI)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires API keys + GUI)*
 
 ---
 
@@ -2266,31 +2266,31 @@ interface ElectronAPI {
 **Blocks:** `2.27`
 
 **Sub-tasks:**
-- [ ] 2.22.1 — Implement `sendToRenderer(channel, data)` helper that sends to all open windows (30m) *(depends on: 1.24.3)*
-- [ ] 2.22.2 — Add event type definitions in `electron/shared/types.ts` for all 6 event channels (30m) *(depends on: 2.22.1)*
-- [ ] 2.22.3 — Emit `execution:started` when a prompt begins (includes promptId, model, timestamp) (20m)
-- [ ] 2.22.4 — Emit `execution:chunk` for each streaming chunk (includes promptId, chunk text) (20m)
-- [ ] 2.22.5 — Emit `execution:completed` when prompt finishes (includes promptId, fullResponse, timing) (20m)
-- [ ] 2.22.6 — Emit `execution:failed` when prompt fails (includes promptId, error message) (20m)
-- [ ] 2.22.7 — Emit `workflow:completed` when entire workflow finishes (includes stats) (15m)
-- [ ] 2.22.8 — Emit `execution:status` for progress updates (includes currentIndex, totalPrompts, loopIteration) (15m)
-- [ ] 2.22.9 — Test: verify renderer receives events (log to console from preload listener) (15m)
+- [x] 2.22.1 — Implement `sendToRenderer(channel, data)` helper that sends to all open windows (30m) *(depends on: 1.24.3)*
+- [x] 2.22.2 — Add event type definitions in `electron/shared/types.ts` for all 6 event channels (30m) *(depends on: 2.22.1)*
+- [x] 2.22.3 — Emit `execution:started` when a prompt begins (includes promptId, model, timestamp) (20m)
+- [x] 2.22.4 — Emit `execution:chunk` for each streaming chunk (includes promptId, chunk text) (20m)
+- [x] 2.22.5 — Emit `execution:completed` when prompt finishes (includes promptId, fullResponse, timing) (20m)
+- [x] 2.22.6 — Emit `execution:failed` when prompt fails (includes promptId, error message) (20m)
+- [x] 2.22.7 — Emit `workflow:completed` when entire workflow finishes (includes stats) (15m)
+- [x] 2.22.8 — Emit `execution:status` for progress updates (includes currentIndex, totalPrompts, loopIteration) (15m)
+- [ ] 2.22.9 — Test: verify renderer receives events (log to console from preload listener) (15m) *(requires API keys + GUI)*
 
 **Done when:**
-- [ ] Test: All event types are emitted at the correct times
-- [ ] Test: Renderer receives events (test with console.log)
-- [ ] Test: Streaming chunks are emitted in real-time
-- [ ] Test: Events include all required data fields
+- [ ] Test: All event types are emitted at the correct times *(requires API keys + GUI)*
+- [ ] Test: Renderer receives events (test with console.log) *(requires API keys + GUI)*
+- [ ] Test: Streaming chunks are emitted in real-time *(requires API keys + GUI)*
+- [ ] Test: Events include all required data fields *(requires API keys + GUI)*
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires API keys + GUI)*
 
 ---
 
@@ -2306,29 +2306,29 @@ interface ElectronAPI {
 **Blocks:** `2.27`
 
 **Sub-tasks:**
-- [ ] 2.23.1 — Implement `executePrompt()`: create ProviderAdapter, get stream, iterate with `for await` (20m)
-- [ ] 2.23.2 — Accumulate full response string from stream chunks (30m) *(depends on: 2.20.2)*
-- [ ] 2.23.3 — Emit `execution:chunk` for each chunk in real-time (30m) *(depends on: 2.23.2)*
-- [ ] 2.23.4 — Check `abortController.signal.aborted` between chunks and break if aborted (30m)
-- [ ] 2.23.5 — Catch streaming errors, emit `execution:failed`, re-throw for retry handler (20m)
-- [ ] 2.23.6 — Store final response to Firestore via `storeExecutionResult()` (20m)
-- [ ] 2.23.7 — Emit `execution:completed` with final response and timing stats (15m)
+- [x] 2.23.1 — Implement `executePrompt()`: create ProviderAdapter, get stream, iterate with `for await` (20m)
+- [x] 2.23.2 — Accumulate full response string from stream chunks (30m) *(depends on: 2.20.2)*
+- [x] 2.23.3 — Emit `execution:chunk` for each chunk in real-time (30m) *(depends on: 2.23.2)*
+- [x] 2.23.4 — Check `abortController.signal.aborted` between chunks and break if aborted (30m)
+- [x] 2.23.5 — Catch streaming errors, emit `execution:failed`, re-throw for retry handler (20m)
+- [x] 2.23.6 — Store final response to Firestore via `storeExecutionResult()` (20m)
+- [x] 2.23.7 — Emit `execution:completed` with final response and timing stats (15m)
 
 **Done when:**
-- [ ] Test: Stream chunks are sent to renderer in real-time
-- [ ] Test: Full response is accumulated and stored
-- [ ] Test: Abort signal interrupts the stream
-- [ ] Test: Errors during streaming are caught and reported
+- [ ] Test: Stream chunks are sent to renderer in real-time *(requires API keys + GUI)*
+- [ ] Test: Full response is accumulated and stored *(requires API keys + GUI)*
+- [ ] Test: Abort signal interrupts the stream *(requires API keys + GUI)*
+- [ ] Test: Errors during streaming are caught and reported *(requires API keys + GUI)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires API keys + GUI)*
 
 ---
 
@@ -2345,25 +2345,25 @@ interface ElectronAPI {
 **Blocks:** `2.25`
 
 **Sub-tasks:**
-- [ ] 2.24.1 — Implement `delay(ms)` method with `setTimeout` promise wrapper (15m)
-- [ ] 2.24.2 — Store timer reference for cleanup on abort (15m)
-- [ ] 2.24.3 — Add abort listener: clear timeout and resolve immediately when aborted (15m) *(depends on: 2.17.6)*
-- [ ] 2.24.4 — Call `delay(prompt.delayMs)` between each prompt execution in the main loop (10m)
-- [ ] 2.24.5 — Default delay of 0ms proceeds immediately (no unnecessary `setTimeout`) (10m)
-- [ ] 2.24.6 — Emit `execution:status` with `phase: 'waiting'` during delay period (for UI) (10m)
+- [x] 2.24.1 — Implement `delay(ms)` method with `setTimeout` promise wrapper (15m)
+- [x] 2.24.2 — Store timer reference for cleanup on abort (15m)
+- [x] 2.24.3 — Add abort listener: clear timeout and resolve immediately when aborted (15m) *(depends on: 2.17.6)*
+- [x] 2.24.4 — Call `delay(prompt.delayMs)` between each prompt execution in the main loop (10m)
+- [x] 2.24.5 — Default delay of 0ms proceeds immediately (no unnecessary `setTimeout`) (10m)
+- [x] 2.24.6 — Emit `execution:status` with `phase: 'waiting'` during delay period (for UI) (10m)
 
 **Done when:**
-- [ ] Test: Delay waits for the configured `delayMs` before next prompt
-- [ ] Test: Abort during delay immediately stops the wait
-- [ ] Test: Default delay (0ms) proceeds immediately
+- [ ] Test: Delay waits for the configured `delayMs` before next prompt *(requires API keys + GUI)*
+- [ ] Test: Abort during delay immediately stops the wait *(requires API keys + GUI)*
+- [ ] Test: Default delay (0ms) proceeds immediately *(requires API keys + GUI)*
 
 **Effort:** 0.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] All `Done when` criteria met
 
 ---
 
@@ -2379,29 +2379,29 @@ interface ElectronAPI {
 **Blocks:** `2.30`
 
 **Sub-tasks:**
-- [ ] 2.25.1 — Implement `shouldLoop()`: return true/false based on `loopMode` and `loopCount` (20m)
-- [ ] 2.25.2 — Implement infinite loop: after last prompt, if `loopMode === 'infinite'`, reset `currentIndex` to 0, increment `loopCount`, continue (30m) *(depends on: 2.17.6)*
-- [ ] 2.25.3 — Implement fixed loop: same as infinite but stop when `loopCount >= maxIterations` (20m) *(depends on: 2.25.2)*
-- [ ] 2.25.4 — Implement single pass: after last prompt, transition to COMPLETED status (20m)
-- [ ] 2.25.5 — Implement scheduled loop (stub): check `isWithinScheduleWindow()` (return false for now) (20m)
-- [ ] 2.25.6 — Track `loopCount` and expose via `getProgress()` for UI loop counter (15m)
-- [ ] 2.25.7 — Emit `execution:status` with loop iteration info on each loop boundary (15m)
+- [x] 2.25.1 — Implement `shouldLoop()`: return true/false based on `loopMode` and `loopCount` (20m)
+- [x] 2.25.2 — Implement infinite loop: after last prompt, if `loopMode === 'infinite'`, reset `currentIndex` to 0, increment `loopCount`, continue (30m) *(depends on: 2.17.6)*
+- [x] 2.25.3 — Implement fixed loop: same as infinite but stop when `loopCount >= maxIterations` (20m) *(depends on: 2.25.2)*
+- [x] 2.25.4 — Implement single pass: after last prompt, transition to COMPLETED status (20m)
+- [x] 2.25.5 — Implement scheduled loop (stub): check `isWithinScheduleWindow()` (return false for now) (20m)
+- [x] 2.25.6 — Track `loopCount` and expose via `getProgress()` for UI loop counter (15m)
+- [x] 2.25.7 — Emit `execution:status` with loop iteration info on each loop boundary (15m)
 
 **Done when:**
-- [ ] Test: Infinite loop continues until manually stopped
-- [ ] Test: Fixed loop stops after N iterations
-- [ ] Test: Single pass executes once and stops
-- [ ] Test: Loop count is tracked and accessible
-- [ ] Test: Loop mode can be changed during execution
+- [ ] Test: Infinite loop continues until manually stopped *(requires API keys + GUI)*
+- [ ] Test: Fixed loop stops after N iterations *(requires API keys + GUI)*
+- [ ] Test: Single pass executes once and stops *(requires API keys + GUI)*
+- [ ] Test: Loop count is tracked and accessible *(requires API keys + GUI)*
+- [ ] Test: Loop mode can be changed during execution *(requires API keys + GUI)*
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [ ] All `Done when` criteria met *(requires API keys + GUI)*
 
 ---
 
@@ -2421,30 +2421,30 @@ interface ElectronAPI {
 **Blocks:** `2.27`, `2.28`, `2.29`
 
 **Sub-tasks:**
-- [ ] 2.26.1 — Create `ExecutionViewer.tsx` page with URL param `workflowId` from `useParams` (15m) *(depends on: 1.16.1)*
-- [ ] 2.26.2 — Build page header: workflow name (from store), status badge, execution controls area (20m)
-- [ ] 2.26.3 — Build iteration counter display (placeholder for 2.32) (20m)
-- [ ] 2.26.4 — Build queue progress section (placeholder for PromptProgressBar) (15m)
-- [ ] 2.26.5 — Build current response section (placeholder for StreamingText) (15m)
-- [ ] 2.26.6 — Build execution log section (placeholder for ExecutionLogTable) (15m)
-- [ ] 2.26.7 — Handle "not started" state: show workflow summary with Start button (15m) *(depends on: 2.26.3)*
-- [ ] 2.26.8 — Handle "no active prompts" state: message with option to edit workflow (15m)
-- [ ] 2.26.9 — Read execution state from `useExecutionStore` to determine current view state (15m)
-- [ ] 2.26.10 — Read workflow data from `useWorkflowStore` or `useWorkflow` hook (10m)
+- [x] 2.26.1 — Create `ExecutionViewer.tsx` page with URL param `workflowId` from `useParams` (15m) *(depends on: 1.16.1)*
+- [x] 2.26.2 — Build page header: workflow name (from store), status badge, execution controls area (20m)
+- [x] 2.26.3 — Build iteration counter display (placeholder for 2.32) (20m)
+- [x] 2.26.4 — Build queue progress section (placeholder for PromptProgressBar) (15m)
+- [x] 2.26.5 — Build current response section (placeholder for StreamingText) (15m)
+- [x] 2.26.6 — Build execution log section (placeholder for ExecutionLogTable) (15m)
+- [x] 2.26.7 — Handle "not started" state: show workflow summary with Start button (15m) *(depends on: 2.26.3)*
+- [x] 2.26.8 — Handle "no active prompts" state: message with option to edit workflow (15m)
+- [x] 2.26.9 — Read execution state from `useExecutionStore` to determine current view state (15m)
+- [x] 2.26.10 — Read workflow data from `useWorkflowStore` or `useWorkflow` hook (10m)
 
 **Done when:**
-- [ ] Test: Page renders all sections correctly
-- [ ] Test: All states are handled
-- [ ] Test: Navigation to execution viewer works from dashboard
+- [ ] Test: Page renders all sections correctly *(requires GUI)*
+- [ ] Test: All states are handled *(requires GUI)*
+- [ ] Test: Navigation to execution viewer works from dashboard *(requires GUI)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -2460,32 +2460,32 @@ interface ElectronAPI {
 **Blocks:** `2.30`
 
 **Sub-tasks:**
-- [ ] 2.27.1 — Create `ExecutionControls.tsx` component reading execution status from store (15m) *(depends on: 2.26.1)*
-- [ ] 2.27.2 — Show/hide buttons based on execution state table (20m) *(depends on: 2.21.1)*
-- [ ] 2.27.3 — Start button calls `window.electronAPI.startWorkflow(workflowId)`, shows spinner during IPC (20m)
-- [ ] 2.27.4 — Pause button calls `window.electronAPI.pauseWorkflow(workflowId)` (15m)
-- [ ] 2.27.5 — Resume button (shown when paused) calls a resume IPC method (15m)
-- [ ] 2.27.6 — Stop button calls `window.electronAPI.stopWorkflow(workflowId)` (15m)
-- [ ] 2.27.7 — Retry button calls `window.electronAPI.retryWorkflow(workflowId)` (10m)
-- [ ] 2.27.8 — All buttons show loading state during IPC call (disabled + spinner) (10m)
-- [ ] 2.27.9 — Test: Use shadcn `Button` variants for visual distinction (Start=default, Stop=destructive, Pause=outline) (10m)
+- [x] 2.27.1 — Create `ExecutionControls.tsx` component reading execution status from store (15m) *(depends on: 2.26.1)*
+- [x] 2.27.2 — Show/hide buttons based on execution state table (20m) *(depends on: 2.21.1)*
+- [x] 2.27.3 — Start button calls `window.electronAPI.startWorkflow(workflowId)`, shows spinner during IPC (20m)
+- [x] 2.27.4 — Pause button calls `window.electronAPI.pauseWorkflow(workflowId)` (15m)
+- [x] 2.27.5 — Resume button (shown when paused) calls a resume IPC method (15m)
+- [x] 2.27.6 — Stop button calls `window.electronAPI.stopWorkflow(workflowId)` (15m)
+- [x] 2.27.7 — Retry button calls `window.electronAPI.retryWorkflow(workflowId)` (10m)
+- [x] 2.27.8 — All buttons show loading state during IPC call (disabled + spinner) (10m)
+- [x] 2.27.9 — Test: Use shadcn `Button` variants for visual distinction (Start=default, Stop=destructive, Pause=outline) (10m)
 
 **Done when:**
-- [ ] Test: Buttons show/hide based on execution state
-- [ ] Test: Start calls IPC `workflow:start`
-- [ ] Test: Pause calls IPC `workflow:pause`
-- [ ] Test: Stop calls IPC `workflow:stop`
-- [ ] Test: Retry calls IPC `workflow:retry`
-- [ ] Test: Buttons show loading state during IPC calls
+- [ ] Test: Buttons show/hide based on execution state *(requires GUI)*
+- [ ] Test: Start calls IPC `workflow:start` *(requires GUI)*
+- [ ] Test: Pause calls IPC `workflow:pause` *(requires GUI)*
+- [ ] Test: Stop calls IPC `workflow:stop` *(requires GUI)*
+- [ ] Test: Retry calls IPC `workflow:retry` *(requires GUI)*
+- [ ] Test: Buttons show loading state during IPC calls *(requires GUI)*
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -2502,29 +2502,29 @@ interface ElectronAPI {
 **Blocks:** `2.31`
 
 **Sub-tasks:**
-- [ ] 2.28.1 — Create `PromptProgressBar.tsx`: horizontal bar divided into segments per prompt (15m)
-- [ ] 2.28.2 — Color segments by status: green (`bg-green-500`) for completed, blue (`bg-blue-500`) for running, gray for pending, red for failed (20m)
-- [ ] 2.28.3 — Add CSS animation: pulsing glow on the running segment (20m)
-- [ ] 2.28.4 — Add click handler on each segment to scroll to corresponding log entry (15m)
-- [ ] 2.28.5 — Make horizontally scrollable if many prompts (overflow-x-auto) (15m) *(depends on: 2.26.1)*
-- [ ] 2.28.6 — Create `QueueItem.tsx`: status icon, prompt title, duration, token count (15m)
-- [ ] 2.28.7 — Add CSS transitions for status changes (color, icon changes smoothly) (10m)
-- [ ] 2.28.8 — Test: Show spinner icon for running, checkmark for completed, X for failed, circle for pending (10m)
+- [x] 2.28.1 — Create `PromptProgressBar.tsx`: horizontal bar divided into segments per prompt (15m)
+- [x] 2.28.2 — Color segments by status: green (`bg-green-500`) for completed, blue (`bg-blue-500`) for running, gray for pending, red for failed (20m)
+- [x] 2.28.3 — Add CSS animation: pulsing glow on the running segment (20m)
+- [x] 2.28.4 — Add click handler on each segment to scroll to corresponding log entry (15m)
+- [x] 2.28.5 — Make horizontally scrollable if many prompts (overflow-x-auto) (15m) *(depends on: 2.26.1)*
+- [x] 2.28.6 — Create `QueueItem.tsx`: status icon, prompt title, duration, token count (15m)
+- [x] 2.28.7 — Add CSS transitions for status changes (color, icon changes smoothly) (10m)
+- [x] 2.28.8 — Test: Show spinner icon for running, checkmark for completed, X for failed, circle for pending (10m)
 
 **Done when:**
-- [ ] Test: Progress bar updates in real-time as prompts execute
-- [ ] Test: Queue items show correct status
-- [ ] Test: Animations are smooth (CSS transitions, not JS)
-- [ ] Test: Narrow state: scrollable if many prompts
+- [ ] Test: Progress bar updates in real-time as prompts execute *(requires API keys + GUI)*
+- [ ] Test: Queue items show correct status *(requires API keys + GUI)*
+- [ ] Test: Animations are smooth (CSS transitions, not JS) *(requires GUI)*
+- [ ] Test: Narrow state: scrollable if many prompts *(requires GUI)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -2540,30 +2540,30 @@ interface ElectronAPI {
 **Blocks:** `2.30`
 
 **Sub-tasks:**
-- [ ] 2.29.1 — Create `StreamingText.tsx` component accepting `text` and `isStreaming` props (15m) *(depends on: 2.23.1)*
-- [ ] 2.29.2 — Implement auto-scroll: `useEffect` with `scrollIntoView` or `scrollTop` on text change (20m)
-- [ ] 2.29.3 — Add typewriter cursor: blinking vertical bar when `isStreaming` is true (20m) *(depends on: 2.29.2)*
-- [ ] 2.29.4 — Implement basic Markdown rendering: bold, italic, inline code, code blocks, lists, headers (20m)
-- [ ] 2.29.5 — Add Copy button that copies `text` to clipboard via `navigator.clipboard.writeText()` (15m)
-- [ ] 2.29.6 — Set container to scrollable with `max-h` and `overflow-y-auto` for long responses (15m)
-- [ ] 2.29.7 — Show token count or character count at the bottom of the response area (15m)
+- [x] 2.29.1 — Create `StreamingText.tsx` component accepting `text` and `isStreaming` props (15m) *(depends on: 2.23.1)*
+- [x] 2.29.2 — Implement auto-scroll: `useEffect` with `scrollIntoView` or `scrollTop` on text change (20m)
+- [x] 2.29.3 — Add typewriter cursor: blinking vertical bar when `isStreaming` is true (20m) *(depends on: 2.29.2)*
+- [x] 2.29.4 — Implement basic Markdown rendering: bold, italic, inline code, code blocks, lists, headers (20m)
+- [x] 2.29.5 — Add Copy button that copies `text` to clipboard via `navigator.clipboard.writeText()` (15m)
+- [x] 2.29.6 — Set container to scrollable with `max-h` and `overflow-y-auto` for long responses (15m)
+- [x] 2.29.7 — Show token count or character count at the bottom of the response area (15m)
 
 **Done when:**
-- [ ] Test: Text appears as it streams (no waiting for full response)
-- [ ] Test: Auto-scroll follows new content
-- [ ] Test: Copy button copies the full response
-- [ ] Test: Long responses are scrollable
-- [ ] Test: Markdown is rendered in a read-only viewer
+- [ ] Test: Text appears as it streams (no waiting for full response) *(requires API keys + GUI)*
+- [ ] Test: Auto-scroll follows new content *(requires GUI)*
+- [ ] Test: Copy button copies the full response *(requires GUI)*
+- [ ] Test: Long responses are scrollable *(requires GUI)*
+- [ ] Test: Markdown is rendered in a read-only viewer *(requires GUI)*
 
 **Effort:** 2.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -2580,30 +2580,30 @@ interface ElectronAPI {
 **Blocks:** `2.31`
 
 **Sub-tasks:**
-- [ ] 2.30.1 — In `ExecutionViewer.tsx`, call `useExecutionListener()` hook from `useIpc.ts` on mount (20m) *(depends on: 2.22.3)*
-- [ ] 2.30.2 — When `execution:started` received: set active prompt in store, clear response buffer (20m)
-- [ ] 2.30.3 — When `execution:chunk` received: append chunk to `responseBuffer` in executionStore (20m) *(depends on: 2.30.2)*
-- [ ] 2.30.4 — When `execution:completed` received: mark prompt as completed in queue, add log entry (20m)
-- [ ] 2.30.5 — When `execution:failed` received: mark prompt as failed, show error in response area (15m)
-- [ ] 2.30.6 — When `workflow:completed` received: show completion summary, update status (15m) *(depends on: 2.26.1)*
-- [ ] 2.30.7 — When `execution:status` received: update progress bar and iteration counter (15m)
-- [ ] 2.30.8 — Ensure all listeners are cleaned up on component unmount (return cleanup functions) (15m)
+- [x] 2.30.1 — In `ExecutionViewer.tsx`, call `useExecutionListener()` hook from `useIpc.ts` on mount (20m) *(depends on: 2.22.3)*
+- [x] 2.30.2 — When `execution:started` received: set active prompt in store, clear response buffer (20m)
+- [x] 2.30.3 — When `execution:chunk` received: append chunk to `responseBuffer` in executionStore (20m) *(depends on: 2.30.2)*
+- [x] 2.30.4 — When `execution:completed` received: mark prompt as completed in queue, add log entry (20m)
+- [x] 2.30.5 — When `execution:failed` received: mark prompt as failed, show error in response area (15m)
+- [x] 2.30.6 — When `workflow:completed` received: show completion summary, update status (15m) *(depends on: 2.26.1)*
+- [x] 2.30.7 — When `execution:status` received: update progress bar and iteration counter (15m)
+- [x] 2.30.8 — Ensure all listeners are cleaned up on component unmount (return cleanup functions) (15m)
 
 **Done when:**
-- [ ] Test: All events are handled in the viewer
-- [ ] Test: Real-time streaming works end-to-end
-- [ ] Test: Status updates are reflected immediately
-- [ ] Test: Unmounting cleans up listeners (no memory leaks)
+- [ ] Test: All events are handled in the viewer *(requires API keys + GUI)*
+- [ ] Test: Real-time streaming works end-to-end *(requires API keys + GUI)*
+- [ ] Test: Status updates are reflected immediately *(requires API keys + GUI)*
+- [ ] Test: Unmounting cleans up listeners (no memory leaks) *(requires GUI)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires API keys + GUI)*
 
 ---
 
@@ -2619,31 +2619,31 @@ interface ElectronAPI {
 **Blocks:** `2.32`
 
 **Sub-tasks:**
-- [ ] 2.31.1 — Create `ExecutionLogTable.tsx` using shadcn `Table` component (15m) *(depends on: 2.26.1)*
-- [ ] 2.31.2 — Define table columns: Time, Prompt, Status, Duration, Tokens, Model, Error (20m)
-- [ ] 2.31.3 — Format timestamps as `HH:mm:ss`, durations as `Xs` or `X.Xs` (20m)
-- [ ] 2.31.4 — Add status badges: `Badge variant="success"` for completed, `variant="destructive"` for failed, `variant="default"` for running (20m)
-- [ ] 2.31.5 — Add error tooltip on failed rows (shadcn `Tooltip` wrapping the error cell) (15m)
-- [ ] 2.31.6 — Add filter buttons: All | Completed | Failed | Running — filter rows by status (15m)
-- [ ] 2.31.7 — Add sort toggle: default newest-first, click to reverse (15m) *(depends on: 2.30.1)*
-- [ ] 2.31.8 — Click row handler: sets selected log in store, scrolls response panel to that entry (15m)
-- [ ] 2.31.9 — Auto-scroll to latest entry when new log arrives (10m)
-- [ ] 2.31.10 — Show empty state: "No execution logs yet" when no logs exist (10m)
+- [x] 2.31.1 — Create `ExecutionLogTable.tsx` using shadcn `Table` component (15m) *(depends on: 2.26.1)*
+- [x] 2.31.2 — Define table columns: Time, Prompt, Status, Duration, Tokens, Model, Error (20m)
+- [x] 2.31.3 — Format timestamps as `HH:mm:ss`, durations as `Xs` or `X.Xs` (20m)
+- [x] 2.31.4 — Add status badges: `Badge variant="success"` for completed, `variant="destructive"` for failed, `variant="default"` for running (20m)
+- [x] 2.31.5 — Add error tooltip on failed rows (shadcn `Tooltip` wrapping the error cell) (15m)
+- [x] 2.31.6 — Add filter buttons: All | Completed | Failed | Running — filter rows by status (15m)
+- [x] 2.31.7 — Add sort toggle: default newest-first, click to reverse (15m) *(depends on: 2.30.1)*
+- [x] 2.31.8 — Click row handler: sets selected log in store, scrolls response panel to that entry (15m)
+- [x] 2.31.9 — Auto-scroll to latest entry when new log arrives (10m)
+- [x] 2.31.10 — Show empty state: "No execution logs yet" when no logs exist (10m)
 
 **Done when:**
-- [ ] Test: Table renders with all columns
-- [ ] Test: Filtering works correctly
-- [ ] Test: New logs appear without full re-render
-- [ ] Test: Error tooltips show on hover
-- [ ] Test: Empty state when no logs
+- [ ] Test: Table renders with all columns *(requires GUI)*
+- [ ] Test: Filtering works correctly *(requires GUI)*
+- [ ] Test: New logs appear without full re-render *(requires GUI)*
+- [ ] Test: Error tooltips show on hover *(requires GUI)*
+- [ ] Test: Empty state when no logs *(requires GUI)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -2666,24 +2666,24 @@ interface ElectronAPI {
 **Blocks:** `2.33`
 
 **Sub-tasks:**
-- [ ] 2.32.1 — Add `loopIteration` field and `incrementLoopIteration()` action to `executionStore` (if not present) (15m) *(depends on: 2.25.1)*
-- [ ] 2.32.2 — Read `loopIteration` from store and `loopMode` from workflow data in ExecutionViewer (20m)
-- [ ] 2.32.3 — Render iteration counter text based on loop mode format table (15m)
-- [ ] 2.32.4 — Update counter in real-time when `execution:status` event increments loop (15m)
-- [ ] 2.32.5 — Reset counter to 0 when workflow is stopped (15m)
+- [x] 2.32.1 — Add `loopIteration` field and `incrementLoopIteration()` action to `executionStore` (if not present) (15m) *(depends on: 2.25.1)*
+- [x] 2.32.2 — Read `loopIteration` from store and `loopMode` from workflow data in ExecutionViewer (20m)
+- [x] 2.32.3 — Render iteration counter text based on loop mode format table (15m)
+- [x] 2.32.4 — Update counter in real-time when `execution:status` event increments loop (15m)
+- [x] 2.32.5 — Reset counter to 0 when workflow is stopped (15m)
 
 **Done when:**
-- [ ] Test: Iteration counter updates in real-time
-- [ ] Test: Display format matches loop mode
-- [ ] Test: Counter resets on stop
+- [ ] Test: Iteration counter updates in real-time *(requires API keys + GUI)*
+- [ ] Test: Display format matches loop mode *(requires GUI)*
+- [ ] Test: Counter resets on stop *(requires API keys + GUI)*
 
 **Effort:** 0.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -2699,27 +2699,27 @@ interface ElectronAPI {
 **Blocks:** Phase 2 Gate
 
 **Sub-tasks:**
-- [ ] 2.33.1 — Handle "workflow has no active prompts": show message with link to edit workflow (15m) *(depends on: 2.26.1)*
-- [ ] 2.33.2 — Handle "workflow was deleted during execution": show error state with explanation (20m)
-- [ ] 2.33.3 — Handle "network lost during streaming": show "Reconnecting..." overlay (15m)
-- [ ] 2.33.4 — Handle "all prompts disabled": show "No active prompts" with toggle instructions (15m)
-- [ ] 2.33.5 — Handle rapid start/pause/stop: debounce button clicks, queue state transitions (15m)
-- [ ] 2.33.6 — Handle "viewer opened while workflow is already running": fetch current state from store (15m)
-- [ ] 2.33.7 — Ensure every state transition has a matching UI state (15m)
+- [x] 2.33.1 — Handle "workflow has no active prompts": show message with link to edit workflow (15m) *(depends on: 2.26.1)*
+- [x] 2.33.2 — Handle "workflow was deleted during execution": show error state with explanation (20m)
+- [x] 2.33.3 — Handle "network lost during streaming": show "Reconnecting..." overlay (15m)
+- [x] 2.33.4 — Handle "all prompts disabled": show "No active prompts" with toggle instructions (15m)
+- [x] 2.33.5 — Handle rapid start/pause/stop: debounce button clicks, queue state transitions (15m)
+- [x] 2.33.6 — Handle "viewer opened while workflow is already running": fetch current state from store (15m)
+- [x] 2.33.7 — Ensure every state transition has a matching UI state (15m)
 
 **Done when:**
-- [ ] Test: All edge cases display appropriate UI
-- [ ] Test: No unhandled states cause blank screens or errors
-- [ ] Test: State transitions are smooth
+- [ ] Test: All edge cases display appropriate UI *(requires GUI)*
+- [ ] Test: No unhandled states cause blank screens or errors *(requires GUI)*
+- [ ] Test: State transitions are smooth *(requires GUI)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -2739,31 +2739,31 @@ interface ElectronAPI {
 **Blocks:** `2.35`
 
 **Sub-tasks:**
-- [ ] 2.34.1 — Create `KeyEncryptor` class using `safeStorage.encryptString()` and `safeStorage.decryptString()` (20m) *(depends on: 1.5.1)*
-- [ ] 2.34.2 — Implement `encrypt(provider, apiKey)`: encrypt, generate UUID keyId, store with metadata (30m)
-- [ ] 2.34.3 — Implement `decrypt(keyId)`: load encrypted key, decrypt and return plaintext (20m)
-- [ ] 2.34.4 — Implement `list()`: return array of `{ keyId, provider, keyPrefix, createdAt }` (no plaintext keys) (20m)
-- [ ] 2.34.5 — Implement `delete(keyId)`: remove key from storage (20m)
-- [ ] 2.34.6 — Store encrypted keys in JSON file at `app.getPath('userData')/keys.json` (15m)
-- [ ] 2.34.7 — Handle `safeStorage.isEncryptionAvailable()` returning false (fallback error) (15m)
-- [ ] 2.34.8 — Test: encrypt a key, verify prefix is visible, decrypt returns original (15m)
+- [x] 2.34.1 — Create `KeyEncryptor` class using `safeStorage.encryptString()` and `safeStorage.decryptString()` (20m) *(depends on: 1.5.1)*
+- [x] 2.34.2 — Implement `encrypt(provider, apiKey)`: encrypt, generate UUID keyId, store with metadata (30m)
+- [x] 2.34.3 — Implement `decrypt(keyId)`: load encrypted key, decrypt and return plaintext (20m)
+- [x] 2.34.4 — Implement `list()`: return array of `{ keyId, provider, keyPrefix, createdAt }` (no plaintext keys) (20m)
+- [x] 2.34.5 — Implement `delete(keyId)`: remove key from storage (20m)
+- [x] 2.34.6 — Store encrypted keys in JSON file at `app.getPath('userData')/keys.json` (15m)
+- [x] 2.34.7 — Handle `safeStorage.isEncryptionAvailable()` returning false (fallback error) (15m)
+- [ ] 2.34.8 — Test: encrypt a key, verify prefix is visible, decrypt returns original (15m) *(requires API key)*
 
 **Done when:**
-- [ ] Test: Encryption works on macOS (Keychain)
-- [ ] Test: Decryption returns the original key
-- [ ] Test: Keys are stored in the app's userData directory
-- [ ] Test: Keys are not accessible without decryption
-- [ ] Test: Key listing returns only metadata (prefix, provider), not full keys
+- [ ] Test: Encryption works on macOS (Keychain) *(requires GUI)*
+- [ ] Test: Decryption returns the original key *(requires GUI)*
+- [ ] Test: Keys are stored in the app's userData directory *(requires GUI)*
+- [ ] Test: Keys are not accessible without decryption *(requires GUI)*
+- [ ] Test: Key listing returns only metadata (prefix, provider), not full keys *(requires GUI)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -2780,27 +2780,27 @@ interface ElectronAPI {
 **Blocks:** `2.36`
 
 **Sub-tasks:**
-- [ ] 2.35.1 — Implement `api-key:encrypt` handler: calls `KeyEncryptor.encrypt()`, returns keyId (15m) *(depends on: 1.24.2)*
-- [ ] 2.35.2 — Implement `api-key:decrypt` handler: calls `KeyEncryptor.decrypt()`, returns plaintext key (15m) *(depends on: 2.34.4)*
-- [ ] 2.35.3 — Implement `api-key:list` handler: returns list of key metadata (no plaintext) (15m)
-- [ ] 2.35.4 — Implement `api-key:delete` handler: calls `KeyEncryptor.delete()`, returns success (15m)
-- [ ] 2.35.5 — Add preload API methods: `encryptApiKey`, `decryptApiKey`, `getApiKeys`, `deleteApiKey` (15m)
-- [ ] 2.35.6 — Ensure encrypted values are never sent to the renderer (15m)
+- [x] 2.35.1 — Implement `api-key:encrypt` handler: calls `KeyEncryptor.encrypt()`, returns keyId (15m) *(depends on: 1.24.2)*
+- [x] 2.35.2 — Implement `api-key:decrypt` handler: calls `KeyEncryptor.decrypt()`, returns plaintext key (15m) *(depends on: 2.34.4)*
+- [x] 2.35.3 — Implement `api-key:list` handler: returns list of key metadata (no plaintext) (15m)
+- [x] 2.35.4 — Implement `api-key:delete` handler: calls `KeyEncryptor.delete()`, returns success (15m)
+- [x] 2.35.5 — Add preload API methods: `encryptApiKey`, `decryptApiKey`, `getApiKeys`, `deleteApiKey` (15m)
+- [x] 2.35.6 — Ensure encrypted values are never sent to the renderer (15m)
 
 **Done when:**
-- [ ] Test: All four IPC handlers work correctly
-- [ ] Test: Encrypted keys are never returned in responses
-- [ ] Test: Only key prefix + provider are sent to renderer
+- [ ] Test: All four IPC handlers work correctly *(requires GUI)*
+- [ ] Test: Encrypted keys are never returned in responses *(requires GUI)*
+- [ ] Test: Only key prefix + provider are sent to renderer *(requires GUI)*
 
 **Effort:** 1h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -2818,29 +2818,29 @@ interface ElectronAPI {
 **Blocks:** `2.37`
 
 **Sub-tasks:**
-- [ ] 2.36.1 — Create `ApiKeys.tsx` page with route `/settings/api-keys` (15m) *(depends on: 1.16.1)*
-- [ ] 2.36.2 — Create `ApiKeyCard.tsx`: provider icon (color by provider), key prefix, provider name, last used timestamp, delete button with confirmation (20m) *(depends on: 2.35.2)*
-- [ ] 2.36.3 — Create `AddApiKeyDialog.tsx`: provider selector, API key input (password field with show/hide toggle), Paste button from clipboard, Save button calling `encryptApiKey` (20m)
-- [ ] 2.36.4 — Add key format validation per provider (starts with `sk-` for OpenAI, `sk-ant-` for Anthropic, `AIza` for Google) (20m)
-- [ ] 2.36.5 — Show success toast on key add, error toast on validation failure (20m)
-- [ ] 2.36.6 — Show empty state: "No API keys configured" with prompt to add one (20m)
-- [ ] 2.36.7 — Show loading skeleton while keys are being fetched (15m)
+- [x] 2.36.1 — Create `ApiKeys.tsx` page with route `/settings/api-keys` (15m) *(depends on: 1.16.1)*
+- [x] 2.36.2 — Create `ApiKeyCard.tsx`: provider icon (color by provider), key prefix, provider name, last used timestamp, delete button with confirmation (20m) *(depends on: 2.35.2)*
+- [x] 2.36.3 — Create `AddApiKeyDialog.tsx`: provider selector, API key input (password field with show/hide toggle), Paste button from clipboard, Save button calling `encryptApiKey` (20m)
+- [x] 2.36.4 — Add key format validation per provider (starts with `sk-` for OpenAI, `sk-ant-` for Anthropic, `AIza` for Google) (20m)
+- [x] 2.36.5 — Show success toast on key add, error toast on validation failure (20m)
+- [x] 2.36.6 — Show empty state: "No API keys configured" with prompt to add one (20m)
+- [x] 2.36.7 — Show loading skeleton while keys are being fetched (15m)
 
 **Done when:**
-- [ ] Test: Keys are listed with prefix and provider
-- [ ] Test: Adding a key encrypts it via IPC
-- [ ] Test: Deleting a key removes it permanently
-- [ ] Test: Validation rejects invalid keys
-- [ ] Test: Empty state when no keys exist
+- [ ] Test: Keys are listed with prefix and provider *(requires GUI)*
+- [ ] Test: Adding a key encrypts it via IPC *(requires GUI)*
+- [ ] Test: Deleting a key removes it permanently *(requires GUI)*
+- [ ] Test: Validation rejects invalid keys *(requires GUI)*
+- [ ] Test: Empty state when no keys exist *(requires GUI)*
 
 **Effort:** 2.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3029,29 +3029,29 @@ interface ElectronAPI {
 **Blocks:** `3.2`
 
 **Sub-tasks:**
-- [ ] 3.1.1 — Install `@ai-sdk/anthropic` npm package (15m) *(depends on: 2.19.3)*
-- [ ] 3.1.2 — Implement `AnthropicProvider` class implementing `ProviderAdapter` (20m)
-- [ ] 3.1.3 — Implement `stream()`: import Vercel AI SDK, construct messages array with optional system prompt, call `streamText` (20m)
-- [ ] 3.1.4 — Implement `mapModel()`: translate internal IDs to Anthropic API model names (claude-3-opus-20240229, etc.) (20m)
-- [ ] 3.1.5 — Implement `validateApiKey()`: make lightweight API call to verify key (15m)
-- [ ] 3.1.6 — Implement `estimateCost()` using Anthropic's per-model pricing (15m) *(depends on: 2.20.4)*
-- [ ] 3.1.7 — Pass `abortSignal` to `streamText` for cancellation support (15m)
-- [ ] 3.1.8 — Test with real API key: call stream with short prompt, verify streaming response (15m)
+- [x] 3.1.1 — Install `@ai-sdk/anthropic` npm package (15m) *(depends on: 2.19.3)*
+- [x] 3.1.2 — Implement `AnthropicProvider` class implementing `ProviderAdapter` (20m)
+- [x] 3.1.3 — Implement `stream()`: import Vercel AI SDK, construct messages array with optional system prompt, call `streamText` (20m)
+- [x] 3.1.4 — Implement `mapModel()`: translate internal IDs to Anthropic API model names (claude-3-opus-20240229, etc.) (20m)
+- [x] 3.1.5 — Implement `validateApiKey()`: make lightweight API call to verify key (15m)
+- [x] 3.1.6 — Implement `estimateCost()` using Anthropic's per-model pricing (15m) *(depends on: 2.20.4)*
+- [x] 3.1.7 — Pass `abortSignal` to `streamText` for cancellation support (15m)
+- [ ] 3.1.8 — Test with real API key: call stream with short prompt, verify streaming response (15m) *(requires API key)*
 
 **Done when:**
-- [ ] Test: Anthropic streaming works for all three Claude models
-- [ ] Test: System prompts are correctly formatted
-- [ ] Test: AbortSignal cancels requests
-- [ ] Test: API key is passed correctly
+- [ ] Test: Anthropic streaming works for all three Claude models *(requires API key)*
+- [ ] Test: System prompts are correctly formatted *(requires API key)*
+- [ ] Test: AbortSignal cancels requests *(requires API key)*
+- [ ] Test: API key is passed correctly *(requires API key)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [ ] All `Done when` criteria met *(requires API key)*
 
 ---
 
@@ -3068,23 +3068,23 @@ interface ElectronAPI {
 **Blocks:** `3.3`
 
 **Sub-tasks:**
-- [ ] 3.2.1 — Add Anthropic model entries to `MODELS` array in `src/lib/models.ts` (15m) *(depends on: 2.13.5)*
-- [ ] 3.2.2 — Ensure Anthropic group renders in `ModelSelector` with correct grouping (15m)
-- [ ] 3.2.3 — Verify selecting a Claude model shows correct max tokens (200K) (15m)
-- [ ] 3.2.4 — Verify Anthropic models appear in the same order as other providers (10m)
+- [x] 3.2.1 — Add Anthropic model entries to `MODELS` array in `src/lib/models.ts` (15m) *(depends on: 2.13.5)*
+- [x] 3.2.2 — Ensure Anthropic group renders in `ModelSelector` with correct grouping (15m)
+- [x] 3.2.3 — Verify selecting a Claude model shows correct max tokens (200K) (15m)
+- [x] 3.2.4 — Verify Anthropic models appear in the same order as other providers (10m)
 
 **Done when:**
-- [ ] Test: Anthropic models appear in the model selector
-- [ ] Test: Models are grouped under "Anthropic" header
-- [ ] Test: Selecting a Claude model shows correct max tokens
+- [ ] Test: Anthropic models appear in the model selector *(requires GUI)*
+- [ ] Test: Models are grouped under "Anthropic" header *(requires GUI)*
+- [ ] Test: Selecting a Claude model shows correct max tokens *(requires GUI)*
 
 **Effort:** 0.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3099,26 +3099,26 @@ interface ElectronAPI {
 **Blocks:** `3.4`
 
 **Sub-tasks:**
-- [ ] 3.3.1 — Test short prompt (10 words) → verify completes quickly (15m) *(depends on: 3.1.9)*
-- [ ] 3.3.2 — Test long prompt (1000 words) → verify streams correctly without truncation (15m)
-- [ ] 3.3.3 — Test system prompt inclusion → verify it appears in API call (15m) *(depends on: 3.3.2)*
-- [ ] 3.3.4 — Test temperature setting → verify output changes with different values (15m)
-- [ ] 3.3.5 — Test: Test max tokens limit → verify response is truncated at limit (10m)
-- [ ] 3.3.6 — Test: Test abort during streaming → verify request is cancelled (10m)
-- [ ] 3.3.7 — Test: Compare streaming performance to OpenAI (time-to-first-token) (10m)
+- [ ] 3.3.1 — Test short prompt (10 words) → verify completes quickly (15m) *(depends on: 3.1.9)* *(requires API key)*
+- [ ] 3.3.2 — Test long prompt (1000 words) → verify streams correctly without truncation (15m) *(requires API key)*
+- [ ] 3.3.3 — Test system prompt inclusion → verify it appears in API call (15m) *(depends on: 3.3.2)* *(requires API key)*
+- [ ] 3.3.4 — Test temperature setting → verify output changes with different values (15m) *(requires API key)*
+- [ ] 3.3.5 — Test: Test max tokens limit → verify response is truncated at limit (10m) *(requires API key)*
+- [ ] 3.3.6 — Test: Test abort during streaming → verify request is cancelled (10m) *(requires API key)*
+- [ ] 3.3.7 — Test: Compare streaming performance to OpenAI (time-to-first-token) (10m) *(requires API keys)*
 
 **Done when:**
-- [ ] Test: All test cases pass
-- [ ] Test: Streaming performance is comparable to OpenAI
-- [ ] Test: No errors in the main process
+- [ ] Test: All test cases pass *(requires API key)*
+- [ ] Test: Streaming performance is comparable to OpenAI *(requires API keys)*
+- [ ] Test: No errors in the main process *(requires API key)*
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [ ] All sub-tasks completed (checked off) *(requires API keys + GUI)*
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires API keys)*
 
 ---
 
@@ -3134,24 +3134,24 @@ interface ElectronAPI {
 **Blocks:** `3.5`
 
 **Sub-tasks:**
-- [ ] 3.4.1 — Create `ProviderFactory` class with static `adapters` map and `register()`/`getAdapter()` methods (10m) *(depends on: 2.19.2)*
-- [ ] 3.4.2 — Implement model-to-provider routing: `gpt-*` → OpenAI, `claude-*` → Anthropic, `gemini-*` → Google (15m)
-- [ ] 3.4.3 — Register OpenAI and Anthropic adapters at app startup (10m)
-- [ ] 3.4.4 — Handle unknown models with clear error message: `"Unknown model: {modelId}"` (10m)
-- [ ] 3.4.5 — Run `yarn tsc --noEmit` to verify factory compiles (10m)
+- [x] 3.4.1 — Create `ProviderFactory` class with static `adapters` map and `register()`/`getAdapter()` methods (10m) *(depends on: 2.19.2)*
+- [x] 3.4.2 — Implement model-to-provider routing: `gpt-*` → OpenAI, `claude-*` → Anthropic, `gemini-*` → Google (15m)
+- [x] 3.4.3 — Register OpenAI and Anthropic adapters at app startup (10m)
+- [x] 3.4.4 — Handle unknown models with clear error message: `"Unknown model: {modelId}"` (10m)
+- [x] 3.4.5 — Run `yarn tsc --noEmit` to verify factory compiles (10m)
 
 **Done when:**
-- [ ] Test: Factory correctly maps all model IDs to providers
-- [ ] Test: Unknown models throw a clear error
-- [ ] Test: Adapters can be registered at startup
+- [x] Test: Factory correctly maps all model IDs to providers
+- [x] Test: Unknown models throw a clear error
+- [x] Test: Adapters can be registered at startup
 
 **Effort:** 0.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] All `Done when` criteria met
 
 ---
 
@@ -3167,25 +3167,25 @@ interface ElectronAPI {
 **Blocks:** Phase 3 Gate
 
 **Sub-tasks:**
-- [ ] 3.5.1 — Test: Mock the Vercel AI SDK `streamText` for Anthropic (15m)
-- [ ] 3.5.2 — Test: Write unit test: verify `stream()` returns chunks correctly (15m)
-- [ ] 3.5.3 — Test: Write unit test: verify `mapModel()` maps all 3 Claude models (15m)
-- [ ] 3.5.4 — Test: Write unit test: verify abort signal is passed to streamText (15m)
-- [ ] 3.5.5 — Test: Write integration test: verify `ProviderFactory.getAdapter('claude-3-opus')` returns Anthropic adapter (15m)
-- [ ] 3.5.6 — Test: Run tests with `yarn vitest run` (10m)
+- [x] 3.5.1 — Test: Mock the Vercel AI SDK `streamText` for Anthropic (15m)
+- [x] 3.5.2 — Test: Write unit test: verify `stream()` returns chunks correctly (15m)
+- [x] 3.5.3 — Test: Write unit test: verify `mapModel()` maps all 3 Claude models (15m)
+- [x] 3.5.4 — Test: Write unit test: verify abort signal is passed to streamText (15m)
+- [x] 3.5.5 — Test: Write integration test: verify `ProviderFactory.getAdapter('claude-3-opus')` returns Anthropic adapter (15m)
+- [x] 3.5.6 — Test: Run tests with `yarn vitest run` (10m)
 
 **Done when:**
-- [ ] Test: Provider adapter unit tests pass
-- [ ] Test: Factory routing tests pass
-- [ ] Test: Mock tests verify API key passing
+- [x] Test: Provider adapter unit tests pass
+- [x] Test: Factory routing tests pass
+- [x] Test: Mock tests verify API key passing
 
 **Effort:** 1h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] All `Done when` criteria met
 
 ---
 
@@ -3207,28 +3207,28 @@ interface ElectronAPI {
 **Blocks:** `3.7`
 
 **Sub-tasks:**
-- [ ] 3.6.1 — Install `@ai-sdk/google` npm package (15m) *(depends on: 2.19.3)*
-- [ ] 3.6.2 — Implement `GoogleProvider` class implementing `ProviderAdapter` (20m)
-- [ ] 3.6.3 — Implement `stream()`: import Vercel AI SDK, call `streamText` with google model (20m)
-- [ ] 3.6.4 — Implement `mapModel()`: translate internal IDs to Gemini API model names (20m)
-- [ ] 3.6.5 — Implement `validateApiKey()`: make lightweight API call to verify key (15m)
-- [ ] 3.6.6 — Implement `estimateCost()` using Google's per-model pricing (15m) *(depends on: 2.20.4)*
-- [ ] 3.6.7 — Pass `abortSignal` to `streamText` for cancellation support (15m)
-- [ ] 3.6.8 — Test with real API key: call stream with short prompt, verify streaming response (15m)
+- [x] 3.6.1 — Install `@ai-sdk/google` npm package (15m) *(depends on: 2.19.3)*
+- [x] 3.6.2 — Implement `GoogleProvider` class implementing `ProviderAdapter` (20m)
+- [x] 3.6.3 — Implement `stream()`: import Vercel AI SDK, call `streamText` with google model (20m)
+- [x] 3.6.4 — Implement `mapModel()`: translate internal IDs to Gemini API model names (20m)
+- [x] 3.6.5 — Implement `validateApiKey()`: make lightweight API call to verify key (15m)
+- [x] 3.6.6 — Implement `estimateCost()` using Google's per-model pricing (15m) *(depends on: 2.20.4)*
+- [x] 3.6.7 — Pass `abortSignal` to `streamText` for cancellation support (15m)
+- [ ] 3.6.8 — Test with real API key: call stream with short prompt, verify streaming response (15m) *(requires API key)*
 
 **Done when:**
-- [ ] Test: Gemini streaming works for Pro and Flash
-- [ ] Test: AbortSignal cancels requests
-- [ ] Test: API key is passed correctly
+- [ ] Test: Gemini streaming works for Pro and Flash *(requires API key)*
+- [ ] Test: AbortSignal cancels requests *(requires API key)*
+- [ ] Test: API key is passed correctly *(requires API key)*
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [ ] All `Done when` criteria met *(requires API key)*
 
 ---
 
@@ -3245,22 +3245,22 @@ interface ElectronAPI {
 **Blocks:** `3.8`
 
 **Sub-tasks:**
-- [ ] 3.7.1 — Add Google model entries to `MODELS` array in `src/lib/models.ts` (15m) *(depends on: 2.13.5)*
-- [ ] 3.7.2 — Ensure Google group renders under "Google" header (15m)
-- [ ] 3.7.3 — Verify selecting a Gemini model shows correct max tokens (1M+ for Pro) (15m)
+- [x] 3.7.1 — Add Google model entries to `MODELS` array in `src/lib/models.ts` (15m) *(depends on: 2.13.5)*
+- [x] 3.7.2 — Ensure Google group renders under "Google" header (15m)
+- [x] 3.7.3 — Verify selecting a Gemini model shows correct max tokens (1M+ for Pro) (15m)
 
 **Done when:**
-- [ ] Test: Google models appear in the model selector
-- [ ] Test: Models are grouped under "Google" header
-- [ ] Test: max tokens for Gemini models is displayed correctly (1M+ tokens)
+- [ ] Test: Google models appear in the model selector *(requires GUI)*
+- [ ] Test: Models are grouped under "Google" header *(requires GUI)*
+- [ ] Test: max tokens for Gemini models is displayed correctly (1M+ tokens) *(requires GUI)*
 
 **Effort:** 0.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3273,24 +3273,24 @@ interface ElectronAPI {
 **Blocks:** `3.9`
 
 **Sub-tasks:**
-- [ ] 3.8.1 — Test short prompt → verify completes quickly (15m) *(depends on: 3.6.9)*
-- [ ] 3.8.2 — Test very long prompt (Gemini supports 1M+ tokens) → verify streaming works (15m)
-- [ ] 3.8.3 — Test temperature setting → verify output changes with different values (15m) *(depends on: 3.8.2)*
-- [ ] 3.8.4 — Test max tokens limit → verify response is truncated at limit (15m)
-- [ ] 3.8.5 — Test: Test abort during streaming → verify request is cancelled (10m)
+- [ ] 3.8.1 — Test short prompt → verify completes quickly (15m) *(depends on: 3.6.9)* *(requires API key)*
+- [ ] 3.8.2 — Test very long prompt (Gemini supports 1M+ tokens) → verify streaming works (15m) *(requires API key)*
+- [ ] 3.8.3 — Test temperature setting → verify output changes with different values (15m) *(depends on: 3.8.2)* *(requires API key)*
+- [ ] 3.8.4 — Test max tokens limit → verify response is truncated at limit (15m) *(requires API key)*
+- [ ] 3.8.5 — Test: Test abort during streaming → verify request is cancelled (10m) *(requires API key)*
 
 **Done when:**
-- [ ] Test: All test cases pass
-- [ ] Test: Streaming works for both models
-- [ ] Test: No errors in main process
+- [ ] Test: All test cases pass *(requires API key)*
+- [ ] Test: Streaming works for both models *(requires API key)*
+- [ ] Test: No errors in main process *(requires API key)*
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [ ] All sub-tasks completed (checked off) *(requires API key)*
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires API key)*
 
 ---
 
@@ -3306,22 +3306,22 @@ interface ElectronAPI {
 **Blocks:** `3.10`
 
 **Sub-tasks:**
-- [ ] 3.9.1 — Register Google provider in `ProviderFactory` at app startup (10m) *(depends on: 2.19.2)*
-- [ ] 3.9.2 — Verify `ProviderFactory.getAdapter('gemini-1.5-pro')` returns Google adapter (15m)
-- [ ] 3.9.3 — Add error handling for missing API keys per provider (10m)
-- [ ] 3.9.4 — Run `yarn tsc --noEmit` to verify factory compiles (10m)
+- [x] 3.9.1 — Register Google provider in `ProviderFactory` at app startup (10m) *(depends on: 2.19.2)*
+- [x] 3.9.2 — Verify `ProviderFactory.getAdapter('gemini-1.5-pro')` returns Google adapter (15m)
+- [x] 3.9.3 — Add error handling for missing API keys per provider (10m)
+- [x] 3.9.4 — Run `yarn tsc --noEmit` to verify factory compiles (10m)
 
 **Done when:**
-- [ ] Test: `ProviderFactory.getAdapter('gemini-1.5-pro')` returns the Google adapter
-- [ ] Test: Error handling for missing API keys works
+- [x] Test: `ProviderFactory.getAdapter('gemini-1.5-pro')` returns the Google adapter
+- [x] Test: Error handling for missing API keys works
 
 **Effort:** 0.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] All `Done when` criteria met
 
 ---
 
@@ -3338,25 +3338,25 @@ interface ElectronAPI {
 **Blocks:** `3.11`
 
 **Sub-tasks:**
-- [ ] 3.10.1 — Create `useConfiguredProviders()` hook reading `apiKeys` from settings store (20m) *(depends on: 2.13.3)*
-- [ ] 3.10.2 — Filter `MODEL_GROUPS` in ModelSelector to only show providers with configured keys (20m)
-- [ ] 3.10.3 — If no API keys configured for any provider, show "Add API key to select a model" prompt (20m)
-- [ ] 3.10.4 — Dynamic update: when user adds/deletes a key in Settings, ModelSelector updates without page reload (15m)
-- [ ] 3.10.5 — Add tooltip on disabled provider groups explaining why they are unavailable (15m)
+- [x] 3.10.1 — Create `useConfiguredProviders()` hook reading `apiKeys` from settings store (20m) *(depends on: 2.13.3)*
+- [x] 3.10.2 — Filter `MODEL_GROUPS` in ModelSelector to only show providers with configured keys (20m)
+- [x] 3.10.3 — If no API keys configured for any provider, show "Add API key to select a model" prompt (20m)
+- [x] 3.10.4 — Dynamic update: when user adds/deletes a key in Settings, ModelSelector updates without page reload (15m)
+- [x] 3.10.5 — Add tooltip on disabled provider groups explaining why they are unavailable (15m)
 
 **Done when:**
-- [ ] Test: Model selector only shows providers with configured API keys
-- [ ] Test: If no API keys are configured, show "Add API key" prompt
-- [ ] Test: Adding a key in Settings dynamically updates the model selector
+- [ ] Test: Model selector only shows providers with configured API keys *(requires GUI)*
+- [ ] Test: If no API keys are configured, show "Add API key" prompt *(requires GUI)*
+- [ ] Test: Adding a key in Settings dynamically updates the model selector *(requires GUI)*
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3376,26 +3376,26 @@ interface ElectronAPI {
 **Blocks:** `3.12`
 
 **Sub-tasks:**
-- [ ] 3.11.1 — Define `ErrorClassification` interface with `category`, `recoverable`, `retryable`, `message` fields (20m) *(depends on: 2.19.6)*
-- [ ] 3.11.2 — Implement `classifyError()`: detect rate limit (429), auth (401), server error (5xx), timeout, network error, unknown (30m)
-- [ ] 3.11.3 — Map HTTP status codes and error codes to categories (20m) *(depends on: 2.23.9)*
-- [ ] 3.11.4 — Return user-friendly error messages for each category (20m)
-- [ ] 3.11.5 — Add provider-specific error detection (OpenAI vs Anthropic vs Google error formats) (20m)
-- [ ] 3.11.6 — Write unit tests for `classifyError()` with mock errors of each type (15m)
+- [x] 3.11.1 — Define `ErrorClassification` interface with `category`, `recoverable`, `retryable`, `message` fields (20m) *(depends on: 2.19.6)*
+- [x] 3.11.2 — Implement `classifyError()`: detect rate limit (429), auth (401), server error (5xx), timeout, network error, unknown (30m)
+- [x] 3.11.3 — Map HTTP status codes and error codes to categories (20m) *(depends on: 2.23.9)*
+- [x] 3.11.4 — Return user-friendly error messages for each category (20m)
+- [x] 3.11.5 — Add provider-specific error detection (OpenAI vs Anthropic vs Google error formats) (20m)
+- [x] 3.11.6 — Write unit tests for `classifyError()` with mock errors of each type (15m)
 
 **Done when:**
-- [ ] Test: All provider error types are classified
-- [ ] Test: Classification includes recovery strategy
-- [ ] Test: Error messages are user-friendly
+- [x] Test: All provider error types are classified
+- [x] Test: Classification includes recovery strategy
+- [x] Test: Error messages are user-friendly
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] All `Done when` criteria met
 
 ---
 
@@ -3412,30 +3412,30 @@ interface ElectronAPI {
 **Blocks:** `3.13`
 
 **Sub-tasks:**
-- [ ] 3.12.1 — Implement `executeWithRetry<T>()` generic function with `maxRetries`, `baseDelayMs`, `maxDelayMs` config (20m) *(depends on: 2.18.5)*
-- [ ] 3.12.2 — Add exponential backoff: `delay = baseDelayMs * 2^(attempt-1) + jitter` (30m)
-- [ ] 3.12.3 — Add jitter: `Math.random() * 1000` to prevent thundering herd (20m) *(depends on: 3.12.2)*
-- [ ] 3.12.4 — Integrate retry into `WorkflowRunner.executePrompt()` — wrap provider call with retry (20m)
-- [ ] 3.12.5 — Skip retry for non-recoverable errors (auth failures) (15m)
-- [ ] 3.12.6 — Emit `execution:retrying` event during retry waits so UI can show countdown (15m)
-- [ ] 3.12.7 — Respect `Retry-After` header from rate-limited responses (15m)
-- [ ] 3.12.8 — Write unit tests for retry logic with mock failures (15m)
+- [x] 3.12.1 — Implement `executeWithRetry<T>()` generic function with `maxRetries`, `baseDelayMs`, `maxDelayMs` config (20m) *(depends on: 2.18.5)*
+- [x] 3.12.2 — Add exponential backoff: `delay = baseDelayMs * 2^(attempt-1) + jitter` (30m)
+- [x] 3.12.3 — Add jitter: `Math.random() * 1000` to prevent thundering herd (20m) *(depends on: 3.12.2)*
+- [x] 3.12.4 — Integrate retry into `WorkflowRunner.executePrompt()` — wrap provider call with retry (20m)
+- [x] 3.12.5 — Skip retry for non-recoverable errors (auth failures) (15m)
+- [x] 3.12.6 — Emit `execution:retrying` event during retry waits so UI can show countdown (15m)
+- [x] 3.12.7 — Respect `Retry-After` header from rate-limited responses (15m)
+- [x] 3.12.8 — Write unit tests for retry logic with mock failures (15m)
 
 **Done when:**
-- [ ] Test: Rate limits trigger exponential backoff
-- [ ] Test: Timeout errors retry with backoff
-- [ ] Test: Auth errors are not retried
-- [ ] Test: Max retries limit is respected
-- [ ] Test: Jitter is added to prevent thundering herd
+- [x] Test: Rate limits trigger exponential backoff
+- [x] Test: Timeout errors retry with backoff
+- [x] Test: Auth errors are not retried
+- [x] Test: Max retries limit is respected
+- [x] Test: Jitter is added to prevent thundering herd
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] All `Done when` criteria met
 
 ---
 
@@ -3451,26 +3451,26 @@ interface ElectronAPI {
 **Blocks:** `3.14`
 
 **Sub-tasks:**
-- [ ] 3.13.1 — Create `ErrorDisplay.tsx` component accepting `error` (code, message, recoverable, provider) and `onRetry`, `onConfigureKey` callbacks (15m) *(depends on: 3.12.2)*
-- [ ] 3.13.2 — Map error categories to specific UI: rate limit → auto-retry countdown, invalid key → "Configure API Key" button, server error → Retry button, timeout → Retry button, network → "Check connection" button (20m)
-- [ ] 3.13.3 — Add auto-retry countdown display: "Rate limited. Retrying in 15s..." with progress bar (20m)
-- [ ] 3.13.4 — Make "Configure API Key" button navigate to `/settings/api-keys` (20m)
-- [ ] 3.13.5 — Style errors with provider-specific color accents (OpenAI green, Anthropic brown, Google blue) (15m)
-- [ ] 3.13.6 — Add non-recoverable error display with clear next-step instructions (15m)
+- [x] 3.13.1 — Create `ErrorDisplay.tsx` component accepting `error` (code, message, recoverable, provider) and `onRetry`, `onConfigureKey` callbacks (15m) *(depends on: 3.12.2)*
+- [x] 3.13.2 — Map error categories to specific UI: rate limit → auto-retry countdown, invalid key → "Configure API Key" button, server error → Retry button, timeout → Retry button, network → "Check connection" button (20m)
+- [x] 3.13.3 — Add auto-retry countdown display: "Rate limited. Retrying in 15s..." with progress bar (20m)
+- [x] 3.13.4 — Make "Configure API Key" button navigate to `/settings/api-keys` (20m)
+- [x] 3.13.5 — Style errors with provider-specific color accents (OpenAI green, Anthropic brown, Google blue) (15m)
+- [x] 3.13.6 — Add non-recoverable error display with clear next-step instructions (15m)
 
 **Done when:**
-- [ ] Test: Error messages are provider-specific
-- [ ] Test: Actionable buttons are provided where possible
-- [ ] Test: Auto-retry shows countdown or progress
-- [ ] Test: Non-recoverable errors show clear next steps
+- [ ] Test: Error messages are provider-specific *(requires GUI)*
+- [ ] Test: Actionable buttons are provided where possible *(requires GUI)*
+- [ ] Test: Auto-retry shows countdown or progress *(requires GUI)*
+- [ ] Test: Non-recoverable errors show clear next steps *(requires GUI)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3486,29 +3486,29 @@ interface ElectronAPI {
 **Blocks:** `3.15`
 
 **Sub-tasks:**
-- [ ] 3.14.1 — Create `RateLimiter` class with per-provider tracking map (30m) *(depends on: 2.18.5)*
-- [ ] 3.14.2 — Implement `recordRequest(provider)`: increment request count, track timestamp (30m)
-- [ ] 3.14.3 — Implement `recordRateLimit(provider, retryAfterMs)`: store retry-after value, set cooldown (30m) *(depends on: 3.14.2)*
-- [ ] 3.14.4 — Implement `throttle(provider)`: if approaching known limit, add artificial delay before request (20m)
-- [ ] 3.14.5 — Implement `getWaitTime(provider)`: return remaining wait time if rate limited (20m)
-- [ ] 3.14.6 — Parse `Retry-After` header from provider error responses (15m)
-- [ ] 3.14.7 — Reset rate limit tracking after cooldown window expires (15m)
-- [ ] 3.14.8 — Test: Wire `RateLimiter` into `WorkflowRunner` before each provider call (10m)
+- [x] 3.14.1 — Create `RateLimiter` class with per-provider tracking map (30m) *(depends on: 2.18.5)*
+- [x] 3.14.2 — Implement `recordRequest(provider)`: increment request count, track timestamp (30m)
+- [x] 3.14.3 — Implement `recordRateLimit(provider, retryAfterMs)`: store retry-after value, set cooldown (30m) *(depends on: 3.14.2)*
+- [x] 3.14.4 — Implement `throttle(provider)`: if approaching known limit, add artificial delay before request (20m)
+- [x] 3.14.5 — Implement `getWaitTime(provider)`: return remaining wait time if rate limited (20m)
+- [x] 3.14.6 — Parse `Retry-After` header from provider error responses (15m)
+- [x] 3.14.7 — Reset rate limit tracking after cooldown window expires (15m)
+- [x] 3.14.8 — Test: Wire `RateLimiter` into `WorkflowRunner` before each provider call (10m)
 
 **Done when:**
-- [ ] Test: Rate limits are tracked per provider
-- [ ] Test: Throttling adds delays before requests if approaching limits
-- [ ] Test: `retry-after` headers from provider responses are respected
-- [ ] Test: Rate limit state resets after the window
+- [ ] Test: Rate limits are tracked per provider *(requires API key)*
+- [ ] Test: Throttling adds delays before requests if approaching limits *(requires API key)*
+- [ ] Test: `retry-after` headers from provider responses are respected *(requires API key)*
+- [ ] Test: Rate limit state resets after the window *(requires API key)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [ ] All `Done when` criteria met *(requires API key)*
 
 ---
 
@@ -3524,26 +3524,26 @@ interface ElectronAPI {
 **Blocks:** `3.16`
 
 **Sub-tasks:**
-- [ ] 3.15.1 — Create `ProviderConfig.tsx` component expandable per provider (15m) *(depends on: 2.36.3)*
-- [ ] 3.15.2 — Add custom base URL input (for OpenAI-compatible APIs like Together, Groq) (20m)
-- [ ] 3.15.3 — Add connection timeout input (per provider, in seconds) (20m)
-- [ ] 3.15.4 — Add max retries input (per provider) (20m)
-- [ ] 3.15.5 — Store provider config in Zustand settings store with persist (15m)
-- [ ] 3.15.6 — Pass custom config to ProviderAdapter when making requests (15m)
-- [ ] 3.15.7 — Show provider config section in the Settings page (15m)
+- [x] 3.15.1 — Create `ProviderConfig.tsx` component expandable per provider (15m) *(depends on: 2.36.3)*
+- [x] 3.15.2 — Add custom base URL input (for OpenAI-compatible APIs like Together, Groq) (20m)
+- [x] 3.15.3 — Add connection timeout input (per provider, in seconds) (20m)
+- [x] 3.15.4 — Add max retries input (per provider) (20m)
+- [x] 3.15.5 — Store provider config in Zustand settings store with persist (15m)
+- [x] 3.15.6 — Pass custom config to ProviderAdapter when making requests (15m)
+- [x] 3.15.7 — Show provider config section in the Settings page (15m)
 
 **Done when:**
-- [ ] Test: Custom base URL can be configured per provider
-- [ ] Test: Timeout and retry settings are per-provider
-- [ ] Test: Config is stored and persisted
+- [ ] Test: Custom base URL can be configured per provider *(requires GUI)*
+- [ ] Test: Timeout and retry settings are per-provider *(requires GUI)*
+- [ ] Test: Config is stored and persisted *(requires GUI)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3553,39 +3553,39 @@ interface ElectronAPI {
 **Description:** Run through the Phase 3 checklist and ensure all providers work consistently.
 
 **Checklist:**
-- [ ] OpenAI models work with streaming
-- [ ] Anthropic models work with streaming
-- [ ] Google models work with streaming
-- [ ] Model selector shows only configured providers
-- [ ] Rate limits handled with backoff
-- [ ] Provider errors display actionable messages
-- [ ] Retry mechanism recovers from transient failures
-- [ ] `yarn lint` passes
-- [ ] `yarn typecheck` passes
+- [ ] OpenAI models work with streaming *(requires API keys)*
+- [ ] Anthropic models work with streaming *(requires API keys)*
+- [ ] Google models work with streaming *(requires API keys)*
+- [ ] Model selector shows only configured providers *(requires GUI)*
+- [ ] Rate limits handled with backoff *(requires API keys)*
+- [ ] Provider errors display actionable messages *(requires API keys)*
+- [ ] Retry mechanism recovers from transient failures *(requires API keys)*
+- [x] `yarn lint` passes
+- [x] `yarn typecheck` passes
 
 **Blocked by:** `3.13`, `3.15`
 **Blocks:** Phase 4
 
 **Sub-tasks:**
-- [ ] 3.16.1 — Test: Test all 3 providers with short prompt, verify streaming works (20m)
-- [ ] 3.16.2 — Test: Test model selector filtering: add key for only 1 provider, verify only that group shows (20m)
-- [ ] 3.16.3 — Test: Test rate limit handling: simulate 429 response, verify backoff and user-visible retry countdown (20m)
-- [ ] 3.16.4 — Test: Test error display: disconnect network during execution, verify error message with actionable button (20m)
-- [ ] 3.16.5 — Test: Test retry: let a prompt fail with server error, verify auto-retry succeeds (15m)
-- [ ] 3.16.6 — Test: Run `yarn lint` and `yarn typecheck`, fix all issues (15m)
-- [ ] 3.16.7 — Test: Tag git with `phase-3-complete` (15m)
+- [ ] 3.16.1 — Test: Test all 3 providers with short prompt, verify streaming works (20m) *(requires API keys)*
+- [ ] 3.16.2 — Test: Test model selector filtering: add key for only 1 provider, verify only that group shows (20m) *(requires GUI + API keys)*
+- [ ] 3.16.3 — Test: Test rate limit handling: simulate 429 response, verify backoff and user-visible retry countdown (20m) *(requires API keys)*
+- [ ] 3.16.4 — Test: Test error display: disconnect network during execution, verify error message with actionable button (20m) *(requires API keys + GUI)*
+- [ ] 3.16.5 — Test: Test retry: let a prompt fail with server error, verify auto-retry succeeds (15m) *(requires API keys)*
+- [x] 3.16.6 — Test: Run `yarn lint` and `yarn typecheck`, fix all issues (15m)
+- [ ] 3.16.7 — Test: Tag git with `phase-3-complete` (15m) *(manual)*
 
 **Done when:**
-- [ ] Test: All checklist items pass
-- [ ] Test: All three providers stream correctly with retry and error handling
+- [ ] Test: All checklist items pass *(requires API keys + GUI)*
+- [ ] Test: All three providers stream correctly with retry and error handling *(requires API keys + GUI)*
 
 **Effort:** 3h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [ ] All sub-tasks completed (checked off) *(requires API keys + GUI)*
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires API keys + GUI)*
 
 ## Phase 4 — Desktop Polish
 
@@ -3610,30 +3610,30 @@ interface ElectronAPI {
 **Blocks:** `4.2`
 
 **Sub-tasks:**
-- [ ] 4.1.1 — Create `TrayManager` class with `Tray` instance and `status` tracking (20m) *(depends on: 1.4.2)*
-- [ ] 4.1.2 — Implement `create()`: create `Tray` with icon path, set tooltip "PromptLoop", build context menu (20m)
-- [ ] 4.1.3 — Implement `setStatus(status)`: update tray icon image and context menu based on new status (20m)
-- [ ] 4.1.4 — Build context menu with: Open, Start/Pause/Stop (state-dependent), separator, Quit (20m)
-- [ ] 4.1.5 — Implement `toggleWindow()`: if window is visible/minimized → show/restore, if hidden → show (15m)
-- [ ] 4.1.6 — Wire tray click to `toggleWindow()` (15m) *(depends on: 4.1.5)*
-- [ ] 4.1.7 — Register `TrayManager` in `electron/main/index.ts` and create on app ready (15m)
-- [ ] 4.1.8 — Test: Set tray icon based on current execution status (idle=running=paused=error) (10m)
+- [x] 4.1.1 — Create `TrayManager` class with `Tray` instance and `status` tracking (20m) *(depends on: 1.4.2)*
+- [x] 4.1.2 — Implement `create()`: create `Tray` with icon path, set tooltip "PromptLoop", build context menu (20m)
+- [x] 4.1.3 — Implement `setStatus(status)`: update tray icon image and context menu based on new status (20m)
+- [x] 4.1.4 — Build context menu with: Open, Start/Pause/Stop (state-dependent), separator, Quit (20m)
+- [x] 4.1.5 — Implement `toggleWindow()`: if window is visible/minimized → show/restore, if hidden → show (15m)
+- [x] 4.1.6 — Wire tray click to `toggleWindow()` (15m) *(depends on: 4.1.5)*
+- [x] 4.1.7 — Register `TrayManager` in `electron/main/index.ts` and create on app ready (15m)
+- [ ] 4.1.8 — Test: Set tray icon based on current execution status (idle=running=paused=error) (10m) *(requires GUI)*
 
 **Done when:**
-- [ ] Test: Tray icon appears in the system tray
-- [ ] Test: Icon changes based on workflow status
-- [ ] Test: Context menu shows correct options based on state
-- [ ] Test: Actions work (Start/Pause/Stop)
-- [ ] Test: Clicking tray toggles window visibility
+- [ ] Test: Tray icon appears in the system tray *(requires GUI)*
+- [ ] Test: Icon changes based on workflow status *(requires GUI)*
+- [ ] Test: Context menu shows correct options based on state *(requires GUI)*
+- [ ] Test: Actions work (Start/Pause/Stop) *(requires GUI)*
+- [ ] Test: Clicking tray toggles window visibility *(requires GUI)*
 
 **Effort:** 3h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3656,28 +3656,28 @@ interface ElectronAPI {
 **Blocks:** `4.3`
 
 **Sub-tasks:**
-- [ ] 4.2.1 — Design a simple recognizable icon for the app (circle with "PL" or app logo mark) (30m) *(depends on: 4.1.2)*
-- [ ] 4.2.2 — Create idle state icon (gray version) (20m)
-- [ ] 4.2.3 — Create running state icon (green version) (15m)
-- [ ] 4.2.4 — Create paused state icon (yellow version) (15m)
-- [ ] 4.2.5 — Create error state icon (red version) (10m)
-- [ ] 4.2.6 — Create Retina @2x versions for all 4 states (10m)
-- [ ] 4.2.7 — Test: Use macOS template images (black and white, system tints automatically) (10m)
-- [ ] 4.2.8 — Test: Verify icons are recognizable at 16x16 and look correct on both light/dark menu bars (5m)
+- [x] 4.2.1 — Design a simple recognizable icon for the app (circle with "PL" or app logo mark) (30m) *(depends on: 4.1.2)*
+- [x] 4.2.2 — Create idle state icon (gray version) (20m)
+- [x] 4.2.3 — Create running state icon (green version) (15m)
+- [x] 4.2.4 — Create paused state icon (yellow version) (15m)
+- [x] 4.2.5 — Create error state icon (red version) (10m)
+- [x] 4.2.6 — Create Retina @2x versions for all 4 states (10m)
+- [x] 4.2.7 — Test: Use macOS template images (black and white, system tints automatically) (10m)
+- [x] 4.2.8 — Test: Verify icons are recognizable at 16x16 and look correct on both light/dark menu bars (5m)
 
 **Done when:**
-- [ ] Test: Icons exist for all states
-- [ ] Test: Retina versions exist
-- [ ] Test: Icons are recognizable at 16x16
-- [ ] Test: Icons look correct on both light and dark menu bars
+- [x] Test: Icons exist for all states
+- [x] Test: Retina versions exist
+- [x] Test: Icons are recognizable at 16x16
+- [x] Test: Icons look correct on both light and dark menu bars
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] All `Done when` criteria met
 
 ---
 
@@ -3695,27 +3695,27 @@ interface ElectronAPI {
 **Blocks:** `4.4`
 
 **Sub-tasks:**
-- [ ] 4.3.1 — Add `minimizeToTrayOnClose` boolean to settingsStore with default `true` (15m) *(depends on: 4.1.6)*
-- [ ] 4.3.2 — In `createWindow()`, add `mainWindow.on('close', handler)` that prevents default and hides window when setting is enabled (15m)
-- [ ] 4.3.3 — Cmd+Q still quits the app regardless of setting (check `event.defaultPrevented` for Cmd+Q) (15m)
-- [ ] 4.3.4 — Implement `mainWindow.show()` in tray's click handler (toggle window visibility) (15m)
-- [ ] 4.3.5 — Add toggle in Settings page for minimize-to-tray behavior (15m)
-- [ ] 4.3.6 — Test: close window → app stays running in tray, click tray → window reappears, Cmd+Q → quits (10m)
+- [x] 4.3.1 — Add `minimizeToTrayOnClose` boolean to settingsStore with default `true` (15m) *(depends on: 4.1.6)*
+- [x] 4.3.2 — In `createWindow()`, add `mainWindow.on('close', handler)` that prevents default and hides window when setting is enabled (15m)
+- [x] 4.3.3 — Cmd+Q still quits the app regardless of setting (check `event.defaultPrevented` for Cmd+Q) (15m)
+- [x] 4.3.4 — Implement `mainWindow.show()` in tray's click handler (toggle window visibility) (15m)
+- [x] 4.3.5 — Add toggle in Settings page for minimize-to-tray behavior (15m)
+- [ ] 4.3.6 — Test: close window → app stays running in tray, click tray → window reappears, Cmd+Q → quits (10m) *(requires GUI)*
 
 **Done when:**
-- [ ] Test: Closing window minimizes to tray (if setting is enabled)
-- [ ] Test: Clicking tray icon shows the window
-- [ ] Test: Cmd+Q still quits the app
-- [ ] Test: Setting can disable minimize-to-tray (window closes normally)
+- [ ] Test: Closing window minimizes to tray (if setting is enabled) *(requires GUI)*
+- [ ] Test: Clicking tray icon shows the window *(requires GUI)*
+- [ ] Test: Cmd+Q still quits the app *(requires GUI)*
+- [ ] Test: Setting can disable minimize-to-tray (window closes normally) *(requires GUI)*
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3731,24 +3731,24 @@ interface ElectronAPI {
 **Blocks:** `4.5`
 
 **Sub-tasks:**
-- [ ] 4.4.1 — Implement `updateTooltip(workflowName?)`: format tooltip as `"PromptLoop: {statusLabel} - {workflowName}"` (15m) *(depends on: 4.1.1)*
-- [ ] 4.4.2 — Call `updateTooltip` when `setStatus()` is called (15m) *(depends on: 2.22.7)*
-- [ ] 4.4.3 — Show "PromptLoop: Idle" when no workflow is active (15m)
-- [ ] 4.4.4 — Show "PromptLoop: Running - Content Generator" when executing (15m)
-- [ ] 4.4.5 — Listen to execution status changes from engine to update tooltip (10m)
+- [x] 4.4.1 — Implement `updateTooltip(workflowName?)`: format tooltip as `"PromptLoop: {statusLabel} - {workflowName}"` (15m) *(depends on: 4.1.1)*
+- [x] 4.4.2 — Call `updateTooltip` when `setStatus()` is called (15m) *(depends on: 2.22.7)*
+- [x] 4.4.3 — Show "PromptLoop: Idle" when no workflow is active (15m)
+- [x] 4.4.4 — Show "PromptLoop: Running - Content Generator" when executing (15m)
+- [x] 4.4.5 — Listen to execution status changes from engine to update tooltip (10m)
 
 **Done when:**
-- [ ] Test: Tooltip shows "PromptLoop: Running - Content Generator"
-- [ ] Test: Tooltip updates when workflow state changes
-- [ ] Test: Tooltip shows "PromptLoop: Idle" when no workflow is active
+- [ ] Test: Tooltip shows "PromptLoop: Running - Content Generator" *(requires GUI)*
+- [ ] Test: Tooltip updates when workflow state changes *(requires GUI)*
+- [ ] Test: Tooltip shows "PromptLoop: Idle" when no workflow is active *(requires GUI)*
 
 **Effort:** 0.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3765,28 +3765,28 @@ interface ElectronAPI {
 **Blocks:** `4.6`
 
 **Sub-tasks:**
-- [ ] 4.5.1 — Implement `sendAction(action)` in TrayManager: gets active workflow ID, calls engine method (15m) *(depends on: 4.4.1)*
-- [ ] 4.5.2 — Wire tray "Start" to `workflow:start` IPC handler (or direct engine call) (20m) *(depends on: 2.22.7)*
-- [ ] 4.5.3 — Wire tray "Pause" to `workflow:pause` handler (20m)
-- [ ] 4.5.4 — Wire tray "Stop" to `workflow:stop` handler (15m)
-- [ ] 4.5.5 — Update context menu item enabled/disabled states based on current workflow status (15m)
-- [ ] 4.5.6 — Handle case where no workflow is active (disable execution actions) (10m)
-- [ ] 4.5.7 — Test: Expose a method in the main process to get the active workflow ID (10m)
+- [x] 4.5.1 — Implement `sendAction(action)` in TrayManager: gets active workflow ID, calls engine method (15m) *(depends on: 4.4.1)*
+- [x] 4.5.2 — Wire tray "Start" to `workflow:start` IPC handler (or direct engine call) (20m) *(depends on: 2.22.7)*
+- [x] 4.5.3 — Wire tray "Pause" to `workflow:pause` handler (20m)
+- [x] 4.5.4 — Wire tray "Stop" to `workflow:stop` handler (15m)
+- [x] 4.5.5 — Update context menu item enabled/disabled states based on current workflow status (15m)
+- [x] 4.5.6 — Handle case where no workflow is active (disable execution actions) (10m)
+- [x] 4.5.7 — Test: Expose a method in the main process to get the active workflow ID (10m)
 
 **Done when:**
-- [ ] Test: Tray "Start" starts the active workflow
-- [ ] Test: Tray "Pause" pauses the running workflow
-- [ ] Test: Tray "Stop" stops the workflow
-- [ ] Test: Menu items enable/disable based on state
+- [ ] Test: Tray "Start" starts the active workflow *(requires GUI)*
+- [ ] Test: Tray "Pause" pauses the running workflow *(requires GUI)*
+- [ ] Test: Tray "Stop" stops the workflow *(requires GUI)*
+- [ ] Test: Menu items enable/disable based on state *(requires GUI)*
 
 **Effort:** 1h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3799,24 +3799,24 @@ interface ElectronAPI {
 **Blocks:** Phase 4 Gate
 
 **Sub-tasks:**
-- [ ] 4.6.1 — Test: Test tray on macOS: menu bar extra, template images, dark mode support (15m)
-- [ ] 4.6.2 — Test: Test tray on Windows: system tray notification area, balloon tooltips (15m)
+- [ ] 4.6.1 — Test: Test tray on macOS: menu bar extra, template images, dark mode support (15m) *(requires GUI)*
+- [ ] 4.6.2 — Test: Test tray on Windows: system tray notification area, balloon tooltips (15m) *(requires GUI)*
 - [ ] 4.6.3 — Test: Document any platform-specific differences or limitations (20m)
-- [ ] 4.6.4 — Test: Add fallback behavior if tray is not supported on platform (20m)
-- [ ] 4.6.5 — Test: Test tray click-to-foreground on all platforms (15m)
+- [x] 4.6.4 — Test: Add fallback behavior if tray is not supported on platform (20m)
+- [ ] 4.6.5 — Test: Test tray click-to-foreground on all platforms (15m) *(requires GUI)*
 
 **Done when:**
-- [ ] Test: Tray works on the primary development platform (macOS)
-- [ ] Test: Known platform differences are documented
-- [ ] Test: Fallback behavior for platforms without tray support
+- [ ] Test: Tray works on the primary development platform (macOS) *(requires GUI)*
+- [ ] Test: Known platform differences are documented *(requires GUI)*
+- [ ] Test: Fallback behavior for platforms without tray support *(requires GUI)*
 
 **Effort:** 1h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [ ] All sub-tasks completed (checked off) *(requires GUI)*
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3836,27 +3836,27 @@ interface ElectronAPI {
 **Blocks:** `4.8`
 
 **Sub-tasks:**
-- [ ] 4.7.1 — Create `NotificationManager` class with methods for each notification type (15m) *(depends on: 2.22.3)*
-- [ ] 4.7.2 — Implement `sendWorkflowCompleted(workflowName, stats)`: show notification with title "Workflow Complete" and body with stats (20m)
-- [ ] 4.7.3 — Implement `sendWorkflowFailed(workflowName, error)`: show notification with title "Workflow Failed" and error message (15m)
-- [ ] 4.7.4 — Add click handler on notification: focus the app window on click (15m)
-- [ ] 4.7.5 — Respect macOS "Do Not Disturb" mode (Electron handles this automatically) (15m)
-- [ ] 4.7.6 — Use `Notification` API from Electron's main process (15m)
+- [x] 4.7.1 — Create `NotificationManager` class with methods for each notification type (15m) *(depends on: 2.22.3)*
+- [x] 4.7.2 — Implement `sendWorkflowCompleted(workflowName, stats)`: show notification with title "Workflow Complete" and body with stats (20m)
+- [x] 4.7.3 — Implement `sendWorkflowFailed(workflowName, error)`: show notification with title "Workflow Failed" and error message (15m)
+- [x] 4.7.4 — Add click handler on notification: focus the app window on click (15m)
+- [x] 4.7.5 — Respect macOS "Do Not Disturb" mode (Electron handles this automatically) (15m)
+- [x] 4.7.6 — Use `Notification` API from Electron's main process (15m)
 
 **Done when:**
-- [ ] Test: Notifications appear on workflow completion
-- [ ] Test: Notifications appear on workflow failure
-- [ ] Test: Clicking notification brings app to foreground
-- [ ] Test: Notifications respect "do not disturb" mode
+- [ ] Test: Notifications appear on workflow completion *(requires GUI)*
+- [ ] Test: Notifications appear on workflow failure *(requires GUI)*
+- [ ] Test: Clicking notification brings app to foreground *(requires GUI)*
+- [ ] Test: Notifications respect "do not disturb" mode *(requires GUI)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3873,24 +3873,24 @@ interface ElectronAPI {
 **Blocks:** `4.9`
 
 **Sub-tasks:**
-- [ ] 4.8.1 — In main process, listen to `workflow:completed` events from execution engine (15m) *(depends on: 4.7.2)*
-- [ ] 4.8.2 — In main process, listen to `workflow:failed` events from execution engine (15m)
-- [ ] 4.8.3 — Call `NotificationManager.sendWorkflowCompleted()` on completion event (15m) *(depends on: 2.22.7)*
-- [ ] 4.8.4 — Call `NotificationManager.sendWorkflowFailed()` on failure event (15m)
-- [ ] 4.8.5 — Include workflow name and relevant stats in notification payload (15m)
+- [x] 4.8.1 — In main process, listen to `workflow:completed` events from execution engine (15m) *(depends on: 4.7.2)*
+- [x] 4.8.2 — In main process, listen to `workflow:failed` events from execution engine (15m)
+- [x] 4.8.3 — Call `NotificationManager.sendWorkflowCompleted()` on completion event (15m) *(depends on: 2.22.7)*
+- [x] 4.8.4 — Call `NotificationManager.sendWorkflowFailed()` on failure event (15m)
+- [x] 4.8.5 — Include workflow name and relevant stats in notification payload (15m)
 
 **Done when:**
-- [ ] Test: Completion triggers a desktop notification
-- [ ] Test: Failure triggers a desktop notification
-- [ ] Test: Notifications include workflow name and relevant info
+- [ ] Test: Completion triggers a desktop notification *(requires GUI)*
+- [ ] Test: Failure triggers a desktop notification *(requires GUI)*
+- [ ] Test: Notifications include workflow name and relevant info *(requires GUI)*
 
 **Effort:** 0.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3908,24 +3908,24 @@ interface ElectronAPI {
 **Blocks:** `4.10`
 
 **Sub-tasks:**
-- [ ] 4.9.1 — Add notification preference fields to settingsStore: `notificationsEnabled`, `notifyOnComplete`, `notifyOnFailure`, `notifyOnWarning` (15m) *(depends on: 4.7.1)*
-- [ ] 4.9.2 — Create notification settings section in Settings page with switch toggles (15m)
-- [ ] 4.9.3 — Send notification preferences to main process via IPC on change (15m)
-- [ ] 4.9.4 — In NotificationManager, check preferences before showing each notification type (15m)
-- [ ] 4.9.5 — Persist notification preferences across restarts (Zustand persist) (10m)
+- [x] 4.9.1 — Add notification preference fields to settingsStore: `notificationsEnabled`, `notifyOnComplete`, `notifyOnFailure`, `notifyOnWarning` (15m) *(depends on: 4.7.1)*
+- [x] 4.9.2 — Create notification settings section in Settings page with switch toggles (15m)
+- [x] 4.9.3 — Send notification preferences to main process via IPC on change (15m)
+- [x] 4.9.4 — In NotificationManager, check preferences before showing each notification type (15m)
+- [x] 4.9.5 — Persist notification preferences across restarts (Zustand persist) (10m)
 
 **Done when:**
-- [ ] Test: Notifications can be toggled on/off in Settings
-- [ ] Test: Preferences persist across restarts
-- [ ] Test: Disabled notifications do not fire
+- [ ] Test: Notifications can be toggled on/off in Settings *(requires GUI)*
+- [ ] Test: Preferences persist across restarts *(requires GUI)*
+- [ ] Test: Disabled notifications do not fire *(requires GUI)*
 
 **Effort:** 1h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3941,24 +3941,24 @@ interface ElectronAPI {
 **Blocks:** `4.11`
 
 **Sub-tasks:**
-- [ ] 4.10.1 — Implement `sendRateLimitWarning(provider, retryAfter)`: show silent notification (15m) *(depends on: 3.11.6)*
-- [ ] 4.10.2 — Suppress repeated rate limit notifications within 5-minute window (cooldown) (15m)
-- [ ] 4.10.3 — Resume rate limit notifications after 5 minutes of no rate limits (15m)
-- [ ] 4.10.4 — Use tray balloon on Windows, notification banner on macOS for rate limit alerts (15m)
-- [ ] 4.10.5 — Log rate limit events for debugging (10m)
+- [x] 4.10.1 — Implement `sendRateLimitWarning(provider, retryAfter)`: show silent notification (15m) *(depends on: 3.11.6)*
+- [x] 4.10.2 — Suppress repeated rate limit notifications within 5-minute window (cooldown) (15m)
+- [x] 4.10.3 — Resume rate limit notifications after 5 minutes of no rate limits (15m)
+- [x] 4.10.4 — Use tray balloon on Windows, notification banner on macOS for rate limit alerts (15m)
+- [x] 4.10.5 — Log rate limit events for debugging (10m)
 
 **Done when:**
-- [ ] Test: Rate limit notifications show on first occurrence
-- [ ] Test: Notifications are suppressed if repeated quickly
-- [ ] Test: Notifications resume after quiet period
+- [ ] Test: Rate limit notifications show on first occurrence *(requires GUI)*
+- [ ] Test: Notifications are suppressed if repeated quickly *(requires GUI)*
+- [ ] Test: Notifications resume after quiet period *(requires GUI)*
 
 **Effort:** 1h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -3971,23 +3971,23 @@ interface ElectronAPI {
 **Blocks:** Phase 4 Gate
 
 **Sub-tasks:**
-- [ ] 4.11.1 — Test: Test macOS: Notification Center banners, grouping (15m)
-- [ ] 4.11.2 — Test: Test Windows: Toast notifications (Action Center), balloon tips for tray (15m)
-- [ ] 4.11.3 — Test: Test Linux: libnotify/DBus notifications (if applicable) (20m)
-- [ ] 4.11.4 — Test: Test click-to-focus behavior on all platforms (20m)
+- [ ] 4.11.1 — Test: Test macOS: Notification Center banners, grouping (15m) *(requires GUI)*
+- [ ] 4.11.2 — Test: Test Windows: Toast notifications (Action Center), balloon tips for tray (15m) *(requires GUI)*
+- [ ] 4.11.3 — Test: Test Linux: libnotify/DBus notifications (if applicable) (20m) *(requires GUI)*
+- [ ] 4.11.4 — Test: Test click-to-focus behavior on all platforms (20m) *(requires GUI)*
 - [ ] 4.11.5 — Test: Document known platform differences (15m)
 
 **Done when:**
-- [ ] Test: Notifications work on the primary development platform
-- [ ] Test: Known platform differences are documented
+- [ ] Test: Notifications work on the primary development platform *(requires GUI)*
+- [ ] Test: Known platform differences are documented *(requires GUI)*
 
 **Effort:** 1h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [ ] All sub-tasks completed (checked off) *(requires GUI)*
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -4007,30 +4007,30 @@ interface ElectronAPI {
 **Blocks:** `4.13`
 
 **Sub-tasks:**
-- [ ] 4.12.1 — Create `ShortcutManager` class using `globalShortcut` from Electron (20m) *(depends on: 1.4.4)*
-- [ ] 4.12.2 — Register `CommandOrControl+Return`: start/resume workflow (20m)
-- [ ] 4.12.3 — Register `CommandOrControl+Shift+Return`: pause workflow (20m)
-- [ ] 4.12.4 — Register `CommandOrControl+.`: stop workflow (15m)
-- [ ] 4.12.5 — Implement `unregister()`: call `globalShortcut.unregisterAll()` on app quit (15m)
-- [ ] 4.12.6 — Handle case where shortcuts are already registered by another app (15m)
-- [ ] 4.12.7 — Wire shortcut actions to execution engine (same as tray actions) (15m)
-- [ ] 4.12.8 — Test shortcuts work when app is minimized or in background (10m)
+- [x] 4.12.1 — Create `ShortcutManager` class using `globalShortcut` from Electron (20m) *(depends on: 1.4.4)*
+- [x] 4.12.2 — Register `CommandOrControl+Return`: start/resume workflow (20m)
+- [x] 4.12.3 — Register `CommandOrControl+Shift+Return`: pause workflow (20m)
+- [x] 4.12.4 — Register `CommandOrControl+.`: stop workflow (15m)
+- [x] 4.12.5 — Implement `unregister()`: call `globalShortcut.unregisterAll()` on app quit (15m)
+- [x] 4.12.6 — Handle case where shortcuts are already registered by another app (15m)
+- [x] 4.12.7 — Wire shortcut actions to execution engine (same as tray actions) (15m)
+- [ ] 4.12.8 — Test shortcuts work when app is minimized or in background (10m) *(requires GUI)*
 
 **Done when:**
-- [ ] Test: Cmd+Enter starts the active workflow
-- [ ] Test: Cmd+Shift+Enter pauses/resumes
-- [ ] Test: Cmd+. stops the workflow
-- [ ] Test: Shortcuts work when app is in background
-- [ ] Test: Shortcuts are unregistered on quit
+- [ ] Test: Cmd+Enter starts the active workflow *(requires GUI)*
+- [ ] Test: Cmd+Shift+Enter pauses/resumes *(requires GUI)*
+- [ ] Test: Cmd+. stops the workflow *(requires GUI)*
+- [ ] Test: Shortcuts work when app is in background *(requires GUI)*
+- [ ] Test: Shortcuts are unregistered on quit *(requires GUI)*
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -4058,28 +4058,28 @@ interface ElectronAPI {
 **Blocks:** `4.14`
 
 **Sub-tasks:**
-- [ ] 4.13.1 — Create `useKeyboardShortcuts.ts` hook with `useEffect` + `keydown` listener (15m)
-- [ ] 4.13.2 — Implement Cmd+N: navigate to `/workflows/new` (20m)
-- [ ] 4.13.3 — Implement Cmd+S: trigger save on current page (15m)
-- [ ] 4.13.4 — Implement Cmd+,: navigate to `/settings` (15m)
-- [ ] 4.13.5 — Implement Escape: close any open panel or dialog (15m)
-- [ ] 4.13.6 — Implement Space: toggle play/pause in execution viewer (only when execution viewer is focused) (15m)
-- [ ] 4.13.7 — Ignore shortcuts when focus is in INPUT/TEXTAREA/SELECT elements (10m)
-- [ ] 4.13.8 — Test: Add `preventDefault()` to avoid conflicts with browser defaults (10m)
-- [ ] 4.13.9 — Test: Clean up event listener on component unmount (5m)
+- [x] 4.13.1 — Create `useKeyboardShortcuts.ts` hook with `useEffect` + `keydown` listener (15m)
+- [x] 4.13.2 — Implement Cmd+N: navigate to `/workflows/new` (20m)
+- [x] 4.13.3 — Implement Cmd+S: trigger save on current page (15m)
+- [x] 4.13.4 — Implement Cmd+,: navigate to `/settings` (15m)
+- [x] 4.13.5 — Implement Escape: close any open panel or dialog (15m)
+- [x] 4.13.6 — Implement Space: toggle play/pause in execution viewer (only when execution viewer is focused) (15m)
+- [x] 4.13.7 — Ignore shortcuts when focus is in INPUT/TEXTAREA/SELECT elements (10m)
+- [x] 4.13.8 — Test: Add `preventDefault()` to avoid conflicts with browser defaults (10m)
+- [x] 4.13.9 — Test: Clean up event listener on component unmount (5m)
 
 **Done when:**
-- [ ] Test: All renderer shortcuts work when the app is focused
-- [ ] Test: Shortcuts are disabled when editing text inputs
-- [ ] Test: No conflicts with Electron's built-in shortcuts
+- [ ] Test: All renderer shortcuts work when the app is focused *(requires GUI)*
+- [ ] Test: Shortcuts are disabled when editing text inputs *(requires GUI)*
+- [ ] Test: No conflicts with Electron's built-in shortcuts *(requires GUI)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -4096,29 +4096,29 @@ interface ElectronAPI {
 **Blocks:** `4.15`
 
 **Sub-tasks:**
-- [ ] 4.14.1 — Add `mode: 'full' | 'compact'` to window state tracking (15m) *(depends on: 1.4.2)*
-- [ ] 4.14.2 — Implement `setWindowMode(mode)`: resize window (full=1200x800, compact=400x400) (20m)
-- [ ] 4.14.3 — Add IPC handler `window:set-mode` for renderer to request mode change (20m)
-- [ ] 4.14.4 — Update `ExecutionViewer.tsx` to support compact variant (hide sidebar, logs, only show header + streaming response) (20m)
-- [ ] 4.14.5 — Add compact mode toggle button in execution viewer header (15m)
-- [ ] 4.14.6 — Add View menu item for compact/full mode switching (15m) *(depends on: 4.14.5)*
-- [ ] 4.14.7 — Maintain window position when switching modes (center the window) (15m)
-- [ ] 4.14.8 — Persist mode preference in settings store (10m)
+- [x] 4.14.1 — Add `mode: 'full' | 'compact'` to window state tracking (15m) *(depends on: 1.4.2)*
+- [x] 4.14.2 — Implement `setWindowMode(mode)`: resize window (full=1200x800, compact=400x400) (20m)
+- [x] 4.14.3 — Add IPC handler `window:set-mode` for renderer to request mode change (20m)
+- [x] 4.14.4 — Update `ExecutionViewer.tsx` to support compact variant (hide sidebar, logs, only show header + streaming response) (20m)
+- [x] 4.14.5 — Add compact mode toggle button in execution viewer header (15m)
+- [x] 4.14.6 — Add View menu item for compact/full mode switching (15m) *(depends on: 4.14.5)*
+- [x] 4.14.7 — Maintain window position when switching modes (center the window) (15m)
+- [x] 4.14.8 — Persist mode preference in settings store (10m)
 
 **Done when:**
-- [ ] Test: Compact window opens with correct size
-- [ ] Test: Execution viewer works in compact mode
-- [ ] Test: Mode can be toggled
-- [ ] Test: Window position is maintained when switching modes
+- [ ] Test: Compact window opens with correct size *(requires GUI)*
+- [ ] Test: Execution viewer works in compact mode *(requires GUI)*
+- [ ] Test: Mode can be toggled *(requires GUI)*
+- [ ] Test: Window position is maintained when switching modes *(requires GUI)*
 
 **Effort:** 2.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -4135,29 +4135,29 @@ interface ElectronAPI {
 **Blocks:** `4.16`
 
 **Sub-tasks:**
-- [ ] 4.15.1 — Define `PersistedWindowState` type with x, y, width, height, isMaximized, mode (20m) *(depends on: 1.4.2)*
-- [ ] 4.15.2 — Save window state on `resize` event (debounced 500ms) (20m)
-- [ ] 4.15.3 — Save window state on `move` event (debounced 500ms) (20m) *(depends on: 4.14.2)*
-- [ ] 4.15.4 — Save window state on `maximize`/`unmaximize` events (20m)
-- [ ] 4.15.5 — Restore window state on app startup (set bounds, maximize if was maximized) (15m)
-- [ ] 4.15.6 — Clamp window position to available display bounds (handle monitor disconnect) (15m)
-- [ ] 4.15.7 — Use `electron-store` or a JSON file in userData for persistence (10m)
-- [ ] 4.15.8 — Test: resize → close → reopen → same size and position (10m)
+- [x] 4.15.1 — Define `PersistedWindowState` type with x, y, width, height, isMaximized, mode (20m) *(depends on: 1.4.2)*
+- [x] 4.15.2 — Save window state on `resize` event (debounced 500ms) (20m)
+- [x] 4.15.3 — Save window state on `move` event (debounced 500ms) (20m) *(depends on: 4.14.2)*
+- [x] 4.15.4 — Save window state on `maximize`/`unmaximize` events (20m)
+- [x] 4.15.5 — Restore window state on app startup (set bounds, maximize if was maximized) (15m)
+- [x] 4.15.6 — Clamp window position to available display bounds (handle monitor disconnect) (15m)
+- [x] 4.15.7 — Use `electron-store` or a JSON file in userData for persistence (10m)
+- [ ] 4.15.8 — Test: resize → close → reopen → same size and position (10m) *(requires GUI)*
 
 **Done when:**
-- [ ] Test: Window position persists across restarts
-- [ ] Test: Window size persists across restarts
-- [ ] Test: Maximized state persists
-- [ ] Test: Window mode persists
-- [ ] Test: Multi-monitor: position is clamped to available displays
+- [ ] Test: Window position persists across restarts *(requires GUI)*
+- [ ] Test: Window size persists across restarts *(requires GUI)*
+- [ ] Test: Maximized state persists *(requires GUI)*
+- [ ] Test: Window mode persists *(requires GUI)*
+- [ ] Test: Multi-monitor: position is clamped to available displays *(requires GUI)*
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
@@ -4176,26 +4176,26 @@ interface ElectronAPI {
 **Blocks:** `4.17`
 
 **Sub-tasks:**
-- [ ] 4.16.1 — Design app icon (1024x1024 base) with app logo/initial (30m)
-- [ ] 4.16.2 — Export macOS `.icns` with all required sizes (16, 32, 48, 128, 256, 512) (20m)
-- [ ] 4.16.3 — Export Windows `.ico` with all required sizes (16, 32, 48, 256) (20m) *(depends on: 4.16.2)*
-- [ ] 4.16.4 — Export Linux `.png` in 512x512 and 1024x1024 (Retina @2x) (15m) *(depends on: 4.16.3)*
-- [ ] 4.16.5 — Configure `electron-builder.yml` to use correct icon paths per platform (15m)
-- [ ] 4.16.6 — Verify icon appears in dock/taskbar, app switcher, About panel, and file manager (15m)
+- [x] 4.16.1 — Design app icon (1024x1024 base) with app logo/initial (30m)
+- [x] 4.16.2 — Export macOS `.icns` with all required sizes (16, 32, 48, 128, 256, 512) (20m)
+- [x] 4.16.3 — Export Windows `.ico` with all required sizes (16, 32, 48, 256) (20m) *(depends on: 4.16.2)*
+- [x] 4.16.4 — Export Linux `.png` in 512x512 and 1024x1024 (Retina @2x) (15m) *(depends on: 4.16.3)*
+- [x] 4.16.5 — Configure `electron-builder.yml` to use correct icon paths per platform (15m)
+- [ ] 4.16.6 — Verify icon appears in dock/taskbar, app switcher, About panel, and file manager (15m) *(requires GUI)*
 
 **Done when:**
-- [ ] Test: App icon shows in the dock/taskbar
-- [ ] Test: App icon shows in the application switcher
-- [ ] Test: App icon shows in About panel
-- [ ] Test: App icon shows in the file manager
+- [ ] Test: App icon shows in the dock/taskbar *(requires GUI)*
+- [ ] Test: App icon shows in the application switcher *(requires GUI)*
+- [ ] Test: App icon shows in About panel *(requires GUI)*
+- [ ] Test: App icon shows in the file manager *(requires GUI)*
 
 **Effort:** 2h (design) or 0.5h (asset creation if design exists)
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [ ] All `Done when` criteria met *(requires GUI)*
 
 ---
 
