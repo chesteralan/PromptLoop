@@ -121,8 +121,8 @@
 - [ ] `src/lib/ipc.ts` → `refactor/src_lib_ipc.md`
 - [ ] `src/lib/models.ts` → `refactor/src_lib_models.md`
 - [ ] `src/lib/utils.ts` → `refactor/src_lib_utils.md`
-- [ ] `src/lib/sentry.ts` → `refactor/src_lib_sentry.md`
-- [ ] `src/lib/electron-mock.ts` → `refactor/src_lib_electron-mock.md`
+- [x] `src/lib/sentry.ts` → `refactor/src_lib_sentry.md`
+- [x] `src/lib/electron-mock.ts` → `refactor/src_lib_electron-mock.md`
 
 ## Stores
 

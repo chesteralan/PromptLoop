@@ -1,31 +1,40 @@
 import type { ElectronAPI } from './ipc'
 
-function noop(): void {}
+const listeners: Record<string, Array<(...args: unknown[]) => void>> = {}
 
-const asyncNoop: (...args: unknown[]) => Promise<unknown> = () => Promise.resolve(undefined)
+function on(channel: string, fn: (...args: unknown[]) => void) {
+  ;(listeners[channel] ??= []).push(fn)
+  return () => {
+    listeners[channel] = listeners[channel]?.filter((f) => f !== fn)
+  }
+}
 
 export function injectElectronMock(): void {
-  if (typeof window === 'undefined' || window.electronAPI) return
+  if (window.electronAPI) return
 
   const mock: ElectronAPI = {
-    startWorkflow: asyncNoop as ElectronAPI['startWorkflow'],
-    pauseWorkflow: asyncNoop as ElectronAPI['pauseWorkflow'],
-    stopWorkflow: asyncNoop as ElectronAPI['stopWorkflow'],
-    retryWorkflow: asyncNoop as ElectronAPI['retryWorkflow'],
-    onExecutionChunk: () => noop,
-    onExecutionCompleted: () => noop,
-    onExecutionFailed: () => noop,
-    onWorkflowCompleted: () => noop,
-    encryptApiKey: asyncNoop as ElectronAPI['encryptApiKey'],
-    decryptApiKey: asyncNoop as ElectronAPI['decryptApiKey'],
-    deleteApiKey: asyncNoop as ElectronAPI['deleteApiKey'],
-    listApiKeys: () => Promise.resolve([]),
-    minimizeToTray: noop,
-    getAppVersion: () => Promise.resolve('0.0.0'),
-    showSaveDialog: () => Promise.resolve({ canceled: true, filePath: null }),
-    showOpenDialog: () => Promise.resolve({ canceled: true, filePaths: [] }),
-    writeFile: () => Promise.resolve({ success: true }),
-    readFile: () => Promise.resolve({ success: true, content: '' }),
+    startWorkflow: async () => ({ success: true, workflowId: '' }),
+    pauseWorkflow: async () => ({ success: true, workflowId: '' }),
+    stopWorkflow: async () => ({ success: true, workflowId: '' }),
+    retryWorkflow: async () => ({ success: true, workflowId: '' }),
+
+    onExecutionChunk: (cb) => on('execution:chunk', cb as (...args: unknown[]) => void),
+    onExecutionCompleted: (cb) => on('execution:completed', cb as (...args: unknown[]) => void),
+    onExecutionFailed: (cb) => on('execution:failed', cb as (...args: unknown[]) => void),
+    onWorkflowCompleted: (cb) => on('workflow:completed', cb as (...args: unknown[]) => void),
+
+    encryptApiKey: async () => ({ id: 'mock-id', keyPrefix: 'sk-****' }),
+    decryptApiKey: async () => ({ key: 'mock-key' }),
+    deleteApiKey: async () => ({ success: true }),
+    listApiKeys: async () => [],
+
+    minimizeToTray: () => {},
+    getAppVersion: async () => '0.0.0',
+
+    showSaveDialog: async () => ({ canceled: true, filePath: null }),
+    showOpenDialog: async () => ({ canceled: true, filePaths: [] }),
+    writeFile: async () => ({ success: true }),
+    readFile: async () => ({ success: true, content: '' }),
   }
 
   window.electronAPI = mock
