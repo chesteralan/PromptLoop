@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useExecutionStore } from '../store/executionStore'
 
 export function useExecutionListener() {
@@ -52,11 +52,26 @@ export function useExecutionListener() {
 }
 
 export function useWorkflowControl() {
-  return {
-    startWorkflow: (workflowId: string, config?: unknown, apiKeys?: Record<string, string>) =>
+  const startWorkflow = useCallback(
+    (workflowId: string, config?: unknown, apiKeys?: Record<string, string>) =>
       window.electronAPI.startWorkflow(workflowId, config, apiKeys),
-    pauseWorkflow: (workflowId: string) => window.electronAPI.pauseWorkflow(workflowId),
-    stopWorkflow: (workflowId: string) => window.electronAPI.stopWorkflow(workflowId),
-    retryWorkflow: (workflowId: string) => window.electronAPI.retryWorkflow(workflowId),
-  }
+    [],
+  )
+
+  const pauseWorkflow = useCallback(
+    (workflowId: string) => window.electronAPI.pauseWorkflow(workflowId),
+    [],
+  )
+
+  const stopWorkflow = useCallback(
+    (workflowId: string) => window.electronAPI.stopWorkflow(workflowId),
+    [],
+  )
+
+  const retryWorkflow = useCallback(
+    (workflowId: string) => window.electronAPI.retryWorkflow(workflowId),
+    [],
+  )
+
+  return { startWorkflow, pauseWorkflow, stopWorkflow, retryWorkflow }
 }

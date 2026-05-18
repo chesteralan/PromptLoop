@@ -108,7 +108,7 @@
 - [ ] `src/hooks/usePrompts.ts` → `refactor/src_hooks_usePrompts.md`
 - [ ] `src/hooks/useExecutions.ts` → `refactor/src_hooks_useExecutions.md`
 - [ ] `src/hooks/useWorkflowSnapshot.ts` → `refactor/src_hooks_useWorkflowSnapshot.md`
-- [ ] `src/hooks/useIpc.ts` → `refactor/src_hooks_useIpc.md`
+- [x] `src/hooks/useIpc.ts` → `refactor/src_hooks_useIpc.md`
 - [ ] `src/hooks/useAutoSave.ts` → `refactor/src_hooks_useAutoSave.md`
 - [ ] `src/hooks/useConfiguredProviders.ts` → `refactor/src_hooks_useConfiguredProviders.md`
 - [ ] `src/hooks/useKeyboardShortcuts.ts` → `refactor/src_hooks_useKeyboardShortcuts.md`
@@ -117,7 +117,7 @@
 
 - [x] `src/lib/firebase.ts` → `refactor/src_lib_firebase.md`
 - [x] `src/lib/converters.ts` → `refactor/src_lib_converters.md`
-- [ ] `src/lib/firestore-helpers.ts` → `refactor/src_lib_firestore-helpers.md`
+- [x] `src/lib/firestore-helpers.ts` → `refactor/src_lib_firestore-helpers.md` _(removed — dead code)_
 - [ ] `src/lib/ipc.ts` → `refactor/src_lib_ipc.md`
 - [ ] `src/lib/models.ts` → `refactor/src_lib_models.md`
 - [ ] `src/lib/utils.ts` → `refactor/src_lib_utils.md`
