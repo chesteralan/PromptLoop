@@ -59,12 +59,13 @@ export function WorkflowEditorPage() {
   const [localPrompts, setLocalPrompts] = useState<(PromptData & { id: string })[]>([])
   const isDirtyRef = useRef(false)
 
+  const initialSyncDone = useRef(false)
   useEffect(() => {
-    if (workflow) {
-      setName(workflow.name)
-      setLoopMode(workflow.loopMode ?? 'single')
-      setMaxIterations(workflow.maxIterations ?? 1)
-    }
+    if (!workflow || initialSyncDone.current) return
+    setName(workflow.name)
+    setLoopMode(workflow.loopMode ?? 'single')
+    setMaxIterations(workflow.maxIterations ?? 1)
+    initialSyncDone.current = true
   }, [workflow])
 
   useEffect(() => {
@@ -89,11 +90,8 @@ export function WorkflowEditorPage() {
     () => ({ name, loopMode, maxIterations }),
     [name, loopMode, maxIterations],
   )
-  useAutoSave({
-    data: workflowData,
-    isNew,
-    delay: 3000,
-    save: async (d) => {
+  const handleAutoSave = useCallback(
+    async (d: { name: string; loopMode: LoopMode; maxIterations?: number }) => {
       if (!workflowId) return
       await updateWorkflow.mutateAsync({
         workflowId,
@@ -104,6 +102,13 @@ export function WorkflowEditorPage() {
         },
       })
     },
+    [workflowId, updateWorkflow],
+  )
+  useAutoSave({
+    data: workflowData,
+    isNew,
+    delay: 3000,
+    save: handleAutoSave,
   })
 
   async function handleSave() {
