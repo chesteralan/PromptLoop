@@ -4,8 +4,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App'
 import { AuthProvider } from './components/auth/AuthProvider'
 import { initRendererSentry } from './lib/sentry'
+import { injectElectronMock } from './lib/electron-mock'
 import './styles/globals.css'
 
+injectElectronMock()
 initRendererSentry()
 
 const queryClient = new QueryClient({

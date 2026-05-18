@@ -13,6 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "preview": "vite preview",
+    "dev:web": "vite -c vite.web.config.ts",
     "emulators": "firebase emulators:start",
     "prepare": "husky"
   },
