@@ -6,10 +6,20 @@ import type {
 } from '../../electron/shared/types'
 
 export interface ElectronAPI {
-  startWorkflow(workflowId: string): Promise<{ workflowId: string }>
-  pauseWorkflow(workflowId: string): Promise<{ workflowId: string }>
-  stopWorkflow(workflowId: string): Promise<{ workflowId: string }>
-  retryWorkflow(workflowId: string): Promise<{ workflowId: string }>
+  startWorkflow(
+    workflowId: string,
+    config?: unknown,
+    apiKeys?: Record<string, string>,
+  ): Promise<{ success: boolean; workflowId: string; error?: string }>
+  pauseWorkflow(
+    workflowId: string,
+  ): Promise<{ success: boolean; workflowId: string; error?: string }>
+  stopWorkflow(
+    workflowId: string,
+  ): Promise<{ success: boolean; workflowId: string; error?: string }>
+  retryWorkflow(
+    workflowId: string,
+  ): Promise<{ success: boolean; workflowId: string; error?: string }>
   onExecutionChunk(callback: (data: ExecutionChunk) => void): () => void
   onExecutionCompleted(callback: (data: ExecutionResult) => void): () => void
   onExecutionFailed(callback: (data: ExecutionError) => void): () => void

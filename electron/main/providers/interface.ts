@@ -1,13 +1,21 @@
-export interface ProviderAdapter {
-  stream(
-    prompt: string,
-    options: {
-      apiKey: string
-      temperature: number
-      maxTokens: number
-      signal?: AbortSignal
-    },
-  ): Promise<AsyncIterable<string>>
+export interface StreamOptions {
+  apiKey: string
+  model: string
+  systemPrompt?: string
+  temperature?: number
+  maxTokens?: number
+  signal?: AbortSignal
+}
 
-  models(): { id: string; name: string }[]
+export interface ModelInfo {
+  id: string
+  name: string
+  maxTokens: number
+}
+
+export interface ProviderAdapter {
+  stream(prompt: string, options: StreamOptions): Promise<AsyncIterable<string>>
+  models(): ModelInfo[]
+  validateApiKey(apiKey: string): Promise<boolean>
+  estimateCost(modelId: string, tokensIn: number, tokensOut: number): number
 }

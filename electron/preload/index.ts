@@ -7,7 +7,8 @@ import type {
 } from '../shared/types'
 
 export const api = {
-  startWorkflow: (workflowId: string) => ipcRenderer.invoke('workflow:start', { workflowId }),
+  startWorkflow: (workflowId: string, config?: unknown, apiKeys?: Record<string, string>) =>
+    ipcRenderer.invoke('workflow:start', { workflowId, config, apiKeys }),
   pauseWorkflow: (workflowId: string) => ipcRenderer.invoke('workflow:pause', { workflowId }),
   stopWorkflow: (workflowId: string) => ipcRenderer.invoke('workflow:stop', { workflowId }),
   retryWorkflow: (workflowId: string) => ipcRenderer.invoke('workflow:retry', { workflowId }),

@@ -26,11 +26,13 @@
     ]
   },
   "dependencies": {
+    "@ai-sdk/openai": "^3.0.64",
     "@base-ui/react": "^1.4.1",
     "@fontsource-variable/geist": "^5.2.9",
     "@hello-pangea/dnd": "^18.0.1",
     "@sentry/electron": "^7.13.0",
     "@tanstack/react-query": "^5.100.10",
+    "ai": "^6.0.184",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
