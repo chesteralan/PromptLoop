@@ -11,6 +11,7 @@ import { registerWorkflowIpc } from './ipc/workflow'
 import { registerExecutionIpc } from './ipc/execution'
 import { registerApiKeysIpc } from './ipc/api-keys'
 import { registerAppIpc } from './ipc/app'
+
 import { createTray, destroyTray, setTrayStatus } from './tray'
 import { registerShortcuts, unregisterShortcuts } from './shortcuts'
 import { initSentry } from './sentry'
@@ -68,6 +69,28 @@ ipcMain.on('tray:action', (_event, action: string) => {
 app.whenReady().then(() => {
   const win = createWindow()
   const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
+
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    if (
+      url.includes('__/auth/handler') ||
+      url.includes('accounts.google.com') ||
+      url.includes('github.com')
+    ) {
+      return {
+        action: 'allow',
+        overrideBrowserWindowOptions: {
+          width: 500,
+          height: 700,
+          resizable: false,
+          webPreferences: {
+            contextIsolation: true,
+            nodeIntegration: false,
+          },
+        },
+      }
+    }
+    return { action: 'allow' }
+  })
 
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL)

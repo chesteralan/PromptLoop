@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { FilePlus, Trash2, Workflow } from 'lucide-react'
 import { Button } from '../components/ui/button'
@@ -85,7 +85,10 @@ export function WorkflowEditorPage() {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [])
 
-  const workflowData = { name, loopMode, maxIterations }
+  const workflowData = useMemo(
+    () => ({ name, loopMode, maxIterations }),
+    [name, loopMode, maxIterations],
+  )
   useAutoSave({
     data: workflowData,
     isNew,
