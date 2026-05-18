@@ -116,7 +116,7 @@
 ## Lib
 
 - [x] `src/lib/firebase.ts` → `refactor/src_lib_firebase.md`
-- [ ] `src/lib/converters.ts` → `refactor/src_lib_converters.md`
+- [x] `src/lib/converters.ts` → `refactor/src_lib_converters.md`
 - [ ] `src/lib/firestore-helpers.ts` → `refactor/src_lib_firestore-helpers.md`
 - [ ] `src/lib/ipc.ts` → `refactor/src_lib_ipc.md`
 - [ ] `src/lib/models.ts` → `refactor/src_lib_models.md`

@@ -53,6 +53,21 @@ export interface ApiKeyData {
   lastUsedAt?: Date
 }
 
+function ts(d: Date): Timestamp {
+  return Timestamp.fromDate(d)
+}
+
+function fromTS(v: unknown): Date {
+  if (v instanceof Timestamp) return v.toDate()
+  if (v instanceof Date) return v
+  return new Date()
+}
+
+function optTS(v: unknown): Date | undefined {
+  if (v == null) return undefined
+  return fromTS(v)
+}
+
 const workflowConverter: FirestoreDataConverter<WorkflowData> = {
   toFirestore(model) {
     return {
@@ -60,16 +75,16 @@ const workflowConverter: FirestoreDataConverter<WorkflowData> = {
       status: model.status,
       loopMode: model.loopMode,
       maxIterations: model.maxIterations,
-      createdAt: Timestamp.fromDate(model.createdAt as Date),
-      updatedAt: Timestamp.fromDate(model.updatedAt as Date),
+      createdAt: ts(model.createdAt as Date),
+      updatedAt: ts(model.updatedAt as Date),
     }
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions) {
     const data = snapshot.data(options)
     return {
       ...data,
-      createdAt: (data.createdAt as Timestamp).toDate(),
-      updatedAt: (data.updatedAt as Timestamp).toDate(),
+      createdAt: fromTS(data.createdAt),
+      updatedAt: fromTS(data.updatedAt),
     } as WorkflowData
   },
 }
@@ -87,16 +102,16 @@ const promptConverter: FirestoreDataConverter<PromptData> = {
       temperature: model.temperature,
       maxTokens: model.maxTokens,
       delayMs: model.delayMs,
-      createdAt: Timestamp.fromDate(model.createdAt as Date),
-      updatedAt: Timestamp.fromDate(model.updatedAt as Date),
+      createdAt: ts(model.createdAt as Date),
+      updatedAt: ts(model.updatedAt as Date),
     }
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions) {
     const data = snapshot.data(options)
     return {
       ...data,
-      createdAt: (data.createdAt as Timestamp).toDate(),
-      updatedAt: (data.updatedAt as Timestamp).toDate(),
+      createdAt: fromTS(data.createdAt),
+      updatedAt: fromTS(data.updatedAt),
     } as PromptData
   },
 }
@@ -113,18 +128,18 @@ const executionConverter: FirestoreDataConverter<ExecutionData> = {
       tokensOut: model.tokensOut,
       durationMs: model.durationMs,
       error: model.error,
-      startedAt: model.startedAt ? Timestamp.fromDate(model.startedAt as Date) : null,
-      completedAt: model.completedAt ? Timestamp.fromDate(model.completedAt as Date) : null,
-      createdAt: Timestamp.fromDate(model.createdAt as Date),
+      startedAt: model.startedAt ? ts(model.startedAt as Date) : null,
+      completedAt: model.completedAt ? ts(model.completedAt as Date) : null,
+      createdAt: ts(model.createdAt as Date),
     }
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions) {
     const data = snapshot.data(options)
     return {
       ...data,
-      startedAt: (data.startedAt as Timestamp | undefined)?.toDate(),
-      completedAt: (data.completedAt as Timestamp | undefined)?.toDate(),
-      createdAt: (data.createdAt as Timestamp).toDate(),
+      startedAt: optTS(data.startedAt),
+      completedAt: optTS(data.completedAt),
+      createdAt: fromTS(data.createdAt),
     } as ExecutionData
   },
 }
@@ -135,26 +150,18 @@ const apiKeyConverter: FirestoreDataConverter<ApiKeyData> = {
       provider: model.provider,
       keyPrefix: model.keyPrefix,
       encryptedKey: model.encryptedKey,
-      lastUsedAt: model.lastUsedAt ? Timestamp.fromDate(model.lastUsedAt as Date) : null,
-      createdAt: Timestamp.fromDate(model.createdAt as Date),
+      lastUsedAt: model.lastUsedAt ? ts(model.lastUsedAt as Date) : null,
+      createdAt: ts(model.createdAt as Date),
     }
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions) {
     const data = snapshot.data(options)
     return {
       ...data,
-      lastUsedAt: (data.lastUsedAt as Timestamp | undefined)?.toDate(),
-      createdAt: (data.createdAt as Timestamp).toDate(),
+      lastUsedAt: optTS(data.lastUsedAt),
+      createdAt: fromTS(data.createdAt),
     } as ApiKeyData
   },
 }
 
-function migrateDocument<T extends { version?: number }>(doc: T): T {
-  let current = { ...doc }
-  if (!current.version || current.version < 1) {
-    current = { ...current, version: 1 }
-  }
-  return current
-}
-
-export { workflowConverter, promptConverter, executionConverter, apiKeyConverter, migrateDocument }
+export { workflowConverter, promptConverter, executionConverter, apiKeyConverter }
