@@ -3,13 +3,18 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 import {
   onAuthStateChanged,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   GoogleAuthProvider,
   GithubAuthProvider,
   signOut as firebaseSignOut,
+  browserPopupRedirectResolver,
   type User,
 } from 'firebase/auth'
 import { auth } from '../../lib/firebase'
 import { useSettingsStore } from '../../store/settingsStore'
+
+const isElectron = typeof window !== 'undefined' && 'electronAPI' in window
 
 interface AuthContextValue {
   user: User | null
@@ -26,6 +31,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (isElectron) {
+      getRedirectResult(auth, browserPopupRedirectResolver).catch(() => {})
+    }
+  }, [])
+
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user)
       useSettingsStore.getState().setUser(user)
@@ -36,12 +47,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider()
-    await signInWithPopup(auth, provider)
+    if (isElectron) {
+      await signInWithRedirect(auth, provider, browserPopupRedirectResolver)
+    } else {
+      await signInWithPopup(auth, provider)
+    }
   }
 
   const signInWithGitHub = async () => {
     const provider = new GithubAuthProvider()
-    await signInWithPopup(auth, provider)
+    if (isElectron) {
+      await signInWithRedirect(auth, provider, browserPopupRedirectResolver)
+    } else {
+      await signInWithPopup(auth, provider)
+    }
   }
 
   const signOut = async () => {
