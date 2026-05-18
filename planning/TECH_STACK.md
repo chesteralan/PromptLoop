@@ -56,12 +56,11 @@ Firestore has its own real-time listeners (`onSnapshot`), but TanStack Query pro
 
 | Decision | Choice | Alternative | Rationale |
 |----------|--------|-------------|-----------|
-| Auth Provider | **Firebase Auth** | Auth0, Clerk, Supabase Auth | Free tier includes email/password + Google/GitHub OAuth. No backend needed — client SDK works directly in Electron. Built-in session management and token refresh. |
+| Auth Provider | **Firebase Auth** | Auth0, Clerk, Supabase Auth | Free tier supports Google/GitHub OAuth. No backend needed — client SDK works directly in Electron. Built-in session management and token refresh. |
 
 ### Supported Providers (V1)
-1. **Email/Password** — Standard email registration and login
-2. **Google** — OAuth via Firebase popup or redirect
-3. **GitHub** — OAuth via Firebase popup or redirect
+1. **Google** — OAuth via Firebase popup or redirect
+2. **GitHub** — OAuth via Firebase popup or redirect
 
 ### What about Auth0 or Clerk?
 Both are excellent but introduce additional cost and complexity. Firebase Auth's free tier (10,000 monthly active users) is more than sufficient for a desktop app. Clerk's React SDK is newer and less battle-tested in Electron.

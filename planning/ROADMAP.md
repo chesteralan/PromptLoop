@@ -55,12 +55,11 @@ PromptLoop is developed in 5 phases. Phases 1-4 deliver the MVP (minimum viable 
 - [ ] Initialize Firebase in renderer
 - [ ] Set up Firebase Emulator Suite for local development
 - [ ] Implement `AuthProvider` context
-- [ ] Build `LoginPage` with email/password form
-- [ ] Build `OAuthButtons` (Google, GitHub)
+- [ ] Build `LoginPage` with OAuth buttons (Google, GitHub)
 - [ ] Implement `ProtectedRoute` component
 - [ ] Wire up `onAuthStateChanged` to Zustand store
 - [ ] Test full auth flow in Firebase Emulator
-- [ ] **Deliverable:** User can sign up, sign in, sign out
+- [ ] **Deliverable:** User can sign in and sign out via Google/GitHub OAuth
 
 ### Week 3: Design System & Layout
 
@@ -93,7 +92,7 @@ PromptLoop is developed in 5 phases. Phases 1-4 deliver the MVP (minimum viable 
 ```
 Checklist:
 ☐ App launches in dev mode
-☐ User can sign up / sign in / sign out
+☐ User can sign in / sign out via Google/GitHub OAuth
 ☐ User sees sidebar navigation
 ☐ Dark/light theme works
 ☐ IPC communication works

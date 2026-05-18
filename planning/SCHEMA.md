@@ -26,7 +26,7 @@ Path: `users/{userId}`
 
 ```typescript
 interface UserProfile {
-  email: string;
+  email: string; // from OAuth provider (Google/GitHub)
   displayName: string;
   photoURL: string | null;
   createdAt: Timestamp;

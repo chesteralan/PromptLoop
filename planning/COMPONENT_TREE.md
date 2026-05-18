@@ -93,15 +93,9 @@ Note: Using `HashRouter` because Electron loads files from `file://` protocol, w
 │
 ├── [Route: /login]
 │   └── <LoginPage>
-│       ├── <LoginForm>
-│       │   ├── <EmailInput />
-│       │   ├── <PasswordInput />
-│       │   └── <SubmitButton />
-│       ├── <Divider text="or" />
-│       ├── <OAuthButtons>
-│       │   ├── <GoogleSignInButton />
-│       │   └── <GitHubSignInButton />
-│       └── <PasswordResetLink />
+│       └── <OAuthButtons>
+│           ├── <GoogleSignInButton />
+│           └── <GitHubSignInButton />
 │
 ├── [Route: / (authenticated)]
 │   └── <AppLayout>
@@ -291,8 +285,7 @@ Note: Using `HashRouter` because Electron loads files from `file://` protocol, w
 
 **Behavior:**
 - On successful login, navigate to `/dashboard`
-- On error, show inline error (not toast) for form errors
-- Password reset sends email; show confirmation toast
+- On error, show inline error (not toast) for OAuth errors
 
 ### 3.2 Dashboard Page
 
@@ -430,7 +423,6 @@ src/components/
 │   └── ExecutionLogTable.tsx   // Execution history table
 ├── auth/
 │   ├── AuthProvider.tsx        // Firebase auth context provider
-│   ├── LoginForm.tsx           // Email/password form
 │   └── OAuthButtons.tsx        // Google/GitHub sign-in buttons
 ├── settings/
 │   ├── ApiKeyCard.tsx          // API key display card

@@ -536,7 +536,6 @@ class ScheduleWorker {
 
 ```
 ├── Authentication
-│   ├── Email/Password
 │   └── Sign-in providers
 │       ├── Google
 │       └── GitHub

@@ -148,13 +148,11 @@ The following are **not** included in V1:
 
 | Requirement | Priority |
 |-------------|----------|
-| Email/password login | High |
 | Google OAuth login | High |
 | GitHub OAuth login | High |
 | Secure API key storage (local encrypted) | High |
 | Session persistence across app restarts | High |
 | Account deletion | Medium |
-| Password reset | High |
 | Anonymous mode (local-only, no cloud sync) | Medium |
 
 ### 7.2 Prompt Management
@@ -361,7 +359,7 @@ Store and retrieve reusable context across workflow runs:
 | Frontend | React 18+ | Declarative UI, rich ecosystem |
 | Bundler | Vite | Fast dev server, optimized builds for Electron |
 | Styling | Tailwind CSS | Rapid UI development, consistent design |
-| Auth | Firebase Auth | Email/password + Google/GitHub OAuth, client SDK |
+| Auth | Firebase Auth | Google/GitHub OAuth, client SDK |
 | Database | Firestore | Real-time sync, no server management, offline support |
 | Local State | Zustand | Lightweight state management for UI state |
 | Routing | React Router | SPA routing within Electron |
