@@ -32,13 +32,15 @@ import {
 import type { LoopMode } from '../../electron/shared/types'
 import type { PromptData } from '../lib/converters'
 
+const EMPTY_PROMPTS: (PromptData & { id: string })[] = []
+
 export function WorkflowEditorPage() {
   const { workflowId } = useParams<{ workflowId: string }>()
   const navigate = useNavigate()
   const isNew = workflowId === 'new'
 
   const { data: workflow, isLoading: workflowLoading } = useWorkflow(isNew ? undefined : workflowId)
-  const { data: promptsData = [], isLoading: promptsLoading } = usePrompts(
+  const { data: promptsData = EMPTY_PROMPTS, isLoading: promptsLoading } = usePrompts(
     isNew ? undefined : workflowId,
   )
   const createWorkflow = useCreateWorkflow()
@@ -68,7 +70,10 @@ export function WorkflowEditorPage() {
     initialSyncDone.current = true
   }, [workflow])
 
+  const prevPromptsRef = useRef(promptsData)
   useEffect(() => {
+    if (promptsData === prevPromptsRef.current) return
+    prevPromptsRef.current = promptsData
     setLocalPrompts(promptsData)
   }, [promptsData])
 
