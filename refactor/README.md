@@ -8,11 +8,11 @@
 - [x] `electron/main/index.ts` → `refactor/electron_main_index.md`
 - [x] `electron/main/window.ts` → `refactor/electron_main_window.md`
 - [x] `electron/main/encryption.ts` → `refactor/electron_main_encryption.md`
-- [ ] `electron/main/sentry.ts` → `refactor/electron_main_sentry.md`
+- [x] `electron/main/sentry.ts` → `refactor/electron_main_sentry.md`
 - [x] `electron/main/tray.ts` → `refactor/electron_main_tray.md`
 - [x] `electron/main/shortcuts.ts` → `refactor/electron_main_shortcuts.md`
 - [x] `electron/main/notifications.ts` → `refactor/electron_main_notifications.md`
-- [ ] `electron/main/updater.ts` → `refactor/electron_main_updater.md`
+- [x] `electron/main/updater.ts` → `refactor/electron_main_updater.md`
 
 ## Engine
 

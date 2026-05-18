@@ -1,3 +1,7 @@
+import { app } from 'electron'
+
 export function setupAutoUpdater(): void {
-  // Auto-updater will be configured with electron-updater
+  // Auto-updater placeholder — enable with electron-updater when code signing is configured
+  const currentVersion = app.getVersion()
+  console.log(`App version: ${currentVersion}`)
 }
