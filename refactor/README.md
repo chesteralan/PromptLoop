@@ -7,7 +7,7 @@
 
 - [ ] `electron/main/index.ts` → `refactor/electron_main_index.md`
 - [ ] `electron/main/window.ts` → `refactor/electron_main_window.md`
-- [ ] `electron/main/encryption.ts` → `refactor/electron_main_encryption.md`
+- [x] `electron/main/encryption.ts` → `refactor/electron_main_encryption.md`
 - [ ] `electron/main/sentry.ts` → `refactor/electron_main_sentry.md`
 - [ ] `electron/main/tray.ts` → `refactor/electron_main_tray.md`
 - [ ] `electron/main/shortcuts.ts` → `refactor/electron_main_shortcuts.md`
@@ -35,7 +35,7 @@
 
 - [ ] `electron/main/ipc/workflow.ts` → `refactor/electron_main_ipc_workflow.md`
 - [ ] `electron/main/ipc/execution.ts` → `refactor/electron_main_ipc_execution.md`
-- [ ] `electron/main/ipc/api-keys.ts` → `refactor/electron_main_ipc_api-keys.md`
+- [x] `electron/main/ipc/api-keys.ts` → `refactor/electron_main_ipc_api-keys.md`
 - [ ] `electron/main/ipc/app.ts` → `refactor/electron_main_ipc_app.md`
 
 ## Preload & Shared

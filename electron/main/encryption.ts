@@ -3,6 +3,8 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { randomUUID } from 'node:crypto'
 import path from 'node:path'
 
+type Result<T> = { ok: true; value: T } | { ok: false; error: string }
+
 interface StoredKey {
   id: string
   provider: 'openai' | 'anthropic' | 'google'
@@ -17,22 +19,40 @@ interface KeyStore {
   keys: StoredKey[]
 }
 
+let cachedStore: KeyStore | null = null
+let saveTimer: ReturnType<typeof setTimeout> | null = null
+let lastUsedAtCounter = 0
+
 function getStorePath(): string {
   return path.join(app.getPath('userData'), 'keys.json')
 }
 
 function loadStore(): KeyStore {
+  if (cachedStore) return cachedStore
   const storePath = getStorePath()
-  if (!existsSync(storePath)) return { version: 1, keys: [] }
+  if (!existsSync(storePath)) {
+    cachedStore = { version: 1, keys: [] }
+    return cachedStore
+  }
   try {
-    return JSON.parse(readFileSync(storePath, 'utf-8'))
+    cachedStore = JSON.parse(readFileSync(storePath, 'utf-8')) as KeyStore
+    if (typeof cachedStore.version !== 'number') cachedStore.version = 1
+    return cachedStore
   } catch {
-    return { version: 1, keys: [] }
+    cachedStore = { version: 1, keys: [] }
+    return cachedStore
   }
 }
 
-function saveStore(store: KeyStore): void {
-  writeFileSync(getStorePath(), JSON.stringify(store, null, 2), 'utf-8')
+function scheduleSave(): void {
+  if (saveTimer) return
+  saveTimer = setTimeout(() => {
+    const store = cachedStore
+    if (store) {
+      writeFileSync(getStorePath(), JSON.stringify(store, null, 2), 'utf-8')
+    }
+    saveTimer = null
+  }, 500)
 }
 
 function getPrefix(key: string): string {
@@ -46,44 +66,53 @@ export function isEncryptionAvailable(): boolean {
 export function encryptApiKey(
   provider: 'openai' | 'anthropic' | 'google',
   apiKey: string,
-): { id: string; keyPrefix: string } | { error: string } {
+): Result<{ id: string; keyPrefix: string }> {
   if (!safeStorage.isEncryptionAvailable()) {
-    return { error: 'Encryption is not available on this system' }
+    return { ok: false, error: 'Encryption is not available on this system' }
   }
 
+  const prefix = getPrefix(apiKey)
   const store = loadStore()
+
+  if (store.keys.some((k) => k.provider === provider && k.keyPrefix === prefix)) {
+    return { ok: false, error: `A ${provider} key with prefix "${prefix}" already exists` }
+  }
+
   const id = randomUUID()
   const encrypted = safeStorage.encryptString(apiKey)
 
   store.keys.push({
     id,
     provider,
-    keyPrefix: getPrefix(apiKey),
+    keyPrefix: prefix,
     encrypted: encrypted.toString('base64'),
     createdAt: new Date().toISOString(),
   })
 
-  saveStore(store)
-  return { id, keyPrefix: getPrefix(apiKey) }
+  scheduleSave()
+  return { ok: true, value: { id, keyPrefix: prefix } }
 }
 
-export function decryptApiKey(keyId: string): { key: string } | { error: string } {
+export function decryptApiKey(keyId: string): Result<{ key: string }> {
   if (!safeStorage.isEncryptionAvailable()) {
-    return { error: 'Encryption is not available on this system' }
+    return { ok: false, error: 'Encryption is not available on this system' }
   }
 
   const store = loadStore()
   const entry = store.keys.find((k) => k.id === keyId)
-  if (!entry) return { error: 'Key not found' }
+  if (!entry) return { ok: false, error: 'Key not found' }
 
   try {
     const buffer = Buffer.from(entry.encrypted, 'base64')
     const key = safeStorage.decryptString(buffer)
-    entry.lastUsedAt = new Date().toISOString()
-    saveStore(store)
-    return { key }
+    lastUsedAtCounter++
+    if (lastUsedAtCounter % 10 === 0) {
+      entry.lastUsedAt = new Date().toISOString()
+      scheduleSave()
+    }
+    return { ok: true, value: { key } }
   } catch {
-    return { error: 'Failed to decrypt key' }
+    return { ok: false, error: 'Failed to decrypt key' }
   }
 }
 
@@ -104,17 +133,17 @@ export function listApiKeys(): {
   }))
 }
 
-export function deleteApiKey(keyId: string): { success: boolean } | { error: string } {
+export function deleteApiKey(keyId: string): Result<{ success: boolean }> {
   const store = loadStore()
   const index = store.keys.findIndex((k) => k.id === keyId)
-  if (index === -1) return { error: 'Key not found' }
+  if (index === -1) return { ok: false, error: 'Key not found' }
 
   store.keys.splice(index, 1)
-  saveStore(store)
-  return { success: true }
+  scheduleSave()
+  return { ok: true, value: { success: true } }
 }
 
-export function getApiKeyForProvider(provider: string): string | null {
+export function getFirstApiKeyForProvider(provider: string): string | null {
   const store = loadStore()
   const entry = store.keys.find((k) => k.provider === provider)
   if (!entry) return null
@@ -122,8 +151,11 @@ export function getApiKeyForProvider(provider: string): string | null {
   try {
     const buffer = Buffer.from(entry.encrypted, 'base64')
     const key = safeStorage.decryptString(buffer)
-    entry.lastUsedAt = new Date().toISOString()
-    saveStore(store)
+    lastUsedAtCounter++
+    if (lastUsedAtCounter % 10 === 0) {
+      entry.lastUsedAt = new Date().toISOString()
+      scheduleSave()
+    }
     return key
   } catch {
     return null
