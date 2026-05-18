@@ -1,0 +1,11 @@
+dist
+dist-electron
+release
+node_modules
+*.svg
+*.png
+*.jpg
+*.gif
+planning
+TASKS.md
+TASKS.md.bak
