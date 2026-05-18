@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { FilePlus, Trash2, Save, Workflow } from 'lucide-react'
+import { FilePlus, Trash2, Workflow } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
 import { Separator } from '../components/ui/separator'
@@ -13,6 +13,8 @@ import { WorkflowSettings } from '../components/workflow/WorkflowSettings'
 import { PromptList } from '../components/workflow/PromptList'
 import { PromptEditorPanel } from '../components/workflow/PromptEditorPanel'
 import { AddPromptButton } from '../components/workflow/AddPromptButton'
+import { SaveButton } from '../components/workflow/SaveButton'
+import { ImportExportButtons } from '../components/workflow/ImportExportButtons'
 import { useAutoSave } from '../hooks/useAutoSave'
 import {
   useWorkflow,
@@ -55,6 +57,7 @@ export function WorkflowEditorPage() {
   const [selectedPromptId, setSelectedPromptId] = useState<string | null>(null)
   const [editorOpen, setEditorOpen] = useState(false)
   const [localPrompts, setLocalPrompts] = useState<(PromptData & { id: string })[]>([])
+  const isDirtyRef = useRef(false)
 
   useEffect(() => {
     if (workflow) {
@@ -67,6 +70,20 @@ export function WorkflowEditorPage() {
   useEffect(() => {
     setLocalPrompts(promptsData)
   }, [promptsData])
+
+  useEffect(() => {
+    isDirtyRef.current = true
+  }, [name, loopMode, maxIterations, localPrompts])
+
+  useEffect(() => {
+    function handleBeforeUnload(e: BeforeUnloadEvent) {
+      if (isDirtyRef.current) {
+        e.preventDefault()
+      }
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [])
 
   const workflowData = { name, loopMode, maxIterations }
   useAutoSave({
@@ -108,6 +125,7 @@ export function WorkflowEditorPage() {
           },
         })
       }
+      isDirtyRef.current = false
     } finally {
       setIsSaving(false)
     }
@@ -140,6 +158,51 @@ export function WorkflowEditorPage() {
       setLocalPrompts((prev) => prev.map((p) => (p.id === id ? { ...p, ...data } : p)))
     },
     [],
+  )
+
+  const handleImport = useCallback(
+    async (importData: {
+      name: string
+      loopMode: string
+      maxIterations?: number
+      prompts: {
+        title: string
+        content?: string
+        systemPrompt?: string
+        model?: string
+        enabled?: boolean
+        temperature?: number
+        maxTokens?: number
+        delayMs?: number
+        position: number
+      }[]
+    }) => {
+      if (!workflowId) return
+      const newName = importData.name === name ? `${importData.name} (imported)` : importData.name
+      const newId = await createWorkflow.mutateAsync({
+        name: newName,
+        status: 'idle',
+        loopMode: importData.loopMode as LoopMode,
+        maxIterations: importData.maxIterations,
+      })
+      for (let i = 0; i < importData.prompts.length; i++) {
+        const p = importData.prompts[i]
+        await createPrompt.mutateAsync({
+          workflowId: newId,
+          title: p.title || 'Untitled',
+          content: p.content || '',
+          systemPrompt: p.systemPrompt,
+          model: p.model || 'gpt-4o',
+          position: i,
+          enabled: p.enabled !== false,
+          temperature: p.temperature ?? 1.0,
+          maxTokens: p.maxTokens ?? 1024,
+          delayMs: p.delayMs,
+        })
+      }
+      navigate(`/workflows/${newId}`, { replace: true })
+    },
+    [workflowId, name, createWorkflow, createPrompt, navigate],
   )
 
   const selectedPrompt = localPrompts.find((p) => p.id === selectedPromptId) ?? null
@@ -178,15 +241,26 @@ export function WorkflowEditorPage() {
         actions={
           <div className="flex items-center gap-2">
             {!isNew && (
-              <Button variant="destructive" size="sm" onClick={() => setShowDeleteConfirm(true)}>
-                <Trash2 className="mr-1.5 size-4" />
-                Delete
-              </Button>
+              <>
+                <ImportExportButtons
+                  workflowName={name}
+                  loopMode={loopMode}
+                  maxIterations={maxIterations}
+                  prompts={localPrompts}
+                  onImport={handleImport}
+                />
+                <Button variant="destructive" size="sm" onClick={() => setShowDeleteConfirm(true)}>
+                  <Trash2 className="mr-1.5 size-4" />
+                  Delete
+                </Button>
+              </>
             )}
-            <Button size="sm" onClick={handleSave} disabled={!name.trim() || isSaving}>
-              <Save className="mr-1.5 size-4" />
-              {isSaving ? 'Saving...' : isNew ? 'Create' : 'Save'}
-            </Button>
+            <SaveButton
+              isNew={isNew}
+              isSaving={isSaving}
+              disabled={!name.trim()}
+              onClick={handleSave}
+            />
           </div>
         }
       />

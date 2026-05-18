@@ -50,6 +50,12 @@ export const api = {
 
   minimizeToTray: () => ipcRenderer.send('app:minimize-to-tray'),
   getAppVersion: () => ipcRenderer.invoke('app:get-version'),
+
+  showSaveDialog: (options: unknown) => ipcRenderer.invoke('dialog:show-save-dialog', options),
+  showOpenDialog: (options: unknown) => ipcRenderer.invoke('dialog:show-open-dialog', options),
+  writeFile: (filePath: string, content: string) =>
+    ipcRenderer.invoke('file:write', filePath, content),
+  readFile: (filePath: string) => ipcRenderer.invoke('file:read', filePath),
 }
 
 contextBridge.exposeInMainWorld('electronAPI', api)

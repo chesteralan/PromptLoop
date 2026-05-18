@@ -30,6 +30,10 @@ export interface ElectronAPI {
   listApiKeys(): Promise<{ id: string; provider: string; keyPrefix: string; createdAt: string }[]>
   minimizeToTray(): void
   getAppVersion(): Promise<string>
+  showSaveDialog(options: unknown): Promise<{ canceled: boolean; filePath: string | null }>
+  showOpenDialog(options: unknown): Promise<{ canceled: boolean; filePaths: string[] }>
+  writeFile(filePath: string, content: string): Promise<{ success: boolean; error?: string }>
+  readFile(filePath: string): Promise<{ success: boolean; content?: string; error?: string }>
 }
 
 declare global {
