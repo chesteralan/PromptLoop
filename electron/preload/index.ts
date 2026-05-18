@@ -43,10 +43,34 @@ export const api = {
   },
 
   encryptApiKey: (provider: string, key: string) =>
-    ipcRenderer.invoke('api-key:encrypt', { provider, key }),
-  decryptApiKey: (keyId: string) => ipcRenderer.invoke('api-key:decrypt', { keyId }),
-  deleteApiKey: (keyId: string) => ipcRenderer.invoke('api-key:delete', { keyId }),
-  listApiKeys: () => ipcRenderer.invoke('api-key:list'),
+    ipcRenderer
+      .invoke('api-key:encrypt', { provider, key })
+      .then((r: { success: boolean; id?: string; keyPrefix?: string; error?: string }) => {
+        if (!r.success) throw new Error(r.error ?? 'Encryption failed')
+        return { id: r.id!, keyPrefix: r.keyPrefix! }
+      }),
+  decryptApiKey: (keyId: string) =>
+    ipcRenderer
+      .invoke('api-key:decrypt', { keyId })
+      .then((r: { success: boolean; key?: string; error?: string }) => {
+        if (!r.success) throw new Error(r.error ?? 'Decryption failed')
+        return { key: r.key! }
+      }),
+  deleteApiKey: (keyId: string) =>
+    ipcRenderer.invoke('api-key:delete', { keyId }).then((r: { success: boolean }) => {
+      return { success: r.success }
+    }),
+  listApiKeys: () =>
+    ipcRenderer
+      .invoke('api-key:list')
+      .then(
+        (r: {
+          success: boolean
+          keys?: { id: string; provider: string; keyPrefix: string; createdAt: string }[]
+        }) => {
+          return r.keys ?? []
+        },
+      ),
 
   minimizeToTray: () => ipcRenderer.send('app:minimize-to-tray'),
   getAppVersion: () => ipcRenderer.invoke('app:get-version'),
