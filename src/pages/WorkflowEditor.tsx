@@ -103,7 +103,7 @@ export function WorkflowEditorPage() {
         data: {
           name: d.name.trim(),
           loopMode: d.loopMode,
-          maxIterations: d.loopMode === 'fixed' ? d.maxIterations : undefined,
+          ...(d.loopMode === 'fixed' ? { maxIterations: d.maxIterations } : {}),
         },
       })
     },
@@ -125,7 +125,7 @@ export function WorkflowEditorPage() {
           name: name.trim(),
           status: 'idle',
           loopMode,
-          maxIterations: loopMode === 'fixed' ? maxIterations : undefined,
+          ...(loopMode === 'fixed' ? { maxIterations } : {}),
         })
         navigate(`/workflows/${id}`, { replace: true })
       } else if (workflowId) {
@@ -134,7 +134,7 @@ export function WorkflowEditorPage() {
           data: {
             name: name.trim(),
             loopMode,
-            maxIterations: loopMode === 'fixed' ? maxIterations : undefined,
+            ...(loopMode === 'fixed' ? { maxIterations } : {}),
           },
         })
       }
