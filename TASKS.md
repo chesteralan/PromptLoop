@@ -1538,31 +1538,202 @@ interface ElectronAPI {
 **Blocks:** `2.9`, `2.10`
 
 **Sub-tasks:**
-- [ ] 2.8.1 — Create `WorkflowEditor.tsx` page component with URL-driven mode (create vs edit via `useParams`) (15m) *(depends on: 1.16.1)*
-- [ ] 2.8.2 — Build the page header with editable workflow name input and Save/Delete action buttons (20m) *(depends on: 1.23.2)*
-- [ ] 2.8.3 — Create `WorkflowSettings.tsx` component with loop mode selector (shadcn `Select`) and max iterations input (20m)
-- [ ] 2.8.4 — Show/hide max iteration input based on loop mode (only for 'fixed' mode) (20m)
-- [ ] 2.8.5 — Handle "create new" mode: default state, "Create" button, navigate to edit URL on first save (15m)
-- [ ] 2.8.6 — Handle "edit" mode: load existing workflow data via `useWorkflow(id)`, populate fields (15m)
-- [ ] 2.8.7 — Handle loading state: show skeleton layout while workflow data loads (15m)
-- [ ] 2.8.8 — Handle "not found": show error state with "Back to Dashboard" button (15m)
-- [ ] 2.8.9 — Wire loop mode selector and name input to auto-save system (prep for 2.12) (10m)
+- [x] 2.8.1 — Create `WorkflowEditor.tsx` page component with URL-driven mode (create vs edit via `useParams`) (15m) *(depends on: 1.16.1)*
+- [x] 2.8.2 — Build the page header with editable workflow name input and Save/Delete action buttons (20m) *(depends on: 1.23.2)*
+- [x] 2.8.3 — Create `WorkflowSettings.tsx` component with loop mode selector (shadcn `Select`) and max iterations input (20m)
+- [x] 2.8.4 — Show/hide max iteration input based on loop mode (only for 'fixed' mode) (20m)
+- [x] 2.8.5 — Handle "create new" mode: default state, "Create" button, navigate to edit URL on first save (15m)
+- [x] 2.8.6 — Handle "edit" mode: load existing workflow data via `useWorkflow(id)`, populate fields (15m)
+- [x] 2.8.7 — Handle loading state: show skeleton layout while workflow data loads (15m)
+- [x] 2.8.8 — Handle "not found": show error state with "Back to Dashboard" button (15m)
+- [x] 2.8.9 — Wire loop mode selector and name input to auto-save system (prep for 2.12) (10m)
 
 **Done when:**
-- [ ] Test: Page renders with correct layout
-- [ ] Test: Creating vs editing mode is handled
-- [ ] Test: Workflow name can be edited
-- [ ] Test: Loop mode selector works (infinite, fixed, single, scheduled)
-- [ ] Test: Max iterations input shows/hides based on loop mode
+- [x] Test: Page renders with correct layout
+- [x] Test: Creating vs editing mode is handled
+- [x] Test: Workflow name can be edited
+- [x] Test: Loop mode selector works (infinite, fixed, single, scheduled)
+- [x] Test: Max iterations input shows/hides based on loop mode
 
 **Effort:** 3h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Blocked tasks unblocked
+- [x] All `Done when` criteria met
+
+---
+
+#### Task 2.9 — Build PromptCard component (draggable)
+
+**Sub-tasks:**
+- [x] 2.9.1 — Install `@hello-pangea/dnd` (maintained fork of react-beautiful-dnd) (20m) *(depends on: 1.14.7)*
+- [x] 2.9.2 — Create `PromptCard.tsx` component with all visual elements: drag handle, position, title, model badge (20m)
+- [x] 2.9.3 — Add enabled/disabled toggle switch (shadcn `Switch`) calling `onToggle` (20m)
+- [x] 2.9.4 — Add Edit button that calls `onSelect` and highlights the card when `isSelected` (15m)
+- [x] 2.9.5 — Add Delete button with confirmation dialog (`ConfirmDialog`) before calling `onDelete` (15m)
+- [x] 2.9.6 — Wrap card with `Draggable` from `@hello-pangea/dnd` (15m)
+- [x] 2.9.7 — Style the drag handle, add visual feedback for drag state (15m)
+
+**Done when:**
+- [x] Test: Card renders with all fields
+- [x] Test: Drag handle is visible and functional
+- [x] Test: Card is selectable (highlighted when selected)
+- [x] Test: Delete shows confirmation dialog
+- [x] Test: Toggle enables/disables the prompt locally
+
+**Effort:** 2h
+
+**Review checklist:**
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] All `Done when` criteria met
+
+---
+
+#### Task 2.10 — Implement drag-and-drop reordering
+
+**Sub-tasks:**
+- [x] 2.10.1 — Create `PromptList.tsx` wrapping cards in `DragDropContext` + `Droppable` (15m)
+- [x] 2.10.2 — Implement `onDragEnd` handler: compute new positions, update local state optimistically (30m) *(depends on: 2.9.2)*
+- [x] 2.10.3 — Call `reorderPrompts()` helper (from 2.7) to persist new positions to Firestore (30m) *(depends on: 2.10.2)*
+- [x] 2.10.4 — Add ghost card visual during drag (semi-transparent original position) (20m)
+- [x] 2.10.5 — Add drop indicator line showing where the card will land (20m)
+- [x] 2.10.6 — Handle drag cancellation (Esc key, drop outside droppable) (20m)
+- [x] 2.10.7 — Ensure only one drop triggers (debounce or disable during save) (15m)
+
+**Done when:**
+- [x] Test: Prompts can be reordered by dragging
+- [x] Test: Visual feedback during drag (ghost card, drop indicator)
+- [x] Test: Positions persist to Firestore on drop
+- [x] Test: Reordering does not trigger auto-save (only on drop)
+
+**Effort:** 2h
+
+**Review checklist:**
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] All `Done when` criteria met
+
+---
+
+#### Task 2.11 — Build PromptEditorPanel (slide-over)
+
+**Sub-tasks:**
+- [x] 2.11.1 — Create `PromptEditorPanel.tsx` using shadcn `Sheet` component (slides in from right) (20m)
+- [x] 2.11.2 — Show empty state when no prompt is selected: icon + "Select a prompt to edit" message (30m) *(depends on: 2.9.1)*
+- [x] 2.11.3 — Build form fields: Title input, Prompt content textarea, System prompt collapsible textarea (30m) *(depends on: 2.11.2)*
+- [x] 2.11.4 — Add ModelSelector (placeholder for 2.13) with model id stored in prompt data (20m)
+- [x] 2.11.5 — Add Temperature slider (shadcn `Slider`, range 0-2, step 0.1) with numeric display (20m)
+- [x] 2.11.6 — Add Max Tokens number input (shadcn `Input type="number"`) (20m)
+- [x] 2.11.7 — Add Delay after execution input (ms, number input) (20m)
+- [x] 2.11.8 — Add Enabled switch toggle (15m)
+- [x] 2.11.9 — Track dirty state: compare current values to initial values (15m)
+- [x] 2.11.10 — Handle Escape key and clicking outside to close panel (15m)
+
+**Done when:**
+- [x] Test: Panel opens as slide-over from the right
+- [x] Test: All fields render and accept input
+- [x] Test: Changes are auto-saved after 2s debounce
+- [x] Test: Panel closes on Escape or clicking outside
+- [x] Test: Model selector groups by provider
+
+**Effort:** 3h
+
+**Review checklist:**
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] All `Done when` criteria met
+
+---
+
+#### Task 2.12 — Implement auto-save with debounce
+
+**Sub-tasks:**
+- [x] 2.12.1 — Create `useAutoSave.ts` hook with `useRef` timer for debounce (20m)
+- [x] 2.12.2 — Implement `isDirty` tracking: compare current data to last saved data using deep equality (30m) *(depends on: 2.11.7)*
+- [x] 2.12.3 — Implement `isSaving` state: true during async save call, false after (20m)
+- [x] 2.12.4 — Call `saveFn` after 2 seconds of no data changes (debounce) (20m)
+- [x] 2.12.5 — Cancel debounce timer on component unmount (15m)
+- [x] 2.12.6 — Add Cmd+S (Ctrl+S) manual save handler with `preventDefault` (15m)
+- [x] 2.12.7 — Test: Wire `useAutoSave` into `WorkflowEditor.tsx` with workflow data changes (10m)
+- [x] 2.12.8 — Show "Unsaved" indicator in header when `isDirty`, spinner when `isSaving`
+
+**Done when:**
+- [x] Test: Changes are auto-saved after 2 seconds of inactivity
+- [x] Test: Dirty indicator shows when unsaved changes exist
+- [x] Test: Saving indicator shows during Firestore write
+- [x] Test: Manual save also works (Cmd+S)
+- [x] Test: No save on component unmount (Firestore handles writes)
+
+**Effort:** 1.5h
+
+**Review checklist:**
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Blocked tasks unblocked
+- [x] All `Done when` criteria met
+
+---
+
+#### Task 2.13 — Model selector with provider grouping
+
+**Sub-tasks:**
+- [x] 2.13.1 — Create `src/lib/models.ts` with `ModelGroup` type and `MODELS` constant grouped by provider (15m) *(depends on: 1.22.7)*
+- [x] 2.13.2 — Implement `ModelSelector.tsx` using shadcn `Select` with grouped options via `<SelectGroup>` + `<SelectLabel>` (20m)
+- [x] 2.13.3 — Display provider name as group label, model name + max tokens as option description (20m)
+- [x] 2.13.4 — Add search/filter input at top to filter models by name or provider (20m)
+- [x] 2.13.5 — Highlight currently selected model in the dropdown (15m) *(depends on: 2.13.4)*
+- [x] 2.13.6 — Show selected model's max tokens below the selector after selection (15m)
+
+**Done when:**
+- [x] Test: Models are grouped by provider with provider labels
+- [x] Test: Selecting a model shows its max tokens
+- [x] Test: Search/filter works for long model lists
+- [x] Test: Currently selected model is highlighted
+
+**Effort:** 1.5h
+
+**Review checklist:**
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Blocked tasks unblocked
+- [x] All `Done when` criteria met
+
+---
+
+#### Task 2.14 — AddPromptButton and create-prompt flow
+
+**Sub-tasks:**
+- [x] 2.14.1 — Create `AddPromptButton.tsx` component (shadcn `Button` with Plus icon) (15m)
+- [x] 2.14.2 — On click: call `useCreatePrompt()` mutation with defaults (position = prompts.length, title = "New Prompt", model = "gpt-4", enabled = true) (20m)
+- [x] 2.14.3 — On successful creation, auto-select the new prompt and open the editor panel (20m)
+- [x] 2.14.4 — Disable the button during the mutation to prevent duplicate rapid clicks (15m)
+- [x] 2.14.5 — Ensure prompt list re-renders with the new prompt at the bottom (15m)
+
+**Done when:**
+- [x] Test: Button creates a prompt with sensible defaults
+- [x] Test: New prompt appears in list without full reload
+- [x] Test: Editor panel opens for the new prompt
+- [x] Test: Multiple rapid clicks do not create duplicates
+
+**Effort:** 1h
+
+**Review checklist:**
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] All `Done when` criteria met
 
 ---
 
