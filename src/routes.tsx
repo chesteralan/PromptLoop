@@ -4,6 +4,7 @@ import { LoginPage } from './pages/Login'
 import { DashboardPage } from './pages/Dashboard'
 import { WorkflowEditorPage } from './pages/WorkflowEditor'
 import { ExecutionViewerPage } from './pages/ExecutionViewer'
+import { OnboardingPage } from './pages/Onboarding'
 import { SettingsPage } from './pages/Settings'
 import { ApiKeysPage } from './pages/ApiKeys'
 
@@ -11,6 +12,10 @@ export const router = createHashRouter([
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  {
+    path: '/onboarding',
+    element: <OnboardingPage />,
   },
   {
     path: '/',

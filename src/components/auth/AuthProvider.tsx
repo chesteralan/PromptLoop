@@ -38,6 +38,7 @@ async function ensureUserDocument(user: User): Promise<void> {
       photoURL: user.photoURL ?? '',
       createdAt: serverTimestamp(),
       lastLoginAt: serverTimestamp(),
+      onboardingComplete: false,
     })
   } else {
     await setDoc(ref, { lastLoginAt: serverTimestamp() }, { merge: true })
