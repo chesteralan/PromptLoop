@@ -1,48 +1,36 @@
-# Refactoring Rules: `src/components/auth/`
+# Auth Components Refactor Rules
 
-## Purpose
+Files: `src/components/auth/AuthProvider.tsx`, `src/components/auth/OAuthButtons.tsx`
 
-Provides authentication context provider (AuthProvider) and sign-in buttons (OAuthButtons) for Google and GitHub OAuth flows.
+## Standards Violated
 
-## Current Issues
+### 11 — Error Handling (silent failures)
 
-### AuthProvider.tsx
+- **Specific issues:**
+  - `AuthProvider.tsx:65` — `getRedirectResult(...).catch(() => {})` — fully silent, swallows errors
+  - `AuthProvider.tsx:73` — `ensureUserDocument(user).catch(() => {})` — fully silent, user doc creation failures are invisible
+  - `AuthProvider.tsx:73` — Fire-and-forget promise with no error reporting
+- **Fix:** Log errors or surface via toast; at minimum use `console.warn` with context
+- **Priority:** High
 
-- `getRedirectResult` call in `useEffect` fires on mount unconditionally but catches silently — should check if redirect result exists
-- `ensureUserDocument` runs on every auth state change, not just first login
-- `signInWithGoogle` / `signInWithGitHub` duplicate identical logic; extract provider factory
-- `isElectron` check uses `typeof window !== 'undefined'` which is always true in browser; simplify to `'electronAPI' in window`
-- `onAuthStateChanged` callback is `async` but returns `void` — unsubscribe function may not work correctly if the callback throws
-- `useSettingsStore.getState().setUser(user)` called in `onAuthStateChanged` but settings store persists `user` to localStorage — this leaks auth state to storage
-- No `useCallback` on `signInWithGoogle` / `signInWithGitHub` / `signOut` — causes context value to change on every render
-- `eslint-disable react-refresh/only-export-components` is a workaround; split `useAuth` hook into separate file
+### 3 — React Component Standards
 
-### OAuthButtons.tsx
+- **Specific issues:**
+  - `AuthProvider.tsx:92` — Component at 92 lines, reasonable
+- **Fix:** None
+- **Priority:** None
 
-- SVG icons inline rather than using `lucide-react` or imported SVG assets — increases bundle size
-- No `aria-label` on buttons (screen readers will read "Sign in with Google" correctly, but loading state lacks description)
-- Button text should use `aria-busy` when loading
+### 7 — Styling Standards
 
-## Refactoring Rules
+- **Specific issues:**
+  - `OAuthButtons.tsx` — Inline SVG for Google/GitHub icons (acceptable for brand icons, but could be extracted)
+- **Fix:** Consider extracting SVG icon components to `src/components/ui/icons.tsx`
+- **Priority:** Low
 
-1. **Extract provider factory** from duplicated `signInWith*` methods
-2. **Move `useAuth` hook** to `hooks/useAuth.ts` (already exists as re-export) and remove `eslint-disable` comment
-3. **Add `useCallback`** to all context methods to prevent unnecessary re-renders
-4. **Do not persist `user`** in settings store; remove `setUser` call from `onAuthStateChanged`
-5. **Avoid `async` in `onAuthStateChanged`** callback — handle inner errors with `.catch()`
-6. **Replace inline SVGs** in `OAuthButtons.tsx` with imported icon components or a shared SVG sprite
-7. **Add `aria-busy`** to buttons when loading
-8. **Memoize `AuthContextValue`** with `useMemo`
+### 14 — Accessibility
 
-## Dependencies
-
-- Both: `../ui/button`, `../../lib/firebase`
-- `AuthProvider.tsx`: `firebase/auth`, `firebase/firestore`, `../../store/settingsStore`
-- `OAuthButtons.tsx`: `../ui/button`
-
-## Verification
-
-- `npm run lint`
-- `npm run typecheck`
-- Test Google/GitHub sign-in flow in both Electron and browser
-- Verify `useAuth()` throws outside provider
+- **Specific issues:**
+  - `OAuthButtons.tsx:11` — `aria-busy={isLoading}` on the container is good
+  - `OAuthButtons.tsx:17,43` — `aria-label` on buttons is good
+- **Fix:** None — already compliant
+- **Priority:** None

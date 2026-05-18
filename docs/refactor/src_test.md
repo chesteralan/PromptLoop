@@ -1,59 +1,33 @@
-# Refactoring Rules: `src/test/`
+# Test Files Refactor Rules
 
-## Purpose
+Files: `src/test/stores.test.ts`, `src/test/auth.test.tsx`, `src/test/routes.test.tsx`, `src/test/example.test.ts`, `src/test/setup.ts`
 
-Contains Vitest test files for auth, stores, routes, and a basic example.
+## Standards Violated
 
-## Current Issues
+### 15 — Testing Standards
 
-### auth.test.tsx
+- **Specific issues:**
+  - `example.test.ts:1-7` — Trivial sanity check (`1+1 === 2`). No real value; should be removed when real tests exist
+  - `auth.test.tsx:33-42` — `TestConsumer` component duplicates production logic for test assertions — tests implementation details via `data-testid="auth-state"`
+  - `routes.test.tsx:35-48` — Inline `LoginPage` and `DashboardPage` stub components duplicate routing behavior
+- **Fix:** Remove `example.test.ts` once coverage is sufficient; test user-facing behavior (rendered content) rather than `data-testid` states where possible
+- **Priority:** Low
 
-- Mocks for `firebase/app`, `firebase/auth`, `firebase/firestore`, and `../../lib/firebase` are set up correctly
-- `mockOnAuthStateChanged` uses `vi.fn()` but `onAuthStateChanged` returns an unsubscribe function — the mock returns `vi.fn()` which is correct
-- Missing mock for `doc`, `getDoc`, `setDoc`, `serverTimestamp` from `firebase/firestore` — current tests don't trigger `ensureUserDocument` but it could break silently
-- `renderWithProviders` wraps in `MemoryRouter` but `AuthProvider` doesn't use routing — unnecessary wrapper
+### 11 — Error Handling
 
-### example.test.ts
+- **Specific issues:**
+  - Tests don't cover error states: failed Firestore operations, IPC errors, network failures
+- **Fix:** Add error-handling test cases for hooks and stores
+- **Priority:** Medium
 
-- Trivial sanity check — remove once real tests exist
+### What's done well
 
-### routes.test.tsx
+- `stores.test.ts` — Good coverage of all store actions with proper `beforeEach` state reset
+- `auth.test.tsx` and `routes.test.tsx` — Proper Firebase mocking setup, testing loading/authenticated/unauthenticated states
+- `setup.ts` — Clean, single import of `@testing-library/jest-dom`
 
-- Mocks same as auth.test.tsx — should share via `setup.ts`
-- `LoginPage` component redefined locally instead of importing the real one — duplicates behavior
-- Tests only cover `ProtectedRoute` and login redirection; missing route param tests
+### Coverage gaps
 
-### setup.ts
-
-- Only imports `@testing-library/jest-dom` — could add global mocks for `window.electronAPI`, `import.meta.env`
-- Missing `vitest` global setup for `electronAPI` mock
-
-### stores.test.ts
-
-- Good test coverage for all three stores
-- `settingsStore` test uses `// eslint-disable-next-line @typescript-eslint/no-explicit-any` — should use proper type cast instead
-- `mockUser` in settings store test is typed as `any` — define a proper `Partial<User>` mock
-
-## Refactoring Rules
-
-1. **Extract shared mocks** into `src/test/setup.ts` to avoid duplication between `auth.test.tsx` and `routes.test.tsx`
-2. **Remove unused `MemoryRouter`** wrapper from `auth.test.tsx`
-3. **Replace `// eslint-disable-next-line @typescript-eslint/no-explicit-any`** with proper type definition for mock user
-4. **Add `window.electronAPI` mock** to `setup.ts` globally
-5. **Add mock for `import.meta.env`** for tests that depend on env vars
-6. **Remove `example.test.ts`** once other tests provide sufficient coverage
-7. **Add missing Firestore mocks** (`doc`, `getDoc`, `setDoc`) to prevent runtime errors if tests expand
-8. **Use real `LoginPage` import** in `routes.test.tsx` instead of redefining locally
-
-## Dependencies
-
-- `vitest`, `@testing-library/react`, `@testing-library/jest-dom`
-- `auth.test.tsx`: `../components/auth/AuthProvider`
-- `routes.test.tsx`: `../../components/layout/ProtectedRoute`, `../../components/auth/AuthProvider`
-- `stores.test.ts`: `../../store/*`
-
-## Verification
-
-- `npx vitest run` — all tests pass
-- No console errors during test runs
-- Coverage reports show meaningful coverage
+- No component tests for execution, workflow, settings, or shared components
+- No hook tests (useAuth, useWorkflows, useAutoSave, etc.)
+- No integration tests for user flows (login → dashboard → create workflow → execute)

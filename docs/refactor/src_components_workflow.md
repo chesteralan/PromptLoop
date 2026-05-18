@@ -1,97 +1,49 @@
-# Refactoring Rules: `src/components/workflow/`
+# Workflow Components Refactor Rules
 
-## Purpose
+Files: `src/components/workflow/WorkflowSettings.tsx`, `src/components/workflow/PromptCard.tsx`, `src/components/workflow/WorkflowStatusBadge.tsx`, `src/components/workflow/WorkflowCard.tsx`, `src/components/workflow/ImportExportButtons.tsx`, `src/components/workflow/ModelSelector.tsx`, `src/components/workflow/SaveButton.tsx`, `src/components/workflow/QueueItem.tsx`, `src/components/workflow/PromptProgressBar.tsx`, `src/components/workflow/AddPromptButton.tsx`, `src/components/workflow/PromptEditorPanel.tsx`, `src/components/workflow/PromptList.tsx`
 
-Provides workflow editing and display components (WorkflowSettings, PromptCard, PromptList, PromptEditorPanel, PromptProgressBar, QueueItem, AddPromptButton, SaveButton, ImportExportButtons, ModelSelector, WorkflowStatusBadge, WorkflowCard).
+## Standards Violated
 
-## Current Issues
+### 9 — Import Rules
 
-### WorkflowSettings.tsx
+- **Specific issues:**
+  - `WorkflowSettings.tsx:4` — Relative import `../../../electron/shared/types` for LoopMode — should use alias
+  - `WorkflowStatusBadge.tsx:2` — Same: `../../../electron/shared/types`
+  - `WorkflowCard.tsx:5` — Same: `../../../electron/shared/types`
+- **Fix:** Add/use import alias for shared types (e.g., `@electron/shared/types`)
+- **Priority:** Medium
 
-- Import path `../../../electron/shared/types` uses deep relative path; use an alias or barrel export
-- `LoopMode` import from electron shared types creates renderer/main coupling
-- `onLoopModeChange` cast `(v as LoopMode)` is unsafe; add validation
+### 17 — Code Smells to Eliminate (component complexity)
 
-### PromptCard.tsx
+- **Specific issues:**
+  - `PromptEditorPanel.tsx` — 139 lines handling 7 form fields inline; each field has its own `Label + Input/Textarea/Switch` block
+  - `ModelSelector.tsx` — 116 lines with complex inline filtering logic (`filtered` computed from `search` and `visibleGroups`)
+  - `ImportExportButtons.tsx` — Inline file read/write logic, inline JSON validation, inline prompt validation
+- **Fix:** Extract field rendering to a reusable `FormField` component; extract model filtering logic to a custom hook; extract import/export validation to a utility
+- **Priority:** Medium
 
-- `PromptData & { id: string }` type repeated across files; extract into shared type
-- No `aria-label` on delete/edit buttons
-- `showDelete` state managed per card; could move to parent for consistency
+### 1 — General Principles (readability)
 
-### PromptList.tsx
+- **Specific issues:**
+  - `PromptEditorPanel.tsx:22-35` — Duplicated `<Sheet>` wrapper for null/selected prompt states
+- **Fix:** Use a single Sheet wrapper and conditionally render content
+- **Priority:** Low
 
-- Clean; minimal issues
-- `handleDragEnd` uses `Array.from` which creates a shallow copy — fine for reorder
+### 14 — Accessibility
 
-### PromptEditorPanel.tsx
+- **Specific issues:**
+  - All workflow components: generally good (aria-labels on buttons)
+- **Fix:** None
+- **Priority:** None
 
-- `onChange` callback type `Partial<Omit<PromptData, 'id' | 'createdAt' | 'updatedAt'>>` is complex; extract as `PromptUpdateData`
-- Empty state sheet (when `!prompt`) renders unnecessary overlay; consider disabling trigger instead
-- Temperature range input uses native `<input type="range">` instead of a styled component
+### Clean Files
 
-### PromptProgressBar.tsx
-
-- `statusColors` uses `status` as index key; TypeScript infers `string` — use `Record<string, string>` explicitly (already done)
-- `status` property type on `PromptProgressItem` is a string union but `statusColors` lookup allows any string
-
-### QueueItem.tsx
-
-- Clean; well-structured
-
-### AddPromptButton.tsx
-
-- Trivial wrapper; could inline in parent
-
-### SaveButton.tsx
-
-- Trivial wrapper; could inline in parent
-
-### ImportExportButtons.tsx
-
-- `handleImport` validates each prompt field but error message shows only for first invalid prompt
-- `JSON.parse` result cast as `WorkflowExport` is unsafe; use Zod or explicit runtime validation
-- `handleExport` destructures `id`, `workflowId`, `createdAt`, `updatedAt` with underscore prefix but doesn't use them — these are correct side effects but `_` prefix is conventional
-
-### ModelSelector.tsx
-
-- `groupedModels` computed at module level — fine
-- `noKeysConfigured` message inside `SelectContent` uses inline JSX; extract to separate component
-- Search input's `onClick.stopPropagation()` prevents select from closing — intentional but fragile
-
-### WorkflowStatusBadge.tsx
-
-- Clean; well-structured
-
-### WorkflowCard.tsx
-
-- `status` is typed as `string` but should be `WorkflowStatus` from shared types
-- `onStart`/`onStop`/`onEdit`/`onDelete` callbacks not wrapped in `useCallback` at parent
-- `loopMode` not used in a meaningful way in the display (only shows raw value)
-
-## Refactoring Rules
-
-1. **Create shared `PromptItem` type** (`PromptData & { id: string }`) in `lib/types.ts`
-2. **Replace deep import `../../../electron/shared/types`** with a barrel export from `electron/shared/types`
-3. **Use Zod schema** for import validation in `ImportExportButtons.tsx` instead of manual checks
-4. **Type `status` as `WorkflowStatus`** in `WorkflowCard.tsx`
-5. **Combine AddPromptButton and SaveButton** into parent component to reduce indirection
-6. **Fix `LoopMode` cast** with runtime validation helper
-7. **Add `aria-label`** to icon-only buttons in `PromptCard.tsx`
-8. **Move `showDelete` state** to parent list component
-
-## Dependencies
-
-- Internal: all import from `../ui/*`, `../../lib/utils`
-- `ModelSelector.tsx`: `../../lib/models`, `../../hooks/useConfiguredProviders`
-- `ImportExportButtons.tsx`: `../../lib/converters`
-- `PromptEditorPanel.tsx`: `./ModelSelector`, `../../lib/converters`
-- `PromptCard.tsx`: `@hello-pangea/dnd`, `../../lib/converters`
-- `PromptList.tsx`: `@hello-pangea/dnd`, `./PromptCard`, `../../lib/converters`
-
-## Verification
-
-- `npm run lint`
-- `npm run typecheck`
-- Test drag-and-drop reordering
-- Test import/export workflow files
-- Test model selection with configured providers
+- `WorkflowSettings.tsx` — Clean, well-typed, single responsibility
+- `PromptCard.tsx` — Clean with good use of ConfirmDialog
+- `WorkflowStatusBadge.tsx` — Clean
+- `WorkflowCard.tsx` — Clean
+- `SaveButton.tsx` — Clean, minimal
+- `QueueItem.tsx` — Clean
+- `PromptProgressBar.tsx` — Clean
+- `AddPromptButton.tsx` — Clean
+- `PromptList.tsx` — Clean

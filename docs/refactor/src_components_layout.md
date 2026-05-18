@@ -1,54 +1,37 @@
-# Refactoring Rules: `src/components/layout/`
+# Layout Components Refactor Rules
 
-## Purpose
+Files: `src/components/layout/Sidebar.tsx`, `src/components/layout/AppLayout.tsx`, `src/components/layout/ProtectedRoute.tsx`, `src/components/layout/StatusBar.tsx`
 
-Provides application layout shell (AppLayout, ProtectedRoute, Sidebar, StatusBar) for authenticated routes.
+## Standards Violated
 
-## Current Issues
+### 4 — State Management
 
-### AppLayout.tsx
+- **Specific issues:**
+  - `AppLayout.tsx:16-29` — `useEffect` for boot-time navigation (onboarding check) mixes data fetching with routing side effects
+  - `AppLayout.tsx:13` — `sidebarCollapsed` is local state (good), but the layout triggers navigation in an effect
+- **Fix:** Move onboarding check to a dedicated hook (`useOnboardingRedirect`) or handle in route guards
+- **Priority:** Medium
 
-- `getDoc` call in `useEffect` creates a loading flash before redirecting to onboarding — consider using `onSnapshot` or checking a Firestore cache
-- `.catch(() => {})` swallows errors silently — at minimum log a warning
-- `sidebarCollapsed` state is local and not persisted across navigation
+### 11 — Error Handling (silent failures)
 
-### ProtectedRoute.tsx
+- **Specific issues:**
+  - `AppLayout.tsx:27` — `.catch((err) => console.warn(...))` — better than silent, but onboarding failures are invisible to user
+  - `StatusBar.tsx:13` — `.catch(() => {})` — completely silent failure when getting app version
+- **Fix:** Surface failures appropriately; at minimum add context to console.warn
+- **Priority:** Medium
 
-- Clean for its purpose; minimal refactoring needed
-- Could use `Navigate` `state` more explicitly with a `from` type guard
+### 17 — Code Smells to Eliminate
 
-### Sidebar.tsx
+- **Specific issues:**
+  - `Sidebar.tsx:49-52` — `cycleTheme` uses `THEMES.indexOf(theme)` — mutates theme via index cycling (brittle)
+  - `Sidebar.tsx:34-39` — `navItems` defined outside component, but the `icon` component references couple it to sidebar
+  - `AppLayout.tsx:16-29` — `checking` state + useEffect for navigational redirect is an antipattern vs route-level guards
+- **Fix:** Replace index-based theme cycling with an explicit `Record<Theme, Theme>` next map; use route-level guards instead of effect-based navigation
+- **Priority:** Medium
 
-- `const navItems` declared outside component — good, but `navigate` dependency in `handleSignOut` could cause stale closures
-- `cycleTheme` function creates new array on every render; hoist `themes` constant
-- No keyboard navigation support for sidebar links (`NavLink` handles this, but custom click targets may not)
-- `collapse` transition uses arbitrary width values (`w-16`, `w-60`) instead of CSS variables
+### 14 — Accessibility
 
-### StatusBar.tsx
-
-- `executionStatus` from store could be undefined; `statusColor` lookup uses bracket notation which returns `undefined` gracefully but TypeScript may not infer
-- `appVersion` is fetched on mount but not refreshed
-
-## Refactoring Rules
-
-1. **Add error logging** to `.catch(() => {})` in `AppLayout.tsx`
-2. **Persist `sidebarCollapsed`** to zustand store or localStorage
-3. **Extract `themes` array** to module-level constant in `Sidebar.tsx`
-4. **Replace inline SVG icons** in sidebar with consistent `lucide-react` imports
-5. **Handle undefined `executionStatus`** in `StatusBar.tsx` with a fallback
-6. **Add `aria-current="page"`** to active `NavLink` (React Router already does this, but verify)
-7. **Memoize `handleSignOut`** with `useCallback`
-
-## Dependencies
-
-- `AppLayout.tsx`: `react-router-dom`, `firebase/firestore`, `../auth/AuthProvider`, `./Sidebar`, `./StatusBar`, `./ProtectedRoute`
-- `ProtectedRoute.tsx`: `react-router-dom`, `../auth/AuthProvider`
-- `Sidebar.tsx`: `react-router-dom`, `lucide-react`, `../auth/AuthProvider`, `../../store/settingsStore`, `../ui/*`
-- `StatusBar.tsx`: `lucide-react`, `../../store/executionStore`
-
-## Verification
-
-- `npm run lint`
-- `npm run typecheck`
-- Test sidebar collapse toggle
-- Verify protected route redirects to /login
+- **Specific issues:**
+  - `Sidebar.tsx:112` — `DropdownMenuTrigger` has `cursor-default` but acts as a button
+- **Fix:** Ensure keyboard navigation works for sidebar theme toggle and user menu
+- **Priority:** Low

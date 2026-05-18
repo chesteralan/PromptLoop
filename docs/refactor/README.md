@@ -1,144 +1,170 @@
-# Refactor Plan
+# Frontend Refactor Rules
 
-> Track refactoring progress for all `.ts` / `.tsx` source files.
-> Check off each file once its companion rule file has been reviewed and applied.
+This directory contains per-group refactor analysis for every TypeScript/TSX source file in the project, aligned to the [Frontend Refactor Standards](../planning/FRONTEND_REFACTOR_STANDARDS.md).
 
-## Electron Main Process
+## Priority Summary
 
-- [x] `electron/main/index.ts` → `refactor/electron_main_index.md`
-- [x] `electron/main/window.ts` → `refactor/electron_main_window.md`
-- [x] `electron/main/encryption.ts` → `refactor/electron_main_encryption.md`
-- [x] `electron/main/sentry.ts` → `refactor/electron_main_sentry.md`
-- [x] `electron/main/tray.ts` → `refactor/electron_main_tray.md`
-- [x] `electron/main/shortcuts.ts` → `refactor/electron_main_shortcuts.md`
-- [x] `electron/main/notifications.ts` → `refactor/electron_main_notifications.md`
-- [x] `electron/main/updater.ts` → `refactor/electron_main_updater.md`
+| Priority   | Count | Description                                                                                                         |
+| ---------- | ----- | ------------------------------------------------------------------------------------------------------------------- |
+| **High**   | 5     | Duplicate provider adapters, massive WorkflowEditor component, duplicate CRUD hooks, duplicate Firestore converters |
+| **Medium** | 12    | Module-level mutable state, silent error handling, unsafe casts, import ordering, excessive effects                 |
+| **Low**    | 8     | Stub code, console.log, minor accessibility, trivial tests                                                          |
 
-## Engine
+## Files by Group
 
-- [x] `electron/main/engine/runner.ts` → `refactor/electron_main_engine_runner.md`
-- [x] `electron/main/engine/queue.ts` → `refactor/electron_main_engine_queue.md`
-- [x] `electron/main/engine/retry.ts` → `refactor/electron_main_engine_retry.md`
-- [x] `electron/main/engine/scheduler.ts` → `refactor/electron_main_engine_scheduler.md`
-- [x] `electron/main/engine/events.ts` → `refactor/electron_main_engine_events.md`
-- [x] `electron/main/engine/types.ts` → `refactor/electron_main_engine_types.md`
+### Electron
 
-## Providers
+- [x] `electron/main/index.ts` — [electron_main_process.md](electron_main_process.md)
+- [x] `electron/main/window.ts` — [electron_main_process.md](electron_main_process.md)
+- [x] `electron/main/updater.ts` — [electron_main_process.md](electron_main_process.md)
+- [x] `electron/main/sentry.ts` — [electron_main_process.md](electron_main_process.md)
+- [x] `electron/main/tray.ts` — [electron_main_process.md](electron_main_process.md)
+- [x] `electron/main/notifications.ts` — [electron_main_process.md](electron_main_process.md)
+- [x] `electron/main/shortcuts.ts` — [electron_main_process.md](electron_main_process.md)
+- [x] `electron/main/encryption.ts` — [electron_main_process.md](electron_main_process.md)
+- [x] `electron/main/engine/runner.ts` — [electron_engine.md](electron_engine.md)
+- [x] `electron/main/engine/queue.ts` — [electron_engine.md](electron_engine.md)
+- [x] `electron/main/engine/scheduler.ts` — [electron_engine.md](electron_engine.md)
+- [x] `electron/main/engine/retry.ts` — [electron_engine.md](electron_engine.md)
+- [x] `electron/main/engine/types.ts` — [electron_engine.md](electron_engine.md)
+- [x] `electron/main/engine/events.ts` — [electron_engine.md](electron_engine.md)
+- [x] `electron/main/providers/interface.ts` — [electron_providers.md](electron_providers.md)
+- [x] `electron/main/providers/factory.ts` — [electron_providers.md](electron_providers.md)
+- [x] `electron/main/providers/openai.ts` — [electron_providers.md](electron_providers.md)
+- [x] `electron/main/providers/anthropic.ts` — [electron_providers.md](electron_providers.md)
+- [x] `electron/main/providers/google.ts` — [electron_providers.md](electron_providers.md)
+- [x] `electron/main/ipc/workflow.ts` — [electron_ipc.md](electron_ipc.md)
+- [x] `electron/main/ipc/execution.ts` — [electron_ipc.md](electron_ipc.md)
+- [x] `electron/main/ipc/api-keys.ts` — [electron_ipc.md](electron_ipc.md)
+- [x] `electron/main/ipc/app.ts` — [electron_ipc.md](electron_ipc.md)
+- [x] `electron/preload/index.ts` — [electron_preload_shared.md](electron_preload_shared.md)
+- [x] `electron/shared/types.ts` — [electron_preload_shared.md](electron_preload_shared.md)
+- [x] `electron/electron-env.d.ts` — No violations
 
-- [x] `electron/main/providers/interface.ts` → `refactor/electron_main_providers_interface.md`
-- [x] `electron/main/providers/factory.ts` → `refactor/electron_main_providers_factory.md`
-- [x] `electron/main/providers/openai.ts` → `refactor/electron_main_providers_openai.md`
-- [x] `electron/main/providers/anthropic.ts` → `refactor/electron_main_providers_anthropic.md`
-- [x] `electron/main/providers/google.ts` → `refactor/electron_main_providers_google.md`
+### Auth
 
-## IPC Handlers
+- [x] `src/components/auth/AuthProvider.tsx` — [src_components_auth.md](src_components_auth.md)
+- [x] `src/components/auth/OAuthButtons.tsx` — [src_components_auth.md](src_components_auth.md)
 
-- [x] `electron/main/ipc/workflow.ts` → `refactor/electron_main_ipc_workflow.md`
-- [x] `electron/main/ipc/execution.ts` → `refactor/electron_main_ipc_execution.md`
-- [x] `electron/main/ipc/api-keys.ts` → `refactor/electron_main_ipc_api-keys.md`
-- [x] `electron/main/ipc/app.ts` → `refactor/electron_main_ipc_app.md`
+### Layout
 
-## Preload & Shared
+- [x] `src/components/layout/Sidebar.tsx` — [src_components_layout.md](src_components_layout.md)
+- [x] `src/components/layout/AppLayout.tsx` — [src_components_layout.md](src_components_layout.md)
+- [x] `src/components/layout/ProtectedRoute.tsx` — [src_components_layout.md](src_components_layout.md)
+- [x] `src/components/layout/StatusBar.tsx` — [src_components_layout.md](src_components_layout.md)
 
-- [x] `electron/preload/index.ts` → `refactor/electron_preload_index.md`
-- [x] `electron/shared/types.ts` → `refactor/electron_shared_types.md`
+### Execution
 
-## React — Auth
+- [x] `src/components/execution/ErrorDisplay.tsx` — [src_components_execution.md](src_components_execution.md)
+- [x] `src/components/execution/StreamingText.tsx` — [src_components_execution.md](src_components_execution.md)
+- [x] `src/components/execution/ExecutionControls.tsx` — [src_components_execution.md](src_components_execution.md)
 
-- [x] `src/components/auth/AuthProvider.tsx` → `refactor/src_components_auth_AuthProvider.md`
-- [x] `src/components/auth/OAuthButtons.tsx` → `refactor/src_components_auth_OAuthButtons.md`
+### Workflow
 
-## React — Layout
+- [x] `src/components/workflow/WorkflowSettings.tsx` — [src_components_workflow.md](src_components_workflow.md)
+- [x] `src/components/workflow/PromptCard.tsx` — [src_components_workflow.md](src_components_workflow.md)
+- [x] `src/components/workflow/WorkflowStatusBadge.tsx` — [src_components_workflow.md](src_components_workflow.md)
+- [x] `src/components/workflow/WorkflowCard.tsx` — [src_components_workflow.md](src_components_workflow.md)
+- [x] `src/components/workflow/ImportExportButtons.tsx` — [src_components_workflow.md](src_components_workflow.md)
+- [x] `src/components/workflow/ModelSelector.tsx` — [src_components_workflow.md](src_components_workflow.md)
+- [x] `src/components/workflow/SaveButton.tsx` — [src_components_workflow.md](src_components_workflow.md)
+- [x] `src/components/workflow/QueueItem.tsx` — [src_components_workflow.md](src_components_workflow.md)
+- [x] `src/components/workflow/PromptProgressBar.tsx` — [src_components_workflow.md](src_components_workflow.md)
+- [x] `src/components/workflow/AddPromptButton.tsx` — [src_components_workflow.md](src_components_workflow.md)
+- [x] `src/components/workflow/PromptEditorPanel.tsx` — [src_components_workflow.md](src_components_workflow.md)
+- [x] `src/components/workflow/PromptList.tsx` — [src_components_workflow.md](src_components_workflow.md)
 
-- [x] `src/components/layout/AppLayout.tsx` → `refactor/src_components_layout_AppLayout.md`
-- [x] `src/components/layout/ProtectedRoute.tsx` → `refactor/src_components_layout_ProtectedRoute.md`
-- [x] `src/components/layout/Sidebar.tsx` → `refactor/src_components_layout_Sidebar.md`
-- [x] `src/components/layout/StatusBar.tsx` → `refactor/src_components_layout_StatusBar.md`
+### Settings & Shared
 
-## React — Execution
+- [x] `src/components/settings/AddApiKeyDialog.tsx` — [src_components_settings_shared.md](src_components_settings_shared.md)
+- [x] `src/components/settings/ApiKeyCard.tsx` — [src_components_settings_shared.md](src_components_settings_shared.md)
+- [x] `src/components/shared/ConfirmDialog.tsx` — [src_components_settings_shared.md](src_components_settings_shared.md)
+- [x] `src/components/shared/SkeletonTable.tsx` — [src_components_settings_shared.md](src_components_settings_shared.md)
+- [x] `src/components/shared/SkeletonCard.tsx` — [src_components_settings_shared.md](src_components_settings_shared.md)
+- [x] `src/components/shared/PageHeader.tsx` — [src_components_settings_shared.md](src_components_settings_shared.md)
+- [x] `src/components/shared/EmptyState.tsx` — [src_components_settings_shared.md](src_components_settings_shared.md)
 
-- [x] `src/components/execution/ExecutionControls.tsx` → `refactor/src_components_execution_ExecutionControls.md`
-- [x] `src/components/execution/StreamingText.tsx` → `refactor/src_components_execution_StreamingText.md`
-- [x] `src/components/execution/ErrorDisplay.tsx` → `refactor/src_components_execution_ErrorDisplay.md`
+### UI Primitives
 
-## React — Workflow
+- [x] `src/components/ui/button.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/input.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/textarea.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/select.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/card.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/dialog.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/dropdown-menu.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/badge.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/avatar.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/switch.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/label.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/progress.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/scroll-area.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/separator.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/sheet.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/skeleton.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/table.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/tabs.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/tooltip.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/command.tsx` — [src_components_ui.md](src_components_ui.md)
+- [x] `src/components/ui/input-group.tsx` — [src_components_ui.md](src_components_ui.md)
 
-- [x] `src/components/workflow/WorkflowSettings.tsx` → `refactor/src_components_workflow_WorkflowSettings.md`
-- [x] `src/components/workflow/PromptCard.tsx` → `refactor/src_components_workflow_PromptCard.md`
-- [x] `src/components/workflow/PromptList.tsx` → `refactor/src_components_workflow_PromptList.md`
-- [x] `src/components/workflow/PromptEditorPanel.tsx` → `refactor/src_components_workflow_PromptEditorPanel.md`
-- [x] `src/components/workflow/PromptProgressBar.tsx` → `refactor/src_components_workflow_PromptProgressBar.md`
-- [x] `src/components/workflow/QueueItem.tsx` → `refactor/src_components_workflow_QueueItem.md`
-- [x] `src/components/workflow/AddPromptButton.tsx` → `refactor/src_components_workflow_AddPromptButton.md`
-- [x] `src/components/workflow/SaveButton.tsx` → `refactor/src_components_workflow_SaveButton.md`
-- [x] `src/components/workflow/ImportExportButtons.tsx` → `refactor/src_components_workflow_ImportExportButtons.md`
-- [x] `src/components/workflow/ModelSelector.tsx` → `refactor/src_components_workflow_ModelSelector.md`
-- [x] `src/components/workflow/WorkflowStatusBadge.tsx` → `refactor/src_components_workflow_WorkflowStatusBadge.md`
-- [x] `src/components/workflow/WorkflowCard.tsx` → `refactor/src_components_workflow_WorkflowCard.md`
+### Pages & Routes
 
-## React — Settings / Shared / UI
+- [x] `src/pages/Dashboard.tsx` — [src_pages.md](src_pages.md)
+- [x] `src/pages/WorkflowEditor.tsx` — [src_pages.md](src_pages.md)
+- [x] `src/pages/ExecutionViewer.tsx` — [src_pages.md](src_pages.md)
+- [x] `src/pages/Login.tsx` — [src_pages.md](src_pages.md)
+- [x] `src/pages/Onboarding.tsx` — [src_pages.md](src_pages.md)
+- [x] `src/pages/Settings.tsx` — [src_pages.md](src_pages.md)
+- [x] `src/pages/ApiKeys.tsx` — [src_pages.md](src_pages.md)
+- [x] `src/routes.tsx` — [src_pages.md](src_pages.md)
+- [x] `src/App.tsx` — [src_pages.md](src_pages.md)
+- [x] `src/main.tsx` — [src_pages.md](src_pages.md)
 
-- [x] `src/components/settings/AddApiKeyDialog.tsx` → `refactor/src_components_settings_AddApiKeyDialog.md`
-- [x] `src/components/settings/ApiKeyCard.tsx` → `refactor/src_components_settings_ApiKeyCard.md`
-- [x] `src/components/shared/ConfirmDialog.tsx` → `refactor/src_components_shared_ConfirmDialog.md`
-- [x] `src/components/shared/EmptyState.tsx` → `refactor/src_components_shared_EmptyState.md`
-- [x] `src/components/shared/PageHeader.tsx` → `refactor/src_components_shared_PageHeader.md`
-- [x] `src/components/shared/SkeletonCard.tsx` → `refactor/src_components_shared_SkeletonCard.md`
-- [x] `src/components/shared/SkeletonTable.tsx` → `refactor/src_components_shared_SkeletonTable.md`
-- [x] (UI primitives — reviewed & applied)
+### Hooks
 
-## Pages
+- [x] `src/hooks/useAuth.ts` — [src_hooks.md](src_hooks.md)
+- [x] `src/hooks/useWorkflows.ts` — [src_hooks.md](src_hooks.md)
+- [x] `src/hooks/usePrompts.ts` — [src_hooks.md](src_hooks.md)
+- [x] `src/hooks/useExecutions.ts` — [src_hooks.md](src_hooks.md)
+- [x] `src/hooks/useIpc.ts` — [src_hooks.md](src_hooks.md)
+- [x] `src/hooks/useAutoSave.ts` — [src_hooks.md](src_hooks.md)
+- [x] `src/hooks/useConfiguredProviders.ts` — [src_hooks.md](src_hooks.md)
+- [x] `src/hooks/useTheme.ts` — [src_hooks.md](src_hooks.md)
+- [x] `src/hooks/useWorkflowSnapshot.ts` — [src_hooks.md](src_hooks.md)
+- [x] `src/hooks/useKeyboardShortcuts.ts` — [src_hooks.md](src_hooks.md)
 
-- [x] `src/pages/Login.tsx` → `refactor/src_pages_Login.md`
-- [x] `src/pages/Dashboard.tsx` → `refactor/src_pages_Dashboard.md`
-- [x] `src/pages/WorkflowEditor.tsx` → `refactor/src_pages_WorkflowEditor.md`
-- [x] `src/pages/ExecutionViewer.tsx` → `refactor/src_pages_ExecutionViewer.md`
-- [x] `src/pages/Settings.tsx` → `refactor/src_pages_Settings.md`
-- [x] `src/pages/ApiKeys.tsx` → `refactor/src_pages_ApiKeys.md`
-- [x] `src/pages/Onboarding.tsx` → `refactor/src_pages_Onboarding.md`
-- [x] `src/routes.tsx` → `refactor/src_routes.md`
-- [x] `src/App.tsx` → `refactor/src_App.md`
-- [x] `src/main.tsx` → `refactor/src_main.md`
+### Lib
 
-## Hooks
+- [x] `src/lib/utils.ts` — [src_lib.md](src_lib.md)
+- [x] `src/lib/firebase.ts` — [src_lib.md](src_lib.md)
+- [x] `src/lib/ipc.ts` — [src_lib.md](src_lib.md)
+- [x] `src/lib/converters.ts` — [src_lib.md](src_lib.md)
+- [x] `src/lib/models.ts` — [src_lib.md](src_lib.md)
+- [x] `src/lib/electron-mock.ts` — [src_lib.md](src_lib.md)
+- [x] `src/lib/sentry.ts` — [src_lib.md](src_lib.md)
 
-- [x] `src/hooks/useAuth.ts` → `refactor/src_hooks_useAuth.md`
-- [x] `src/hooks/useTheme.ts` → `refactor/src_hooks_useTheme.md`
-- [x] `src/hooks/useWorkflows.ts` → `refactor/src_hooks_useWorkflows.md`
-- [x] `src/hooks/usePrompts.ts` → `refactor/src_hooks_usePrompts.md`
-- [x] `src/hooks/useExecutions.ts` → `refactor/src_hooks_useExecutions.md`
-- [x] `src/hooks/useWorkflowSnapshot.ts` → `refactor/src_hooks_useWorkflowSnapshot.md`
-- [x] `src/hooks/useIpc.ts` → `refactor/src_hooks_useIpc.md`
-- [x] `src/hooks/useAutoSave.ts` → `refactor/src_hooks_useAutoSave.md`
-- [x] `src/hooks/useConfiguredProviders.ts` → `refactor/src_hooks_useConfiguredProviders.md`
-- [x] `src/hooks/useKeyboardShortcuts.ts` → `refactor/src_hooks_useKeyboardShortcuts.md`
+### Stores
 
-## Lib
+- [x] `src/store/index.ts` — [src_stores.md](src_stores.md)
+- [x] `src/store/workflowStore.ts` — [src_stores.md](src_stores.md)
+- [x] `src/store/settingsStore.ts` — [src_stores.md](src_stores.md)
+- [x] `src/store/executionStore.ts` — [src_stores.md](src_stores.md)
 
-- [x] `src/lib/firebase.ts` → `refactor/src_lib_firebase.md`
-- [x] `src/lib/converters.ts` → `refactor/src_lib_converters.md`
-- [x] `src/lib/firestore-helpers.ts` → `refactor/src_lib_firestore-helpers.md` _(removed — dead code)_
-- [x] `src/lib/ipc.ts` → `refactor/src_lib_ipc.md`
-- [x] `src/lib/models.ts` → `refactor/src_lib_models.md`
-- [x] `src/lib/utils.ts` → `refactor/src_lib_utils.md`
-- [x] `src/lib/sentry.ts` → `refactor/src_lib_sentry.md`
-- [x] `src/lib/electron-mock.ts` → `refactor/src_lib_electron-mock.md`
+### Test
 
-## Stores
+- [x] `src/test/stores.test.ts` — [src_test.md](src_test.md)
+- [x] `src/test/auth.test.tsx` — [src_test.md](src_test.md)
+- [x] `src/test/routes.test.tsx` — [src_test.md](src_test.md)
+- [x] `src/test/example.test.ts` — [src_test.md](src_test.md)
+- [x] `src/test/setup.ts` — [src_test.md](src_test.md)
 
-- [x] `src/store/executionStore.ts` → `refactor/src_store_executionStore.md`
-- [x] `src/store/workflowStore.ts` → `refactor/src_store_workflowStore.md`
-- [x] `src/store/settingsStore.ts` → `refactor/src_store_settingsStore.md`
-- [x] `src/store/index.ts` → `refactor/src_store_index.md`
+## Top 5 Most Impactful Refactors
 
-## Tests
-
-- [x] `src/test/setup.ts` → `refactor/src_test_setup.md`
-- [x] `src/test/example.test.ts` → `refactor/src_test_example_test.md`
-- [x] `src/test/auth.test.tsx` → `refactor/src_test_auth_test.md`
-- [x] `src/test/routes.test.tsx` → `refactor/src_test_routes_test.md`
-- [x] `src/test/stores.test.ts` → `refactor/src_test_stores_test.md`
-
----
-
-**Total: 91 files**
+| Rank | Area                                                                       | Impact                                      | Effort |
+| ---- | -------------------------------------------------------------------------- | ------------------------------------------- | ------ |
+| 1    | **Duplicate provider adapters** (`openai.ts`, `anthropic.ts`, `google.ts`) | Eliminates ~80% duplicate code in providers | Medium |
+| 2    | **Massive WorkflowEditorPage** (378 lines)                                 | Improves maintainability, enables testing   | Large  |
+| 3    | **Duplicate CRUD hooks** (`useWorkflows.ts`, `usePrompts.ts`)              | Eliminates ~50% duplicate code across hooks | Medium |
+| 4    | **Duplicate Firestore converters** (`converters.ts`)                       | Eliminates ~60% converter boilerplate       | Small  |
+| 5    | **Module-level mutable state** (`window.ts`, `encryption.ts`)              | Reduces bugs from shared mutable state      | Small  |
