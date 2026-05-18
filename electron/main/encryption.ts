@@ -143,6 +143,10 @@ export function deleteApiKey(keyId: string): Result<{ success: boolean }> {
   return { ok: true, value: { success: true } }
 }
 
+export function resetStore(): void {
+  cachedStore = null
+}
+
 export function getFirstApiKeyForProvider(provider: string): string | null {
   const store = loadStore()
   const entry = store.keys.find((k) => k.provider === provider)
