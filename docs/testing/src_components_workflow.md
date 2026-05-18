@@ -9,7 +9,7 @@
   - `disabled` prop disables the button
 - **Mocking requirements:** Button component
 - **Coverage targets:** Enabled vs disabled
-- **Suggested test file location:** `src/test/components/workflow/AddPromptButton.test.tsx`
+- **Suggested test file location:** `components/workflow/__tests__/AddPromptButton.test.tsx`
 
 ## 2. `src/components/workflow/ImportExportButtons.tsx`
 
@@ -21,7 +21,7 @@
   - Import with invalid prompts shows error listing their names
 - **Mocking requirements:** `window.electronAPI.showSaveDialog`, `showOpenDialog`, `writeFile`, `readFile`; `sonner` toast
 - **Coverage targets:** Export canceled vs confirmed; write success vs error; import canceled; file read success vs error; JSON parse error; invalid top-level fields; invalid prompt fields; valid import
-- **Suggested test file location:** `src/test/components/workflow/ImportExportButtons.test.tsx`
+- **Suggested test file location:** `components/workflow/__tests__/ImportExportButtons.test.tsx`
 
 ## 3. `src/components/workflow/ModelSelector.tsx`
 
@@ -36,7 +36,7 @@
   - `onChange` fires with model ID on selection
 - **Mocking requirements:** `../../lib/models` (MODELS, PROVIDER_LABELS); `../../hooks/useConfiguredProviders`; Select, Input components
 - **Coverage targets:** No keys configured; keys configured with/without search match; selected vs unselected; all provider groups
-- **Suggested test file location:** `src/test/components/workflow/ModelSelector.test.tsx`
+- **Suggested test file location:** `components/workflow/__tests__/ModelSelector.test.tsx`
 
 ## 4. `src/components/workflow/PromptEditorPanel.tsx`
 
@@ -50,7 +50,7 @@
   - Enabled switch: boolean toggle
 - **Mocking requirements:** Sheet, Input, Textarea, Label, Switch, ModelSelector components
 - **Coverage targets:** Null vs defined prompt; all field change handlers; systemPrompt undefined coalescing
-- **Suggested test file location:** `src/test/components/workflow/PromptEditorPanel.test.tsx`
+- **Suggested test file location:** `components/workflow/__tests__/PromptEditorPanel.test.tsx`
 
 ## 5. `src/components/workflow/PromptList.tsx`
 
@@ -62,7 +62,7 @@
   - Each `PromptCard` receives correct props (key, index, isSelected, onSelect, onToggle, onDelete)
 - **Mocking requirements:** `@hello-pangea/dnd` (DragDropContext, Droppable); PromptCard component
 - **Coverage targets:** Drop to same position (no-op); drop to different position; empty prompts array
-- **Suggested test file location:** `src/test/components/workflow/PromptList.test.tsx`
+- **Suggested test file location:** `components/workflow/__tests__/PromptList.test.tsx`
 
 ## 6. `src/components/workflow/PromptProgressBar.tsx`
 
@@ -76,7 +76,7 @@
   - Each button shows truncated title
 - **Mocking requirements:** None (pure display)
 - **Coverage targets:** Empty; all 4 status values; unknown status fallback; click handler
-- **Suggested test file location:** `src/test/components/workflow/PromptProgressBar.test.tsx`
+- **Suggested test file location:** `components/workflow/__tests__/PromptProgressBar.test.tsx`
 
 ## 7. `src/components/workflow/QueueItem.tsx`
 
@@ -91,7 +91,7 @@
   - Truncates long title/error text
 - **Mocking requirements:** None (pure display)
 - **Coverage targets:** All 4 status values; isActive true/false; error present/absent; durationMs present/absent
-- **Suggested test file location:** `src/test/components/workflow/QueueItem.test.tsx`
+- **Suggested test file location:** `components/workflow/__tests__/QueueItem.test.tsx`
 
 ## 8. `src/components/workflow/SaveButton.tsx`
 
@@ -103,7 +103,7 @@
   - Disabled when `disabled` is true OR `isSaving` is true
 - **Mocking requirements:** Button component
 - **Coverage targets:** isNew + isSaving combinations; disabled state
-- **Suggested test file location:** `src/test/components/workflow/SaveButton.test.tsx`
+- **Suggested test file location:** `components/workflow/__tests__/SaveButton.test.tsx`
 
 ## 9. `src/components/workflow/WorkflowSettings.tsx`
 
@@ -117,7 +117,7 @@
   - `onMaxIterationsChange` fires with number value
 - **Mocking requirements:** Select, Input, Label components
 - **Coverage targets:** All 4 loop modes; fixed vs non-fixed; invalid mode rejection
-- **Suggested test file location:** `src/test/components/workflow/WorkflowSettings.test.tsx`
+- **Suggested test file location:** `components/workflow/__tests__/WorkflowSettings.test.tsx`
 
 ## 10. `src/components/workflow/WorkflowStatusBadge.tsx`
 
@@ -128,7 +128,7 @@
   - Running status shows pulsing dot; non-running shows static dot
 - **Mocking requirements:** None (pure display)
 - **Coverage targets:** All 6 statuses; unknown status fallback
-- **Suggested test file location:** `src/test/components/workflow/WorkflowStatusBadge.test.tsx`
+- **Suggested test file location:** `components/workflow/__tests__/WorkflowStatusBadge.test.tsx`
 
 ## 11. `src/components/workflow/WorkflowCard.tsx`
 
@@ -143,7 +143,7 @@
   - `onStart`, `onStop`, `onEdit`, `onDelete` fire correctly
 - **Mocking requirements:** Card, Button, WorkflowStatusBadge components
 - **Coverage targets:** All statuses for control buttons; prompt count singular/plural; loop mode present/absent
-- **Suggested test file location:** `src/test/components/workflow/WorkflowCard.test.tsx`
+- **Suggested test file location:** `components/workflow/__tests__/WorkflowCard.test.tsx`
 
 ## 12. `src/components/workflow/PromptCard.tsx`
 
@@ -160,16 +160,25 @@
   - ConfirmDialog: confirm calls `onDelete` and hides dialog; cancel hides dialog
 - **Mocking requirements:** `@hello-pangea/dnd` Draggable; Button, Badge, Switch, ConfirmDialog components
 - **Coverage targets:** Dragging vs selected vs default state; delete confirm/cancel
-- **Suggested test file location:** `src/test/components/workflow/PromptCard.test.tsx`
+- **Suggested test file location:** `components/workflow/__tests__/PromptCard.test.tsx`
+
+---
 
 ---
 
 ## Global Rule
 
-All test files must be placed under `src/test/`. Mirror the source path structure:
+All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
+This keeps tests co-located with their source, making it easy to find and maintain related tests.
+All test files must be placed under ``. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.

@@ -15,7 +15,7 @@
   - Context value is memoized
 - **Mocking requirements:** `firebase/auth` (onAuthStateChanged, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, GithubAuthProvider, signOut, browserPopupRedirectResolver); `firebase/firestore` (doc, getDoc, setDoc, serverTimestamp); `../../lib/firebase` (auth, db)
 - **Coverage targets:** Electron vs browser path; user exists vs new user; getRedirectResult success vs failure; `ensureUserDocument` error caught silently
-- **Suggested test file location:** `src/test/components/auth/AuthProvider.test.tsx`
+- **Suggested test file location:** `components/auth/__tests__/AuthProvider.test.tsx`
 
 ## 2. `src/components/auth/OAuthButtons.tsx`
 
@@ -28,16 +28,25 @@
   - SVG icons rendered with `aria-hidden="true"`
 - **Mocking requirements:** Button component from `../ui/button`
 - **Coverage targets:** Loading vs not loading state
-- **Suggested test file location:** `src/test/components/auth/OAuthButtons.test.tsx`
+- **Suggested test file location:** `components/auth/__tests__/OAuthButtons.test.tsx`
+
+---
 
 ---
 
 ## Global Rule
 
-All test files must be placed under `src/test/`. Mirror the source path structure:
+All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
+This keeps tests co-located with their source, making it easy to find and maintain related tests.
+All test files must be placed under ``. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.

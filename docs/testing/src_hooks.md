@@ -8,7 +8,7 @@
   - Throws `"useAuth must be used within an AuthProvider"` when used outside provider
 - **Mocking requirements:** `AuthContext` from `../components/auth/AuthProvider`
 - **Coverage targets:** Within provider (success) vs outside (error)
-- **Suggested test file location:** `src/test/hooks/useAuth.test.ts`
+- **Suggested test file location:** `hooks/__tests__/useAuth.test.ts`
 
 ## 2. `src/hooks/useAutoSave.ts`
 
@@ -23,7 +23,7 @@
   - Ref updates for `save` function (avoids stale closure)
 - **Mocking requirements:** None (pure hook)
 - **Coverage targets:** isNew vs existing; data unchanged (same JSON); dirty/debounce lifecycle; keyboard shortcut; unmount cleanup
-- **Suggested test file location:** `src/test/hooks/useAutoSave.test.ts`
+- **Suggested test file location:** `hooks/__tests__/useAutoSave.test.ts`
 
 ## 3. `src/hooks/useConfiguredProviders.ts`
 
@@ -37,7 +37,7 @@
   - `refetch` re-fetches providers fresh
 - **Mocking requirements:** `window.electronAPI.listApiKeys`; AbortController
 - **Coverage targets:** Success (deduplicates); timeout; fetch error; abort after unmount
-- **Suggested test file location:** `src/test/hooks/useConfiguredProviders.test.ts`
+- **Suggested test file location:** `hooks/__tests__/useConfiguredProviders.test.ts`
 
 ## 4. `src/hooks/useExecutions.ts`
 
@@ -51,7 +51,7 @@
   - Uses `executionConverter` for Firestore serialization
 - **Mocking requirements:** `@tanstack/react-query` useQuery; `firebase/firestore` collection, getDocs, query, orderBy, limit, where; `../../lib/firebase` (db); `./useAuth`
 - **Coverage targets:** No user; with/without workflowId; enabled/disabled query
-- **Suggested test file location:** `src/test/hooks/useExecutions.test.ts`
+- **Suggested test file location:** `hooks/__tests__/useExecutions.test.ts`
 
 ## 5. `src/hooks/useIpc.ts`
 
@@ -65,7 +65,7 @@
   - `useWorkflowControl()`: returns 4 memoized callbacks wrapping `window.electronAPI` methods
 - **Mocking requirements:** `window.electronAPI.onExecutionChunk`, `onExecutionCompleted`, `onExecutionFailed`, `onWorkflowCompleted`; `../../store/executionStore`
 - **Coverage targets:** All 4 event handlers; listener cleanup; `appendResponseChunk` called with `data.chunk`
-- **Suggested test file location:** `src/test/hooks/useIpc.test.ts`
+- **Suggested test file location:** `hooks/__tests__/useIpc.test.ts`
 
 ## 6. `src/hooks/useKeyboardShortcuts.ts`
 
@@ -81,7 +81,7 @@
   - Cleanup removes event listener on unmount
 - **Mocking requirements:** `react-router-dom` useNavigate
 - **Coverage targets:** All shortcut keys; input focused vs not; Escape click target present vs absent; Cmd vs Ctrl (metaKey vs ctrlKey)
-- **Suggested test file location:** `src/test/hooks/useKeyboardShortcuts.test.ts`
+- **Suggested test file location:** `hooks/__tests__/useKeyboardShortcuts.test.ts`
 
 ## 7. `src/hooks/usePrompts.ts`
 
@@ -96,7 +96,7 @@
   - Firestore collection references use `promptConverter`
 - **Mocking requirements:** `@tanstack/react-query` (useQuery, useMutation, useQueryClient); `firebase/firestore` (collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, orderBy, writeBatch); `../../lib/firebase` (db); `./useAuth`; `../../lib/converters`; `sonner` toast
 - **Coverage targets:** Success/error for all 5 operations; no user guard; no workflowId guard
-- **Suggested test file location:** `src/test/hooks/usePrompts.test.ts`
+- **Suggested test file location:** `hooks/__tests__/usePrompts.test.ts`
 
 ## 8. `src/hooks/useTheme.ts`
 
@@ -108,7 +108,7 @@
   - Returns `{ theme, setTheme }` from settings store
 - **Mocking requirements:** `window.matchMedia`; `../../store/settingsStore`
 - **Coverage targets:** All 3 theme values; system media query change event; cleanup on unmount
-- **Suggested test file location:** `src/test/hooks/useTheme.test.ts`
+- **Suggested test file location:** `hooks/__tests__/useTheme.test.ts`
 
 ## 9. `src/hooks/useWorkflows.ts`
 
@@ -123,7 +123,7 @@
   - Firestore references use `workflowConverter`
 - **Mocking requirements:** `@tanstack/react-query` (useQuery, useMutation, useQueryClient); `firebase/firestore` (collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc, query, orderBy); `../../lib/firebase` (db); `./useAuth`; `../../lib/converters`
 - **Coverage targets:** All 5 operations; no user guard; null document guard
-- **Suggested test file location:** `src/test/hooks/useWorkflows.test.ts`
+- **Suggested test file location:** `hooks/__tests__/useWorkflows.test.ts`
 
 ## 10. `src/hooks/useWorkflowSnapshot.ts`
 
@@ -138,16 +138,25 @@
   - Uses `workflowConverter`
 - **Mocking requirements:** `firebase/firestore` (doc, onSnapshot); `../../lib/firebase` (db); `./useAuth`; `../../store/workflowStore`
 - **Coverage targets:** Snapshot exists vs not; snapshot data with Date vs string timestamps; error callback; cleanup
-- **Suggested test file location:** `src/test/hooks/useWorkflowSnapshot.test.ts`
+- **Suggested test file location:** `hooks/__tests__/useWorkflowSnapshot.test.ts`
+
+---
 
 ---
 
 ## Global Rule
 
-All test files must be placed under `src/test/`. Mirror the source path structure:
+All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
+This keeps tests co-located with their source, making it easy to find and maintain related tests.
+All test files must be placed under ``. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.

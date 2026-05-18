@@ -13,7 +13,7 @@
   - `cleanupRunner()` is safe for missing runner; cleans up after completion/failure
 - **Mocking requirements:** `ipcMain` from electron; `WorkflowRunner` constructor and instance methods
 - **Coverage targets:** All IPC handler resolved/rejected states; runner already running; runner not found (all 4 handlers)
-- **Suggested test file location:** `src/test/electron/main/ipc/workflow.test.ts`
+- **Suggested test file location:** `electron/main/ipc/__tests__/workflow.test.ts`
 
 ## 2. `electron/main/ipc/execution.ts`
 
@@ -23,7 +23,7 @@
   - Confirms no handlers are registered
 - **Mocking requirements:** None
 - **Coverage targets:** N/A (placeholder)
-- **Suggested test file location:** `src/test/electron/main/ipc/execution.test.ts`
+- **Suggested test file location:** `electron/main/ipc/__tests__/execution.test.ts`
 
 ## 3. `electron/main/ipc/api-keys.ts`
 
@@ -37,7 +37,7 @@
   - `isValidProvider()` returns true only for `'openai' | 'anthropic' | 'google'`
 - **Mocking requirements:** `ipcMain` from electron; `encryptApiKey`, `decryptApiKey`, `listApiKeys`, `deleteApiKey` from '../encryption'
 - **Coverage targets:** All 4 provider validation paths; each handler's success/error branches
-- **Suggested test file location:** `src/test/electron/main/ipc/api-keys.test.ts`
+- **Suggested test file location:** `electron/main/ipc/__tests__/api-keys.test.ts`
 
 ## 4. `electron/main/ipc/app.ts`
 
@@ -52,16 +52,25 @@
   - `file:read`: reads file, returns `{ success: true, content }`; catches error returns `{ success: false, error }`
 - **Mocking requirements:** `ipcMain`, `app`, `BrowserWindow`, `dialog` from electron; `readFile`/`writeFile` from `fs/promises`
 - **Coverage targets:** All dialog paths (no window, with window); file read/write success/error
-- **Suggested test file location:** `src/test/electron/main/ipc/app.test.ts`
+- **Suggested test file location:** `electron/main/ipc/__tests__/app.test.ts`
+
+---
 
 ---
 
 ## Global Rule
 
-All test files must be placed under `src/test/`. Mirror the source path structure:
+All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
+This keeps tests co-located with their source, making it easy to find and maintain related tests.
+All test files must be placed under ``. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.

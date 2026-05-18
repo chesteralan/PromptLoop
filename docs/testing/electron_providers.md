@@ -9,7 +9,7 @@
   - `ModelInfo` has id, name, maxTokens
 - **Mocking requirements:** None (interface)
 - **Coverage targets:** N/A
-- **Suggested test file location:** `src/test/electron/main/providers/interface.test.ts`
+- **Suggested test file location:** `electron/main/providers/__tests__/interface.test.ts`
 
 ## 2. `electron/main/providers/factory.ts`
 
@@ -24,7 +24,7 @@
   - Matcher for `gemini-*` maps to Google
 - **Mocking requirements:** `OpenAIAdapter`, `AnthropicAdapter`, `GoogleAdapter` constructors
 - **Coverage targets:** All 3 provider matchers; unknown model path
-- **Suggested test file location:** `src/test/electron/main/providers/factory.test.ts`
+- **Suggested test file location:** `electron/main/providers/__tests__/factory.test.ts`
 
 ## 3. `electron/main/providers/openai.ts`
 
@@ -36,7 +36,7 @@
   - `estimateCost()` uses correct per-model rates ($/1M tokens); falls back to gpt-4o rates for unknown models
 - **Mocking requirements:** `streamText` from `ai`; `openai` from `@ai-sdk/openai`
 - **Coverage targets:** All 5 model rate entries, unknown model fallback, validateApiKey success/failure
-- **Suggested test file location:** `src/test/electron/main/providers/openai.test.ts`
+- **Suggested test file location:** `electron/main/providers/__tests__/openai.test.ts`
 
 ## 4. `electron/main/providers/anthropic.ts`
 
@@ -48,7 +48,7 @@
   - `estimateCost()` uses correct per-model rates; falls back to claude-3-5-sonnet rates
 - **Mocking requirements:** `streamText` from `ai`; `anthropic` from `@ai-sdk/anthropic`
 - **Coverage targets:** All 3 model rate entries, unknown model fallback, validateApiKey success/failure
-- **Suggested test file location:** `src/test/electron/main/providers/anthropic.test.ts`
+- **Suggested test file location:** `electron/main/providers/__tests__/anthropic.test.ts`
 
 ## 5. `electron/main/providers/google.ts`
 
@@ -60,16 +60,25 @@
   - `estimateCost()` uses correct per-model rates; falls back to gemini-2.0-flash rates
 - **Mocking requirements:** `streamText` from `ai`; `google` from `@ai-sdk/google`
 - **Coverage targets:** All 3 model rate entries, unknown model fallback, validateApiKey success/failure
-- **Suggested test file location:** `src/test/electron/main/providers/google.test.ts`
+- **Suggested test file location:** `electron/main/providers/__tests__/google.test.ts`
+
+---
 
 ---
 
 ## Global Rule
 
-All test files must be placed under `src/test/`. Mirror the source path structure:
+All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
+This keeps tests co-located with their source, making it easy to find and maintain related tests.
+All test files must be placed under ``. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.

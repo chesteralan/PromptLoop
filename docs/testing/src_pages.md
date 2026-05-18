@@ -14,7 +14,7 @@
   - Load error caught with error toast
 - **Mocking requirements:** `window.electronAPI.listApiKeys`, `encryptApiKey`, `deleteApiKey`; `sonner` toast; PageHeader, EmptyState, SkeletonCard, AddApiKeyDialog, ApiKeyCard components
 - **Coverage targets:** Loading → empty → keys states; save then reload; optimistic delete; load error
-- **Suggested test file location:** `src/test/pages/ApiKeys.test.tsx`
+- **Suggested test file location:** `pages/__tests__/ApiKeys.test.tsx`
 
 ## 2. `src/pages/ExecutionViewer.tsx`
 
@@ -35,7 +35,7 @@
   - "Clear" button calls `resetExecution`
 - **Mocking requirements:** `react-router-dom` useParams/useNavigate; all hooks (useWorkflow, usePrompts, useExecutionStore, useIpc); all sub-components
 - **Coverage targets:** All 4 control actions; idle vs active state; empty prompts; logs rendering
-- **Suggested test file location:** `src/test/pages/ExecutionViewer.test.tsx`
+- **Suggested test file location:** `pages/__tests__/ExecutionViewer.test.tsx`
 
 ## 3. `src/pages/Login.tsx`
 
@@ -48,7 +48,7 @@
   - GitHub sign-in: calls `signInWithGitHub`; shows error toast on failure
 - **Mocking requirements:** `react-router-dom` useNavigate; `../../hooks/useAuth`; OAuthButtons, Card components; `sonner` toast
 - **Coverage targets:** Loading → unauthenticated → redirect; both sign-in handlers with error
-- **Suggested test file location:** `src/test/pages/Login.test.tsx`
+- **Suggested test file location:** `pages/__tests__/Login.test.tsx`
 
 ## 4. `src/pages/Onboarding.tsx`
 
@@ -63,7 +63,7 @@
   - "Get Started" button disabled when name empty or saving
 - **Mocking requirements:** `react-router-dom` useNavigate; `firebase/firestore` (doc, getDoc, updateDoc); `../../lib/firebase` (db); `../../hooks/useAuth`; Button, Input, Card, toast components
 - **Coverage targets:** No user; loading; onboarding complete redirect; form submit success/error; cancellation via `cancelled` flag
-- **Suggested test file location:** `src/test/pages/Onboarding.test.tsx`
+- **Suggested test file location:** `pages/__tests__/Onboarding.test.tsx`
 
 ## 5. `src/pages/Settings.tsx`
 
@@ -76,7 +76,7 @@
   - Checkbox toggles `minimizeToTrayOnClose`
 - **Mocking requirements:** `../../store/settingsStore`; PageHeader, Card, Button components
 - **Coverage targets:** All 3 theme buttons; Electron vs browser; checkbox toggle
-- **Suggested test file location:** `src/test/pages/Settings.test.tsx`
+- **Suggested test file location:** `pages/__tests__/Settings.test.tsx`
 
 ## 6. `src/pages/WorkflowEditor.tsx`
 
@@ -99,7 +99,7 @@
   - `setIsDirty` on any field change; reset on save
 - **Mocking requirements:** `react-router-dom` useParams/useNavigate; all workflow/prompt hooks; AutoSave hook; all sub-components; `beforeunload` event
 - **Coverage targets:** New vs existing; save/delete/create/import; dirty flag lifecycle; beforeunload; not found state
-- **Suggested test file location:** `src/test/pages/WorkflowEditor.test.tsx`
+- **Suggested test file location:** `pages/__tests__/WorkflowEditor.test.tsx`
 
 ## 7. `src/pages/Dashboard.tsx`
 
@@ -114,7 +114,7 @@
   - WorkflowCard onStart/onStop/onEdit/onDelete fire correctly
 - **Mocking requirements:** `react-router-dom` useNavigate; `../../hooks/useWorkflows`; `../../hooks/useExecutions`; WorkflowCard, SkeletonCard, ConfirmDialog, EmptyState components; `sonner` toast
 - **Coverage targets:** All 4 stat values; statColor boundaries; empty vs populated; delete confirm
-- **Suggested test file location:** `src/test/pages/Dashboard.test.tsx`
+- **Suggested test file location:** `pages/__tests__/Dashboard.test.tsx`
 
 ## 8. `src/routes.tsx`
 
@@ -132,7 +132,7 @@
   - All lazy-loaded routes wrapped in `Suspense` with spinner fallback
 - **Mocking requirements:** All page components; `react-router-dom` createHashRouter
 - **Coverage targets:** All route paths; catch-all redirect; Suspense fallback
-- **Suggested test file location:** `src/test/routes.test.tsx` (extend existing)
+- **Suggested test file location:** `routes.test.tsx` (extend existing)
 
 ## 9. `src/App.tsx`
 
@@ -145,7 +145,7 @@
   - Renders `Toaster` from sonner with `richColors` and `bottom-right` position
 - **Mocking requirements:** `react-router-dom` RouterProvider; `../../hooks/useTheme`; TooltipProvider, Toaster components
 - **Coverage targets:** ErrorBoundary normal vs error state; ErrorBoundary reset via state change
-- **Suggested test file location:** `src/test/App.test.tsx`
+- **Suggested test file location:** `App.test.tsx`
 
 ## 10. `src/main.tsx`
 
@@ -159,16 +159,25 @@
   - Styles imported from `globals.css`
 - **Mocking requirements:** ReactDOM.createRoot; `../../lib/electron-mock`; `../../lib/sentry`; AuthProvider, App, QueryClient
 - **Coverage targets:** Electron mock inject success/failure
-- **Suggested test file location:** `src/test/main.test.tsx`
+- **Suggested test file location:** `main.test.tsx`
+
+---
 
 ---
 
 ## Global Rule
 
-All test files must be placed under `src/test/`. Mirror the source path structure:
+All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
+This keeps tests co-located with their source, making it easy to find and maintain related tests.
+All test files must be placed under ``. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.

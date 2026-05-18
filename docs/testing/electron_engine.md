@@ -9,7 +9,7 @@
   - `ExecutionEventMap` keys match the channels used in `events.ts`
 - **Mocking requirements:** None (type definitions)
 - **Coverage targets:** N/A
-- **Suggested test file location:** `src/test/electron/main/engine/types.test.ts`
+- **Suggested test file location:** `electron/main/engine/__tests__/types.test.ts`
 
 ## 2. `electron/main/engine/events.ts`
 
@@ -20,7 +20,7 @@
   - Works with all `ExecutionEventMap` channels
 - **Mocking requirements:** `BrowserWindow` from electron
 - **Coverage targets:** All windows destroyed vs mixed; no windows at all
-- **Suggested test file location:** `src/test/electron/main/engine/events.test.ts`
+- **Suggested test file location:** `electron/main/engine/__tests__/events.test.ts`
 
 ## 3. `electron/main/engine/queue.ts`
 
@@ -34,7 +34,7 @@
   - `getAll()` returns a shallow copy (mutating returned array doesn't affect internal state)
 - **Mocking requirements:** None
 - **Coverage targets:** Empty state, single item, multiple items
-- **Suggested test file location:** `src/test/electron/main/engine/queue.test.ts`
+- **Suggested test file location:** `electron/main/engine/__tests__/queue.test.ts`
 
 ## 4. `electron/main/engine/retry.ts`
 
@@ -51,7 +51,7 @@
   - Backoff clamped to `maxDelayMs`
 - **Mocking requirements:** None (pure functions/classes)
 - **Coverage targets:** All error categories (7), stop vs retry action, jitter multiplication, backoff clamping, all retry exhaustion paths
-- **Suggested test file location:** `src/test/electron/main/engine/retry.test.ts`
+- **Suggested test file location:** `electron/main/engine/__tests__/retry.test.ts`
 
 ## 5. `electron/main/engine/scheduler.ts`
 
@@ -61,7 +61,7 @@
   - `ScheduleWorker.stop()` logs "not yet implemented" warning
 - **Mocking requirements:** None
 - **Coverage targets:** N/A (placeholder)
-- **Suggested test file location:** `src/test/electron/main/engine/scheduler.test.ts`
+- **Suggested test file location:** `electron/main/engine/__tests__/scheduler.test.ts`
 
 ## 6. `electron/main/engine/runner.ts`
 
@@ -83,16 +83,25 @@
   - Edge: all prompts disabled (none enqueued) — loop body never executes
 - **Mocking requirements:** `getProviderAdapter`, `getProviderName` from factory; `QueueManager`; `emit` from events; `executeWithRetry` from retry; `sendWorkflowCompleted`, `sendWorkflowFailed` from notifications; `BrowserWindow` from electron
 - **Coverage targets:** All state transitions (idle→running→paused→running→completed, idle→running→stopped); all loop modes (4); enabled/disabled prompt filtering; abort signal; delay with abort
-- **Suggested test file location:** `src/test/electron/main/engine/runner.test.ts`
+- **Suggested test file location:** `electron/main/engine/__tests__/runner.test.ts`
+
+---
 
 ---
 
 ## Global Rule
 
-All test files must be placed under `src/test/`. Mirror the source path structure:
+All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
+This keeps tests co-located with their source, making it easy to find and maintain related tests.
+All test files must be placed under ``. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.

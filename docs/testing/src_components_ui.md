@@ -12,7 +12,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Group applies negative spacing
 - **Mocking requirements:** `@base-ui/react/avatar`
 - **Coverage targets:** All size variants; with/without image
-- **Suggested test file location:** `src/test/components/ui/avatar.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/avatar.test.tsx`
 
 ## 2. `src/components/ui/badge.tsx`
 
@@ -24,7 +24,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Renders as `span` by default; supports `render` prop for custom element
 - **Mocking requirements:** None
 - **Coverage targets:** All 6 variants
-- **Suggested test file location:** `src/test/components/ui/badge.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/badge.test.tsx`
 
 ## 3. `src/components/ui/button.tsx`
 
@@ -38,7 +38,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Disabled state applies correct classes
 - **Mocking requirements:** `@base-ui/react/button`
 - **Coverage targets:** All variant × size combinations (6 × 8)
-- **Suggested test file location:** `src/test/components/ui/button.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/button.test.tsx`
 
 ## 4. `src/components/ui/dialog.tsx`
 
@@ -49,7 +49,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Content hides close button when `showCloseButton=false`
 - **Mocking requirements:** `@base-ui/react/dialog`
 - **Coverage targets:** Close button shown/hidden
-- **Suggested test file location:** `src/test/components/ui/dialog.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/dialog.test.tsx`
 
 ## 5. `src/components/ui/dropdown-menu.tsx`
 
@@ -60,7 +60,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Inset prop adds left padding
 - **Mocking requirements:** `@base-ui/react/menu`
 - **Coverage targets:** Default vs destructive item variant; inset vs no-inset
-- **Suggested test file location:** `src/test/components/ui/dropdown-menu.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/dropdown-menu.test.tsx`
 
 ## 6. `src/components/ui/input-group.tsx`
 
@@ -73,7 +73,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - InputGroupInput/InputGroupTextarea strip outer borders
 - **Mocking requirements:** Button, Input, Textarea components
 - **Coverage targets:** All 4 align variants; button click vs non-button click inside addon
-- **Suggested test file location:** `src/test/components/ui/input-group.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/input-group.test.tsx`
 
 ## 7. `src/components/ui/input.tsx`
 
@@ -85,7 +85,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Supports `forwardRef`
 - **Mocking requirements:** `@base-ui/react/input`
 - **Coverage targets:** Normal, disabled, invalid states
-- **Suggested test file location:** `src/test/components/ui/input.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/input.test.tsx`
 
 ## 8. `src/components/ui/label.tsx`
 
@@ -95,7 +95,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Supports `className` merging
 - **Mocking requirements:** None
 - **Coverage targets:** N/A (single render path)
-- **Suggested test file location:** `src/test/components/ui/label.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/label.test.tsx`
 
 ## 9. `src/components/ui/progress.tsx`
 
@@ -106,7 +106,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Indicator width transitions via CSS
 - **Mocking requirements:** `@base-ui/react/progress`
 - **Coverage targets:** 0% vs 50% vs 100% value
-- **Suggested test file location:** `src/test/components/ui/progress.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/progress.test.tsx`
 
 ## 10. `src/components/ui/scroll-area.tsx`
 
@@ -116,7 +116,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - ScrollBar supports `orientation='vertical'` (default) and `'horizontal'`
 - **Mocking requirements:** `@base-ui/react/scroll-area`
 - **Coverage targets:** Vertical vs horizontal orientation
-- **Suggested test file location:** `src/test/components/ui/scroll-area.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/scroll-area.test.tsx`
 
 ## 11. `src/components/ui/select.tsx`
 
@@ -127,7 +127,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Content supports side/align/sideOffset/alignOffset/alignItemWithTrigger
 - **Mocking requirements:** `@base-ui/react/select`
 - **Coverage targets:** Default vs sm trigger size; content alignment props
-- **Suggested test file location:** `src/test/components/ui/select.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/select.test.tsx`
 
 ## 12. `src/components/ui/separator.tsx`
 
@@ -137,7 +137,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Orientation prop applies correct data attribute and classes
 - **Mocking requirements:** `@base-ui/react/separator`
 - **Coverage targets:** Horizontal vs vertical
-- **Suggested test file location:** `src/test/components/ui/separator.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/separator.test.tsx`
 
 ## 13. `src/components/ui/sheet.tsx`
 
@@ -149,7 +149,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - `showCloseButton=false`: no close button
 - **Mocking requirements:** `@base-ui/react/dialog` (reused as SheetPrimitive)
 - **Coverage targets:** All 4 side positions; close button shown/hidden
-- **Suggested test file location:** `src/test/components/ui/sheet.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/sheet.test.tsx`
 
 ## 14. `src/components/ui/skeleton.tsx`
 
@@ -158,7 +158,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Renders div with pulse animation and rounded-md bg-muted
 - **Mocking requirements:** None
 - **Coverage targets:** N/A (single render path)
-- **Suggested test file location:** `src/test/components/ui/skeleton.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/skeleton.test.tsx`
 
 ## 15. `src/components/ui/switch.tsx`
 
@@ -169,7 +169,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Checked/unchecked states apply different transforms
 - **Mocking requirements:** `@base-ui/react/switch`
 - **Coverage targets:** Default vs sm size
-- **Suggested test file location:** `src/test/components/ui/switch.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/switch.test.tsx`
 
 ## 16. `src/components/ui/table.tsx`
 
@@ -179,7 +179,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Wraps table in scrollable container
 - **Mocking requirements:** None
 - **Coverage targets:** N/A (single render path)
-- **Suggested test file location:** `src/test/components/ui/table.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/table.test.tsx`
 
 ## 17. `src/components/ui/tabs.tsx`
 
@@ -191,7 +191,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Active/inactive trigger states apply different styling
 - **Mocking requirements:** `@base-ui/react/tabs`
 - **Coverage targets:** Horizontal vs vertical; default vs line variant
-- **Suggested test file location:** `src/test/components/ui/tabs.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/tabs.test.tsx`
 
 ## 18. `src/components/ui/textarea.tsx`
 
@@ -202,7 +202,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Supports `forwardRef`
 - **Mocking requirements:** None
 - **Coverage targets:** Normal, disabled, invalid states
-- **Suggested test file location:** `src/test/components/ui/textarea.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/textarea.test.tsx`
 
 ## 19. `src/components/ui/tooltip.tsx`
 
@@ -213,7 +213,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - Provider supports custom `delay`
 - **Mocking requirements:** `@base-ui/react/tooltip`
 - **Coverage targets:** All 4 side positions; custom delay
-- **Suggested test file location:** `src/test/components/ui/tooltip.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/tooltip.test.tsx`
 
 ## 20. `src/components/ui/card.tsx`
 
@@ -223,7 +223,7 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - `size='default'` vs `'sm'` for Card
 - **Mocking requirements:** None
 - **Coverage targets:** Default vs sm size
-- **Suggested test file location:** `src/test/components/ui/card.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/card.test.tsx`
 
 ## 21. `src/components/ui/command.tsx`
 
@@ -235,16 +235,25 @@ All UI components are thin wrappers around `@base-ui/react` primitives with Tail
   - CommandItem shows CheckIcon on checked state
 - **Mocking requirements:** `cmdk`; Dialog, InputGroup components
 - **Coverage targets:** CommandDialog with/without showCloseButton; CommandItem checked/unchecked
-- **Suggested test file location:** `src/test/components/ui/command.test.tsx`
+- **Suggested test file location:** `components/ui/__tests__/command.test.tsx`
+
+---
 
 ---
 
 ## Global Rule
 
-All test files must be placed under `src/test/`. Mirror the source path structure:
+All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
+This keeps tests co-located with their source, making it easy to find and maintain related tests.
+All test files must be placed under ``. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.

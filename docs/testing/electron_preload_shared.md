@@ -17,7 +17,7 @@
   - `writeFile`, `readFile`: invoke correct file channels with correct args
 - **Mocking requirements:** `ipcRenderer` and `contextBridge` from electron
 - **Coverage targets:** `assertSuccess` success/error; all 4 listener cleanup functions; encrypt/decrypt missing fields validation
-- **Suggested test file location:** `src/test/electron/preload/index.test.ts`
+- **Suggested test file location:** `electron/preload/__tests__/index.test.ts`
 
 ## 2. `electron/shared/types.ts`
 
@@ -29,16 +29,25 @@
   - All interfaces (`WorkflowStartPayload`, `ExecutionChunk`, `ExecutionResult`, `ExecutionError`, `WorkflowComplete`, `ApiKeyInfo`, `ExecutionLog`, `AppUpdateEvent`, `WindowState`) have correct field types
 - **Mocking requirements:** None
 - **Coverage targets:** N/A
-- **Suggested test file location:** `src/test/electron/shared/types.test.ts`
+- **Suggested test file location:** `electron/shared/__tests__/types.test.ts`
+
+---
 
 ---
 
 ## Global Rule
 
-All test files must be placed under `src/test/`. Mirror the source path structure:
+All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
+This keeps tests co-located with their source, making it easy to find and maintain related tests.
+All test files must be placed under ``. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.

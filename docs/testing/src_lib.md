@@ -15,7 +15,7 @@
   - `apiKeyConverter.toFirestore()` / `fromFirestore()` handles optional lastUsedAt
 - **Mocking requirements:** `firebase/firestore` Timestamp, QueryDocumentSnapshot, SnapshotOptions
 - **Coverage targets:** All 4 converters; optional timestamp null vs present; fromTS fallback for unknown type
-- **Suggested test file location:** `src/test/lib/converters.test.ts`
+- **Suggested test file location:** `lib/__tests__/converters.test.ts`
 
 ## 2. `src/lib/electron-mock.ts`
 
@@ -32,7 +32,7 @@
   - File operations return success with empty/null defaults
 - **Mocking requirements:** `window` global
 - **Coverage targets:** Already exists vs fresh inject; on/off lifecycle
-- **Suggested test file location:** `src/test/lib/electron-mock.test.ts`
+- **Suggested test file location:** `lib/__tests__/electron-mock.test.ts`
 
 ## 3. `src/lib/firebase.ts`
 
@@ -44,7 +44,7 @@
   - DEV mode: connects to auth emulator (localhost:9099) and Firestore emulator (localhost:8080); catches errors silently if emulators not running
 - **Mocking requirements:** `firebase/app` (initializeApp); `firebase/auth` (getAuth, connectAuthEmulator); `firebase/firestore` (getFirestore, connectFirestoreEmulator); `import.meta.env`
 - **Coverage targets:** All 6 env vars present vs missing; DEV vs production; emulator connect success vs error
-- **Suggested test file location:** `src/test/lib/firebase.test.ts`
+- **Suggested test file location:** `lib/__tests__/firebase.test.ts`
 
 ## 4. `src/lib/ipc.ts`
 
@@ -54,7 +54,7 @@
   - `Window` interface extends with `electronAPI` property
 - **Mocking requirements:** None (type definitions)
 - **Coverage targets:** N/A
-- **Suggested test file location:** `src/test/lib/ipc.test.ts`
+- **Suggested test file location:** `lib/__tests__/ipc.test.ts`
 
 ## 5. `src/lib/models.ts`
 
@@ -68,7 +68,7 @@
   - `PROVIDER_LABELS` maps provider keys to display names
 - **Mocking requirements:** None (data constants)
 - **Coverage targets:** All 11 entries; 3 provider labels
-- **Suggested test file location:** `src/test/lib/models.test.ts`
+- **Suggested test file location:** `lib/__tests__/models.test.ts`
 
 ## 6. `src/lib/sentry.ts`
 
@@ -80,7 +80,7 @@
   - Other events pass through unchanged
 - **Mocking requirements:** `@sentry/electron/renderer` `init` function; `import.meta.env`
 - **Coverage targets:** DSN present/absent; DEV vs production; all 3 filter patterns
-- **Suggested test file location:** `src/test/lib/sentry.test.ts`
+- **Suggested test file location:** `lib/__tests__/sentry.test.ts`
 
 ## 7. `src/lib/utils.ts`
 
@@ -91,16 +91,25 @@
   - Tailwind conflicts resolved correctly (last class wins)
 - **Mocking requirements:** None
 - **Coverage targets:** Basic merge; conflict resolution; empty input; conditional classes (objects/arrays)
-- **Suggested test file location:** `src/test/lib/utils.test.ts`
+- **Suggested test file location:** `lib/__tests__/utils.test.ts`
+
+---
 
 ---
 
 ## Global Rule
 
-All test files must be placed under `src/test/`. Mirror the source path structure:
+All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
+This keeps tests co-located with their source, making it easy to find and maintain related tests.
+All test files must be placed under ``. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.

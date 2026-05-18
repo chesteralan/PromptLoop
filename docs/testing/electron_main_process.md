@@ -15,7 +15,7 @@
   - App startup error shows error dialog
 - **Mocking requirements:** `app`, `BrowserWindow`, `dialog`, `ipcMain` from electron; mock `createWindow`, `createTray`, `registerShortcuts`, `initSentry`
 - **Coverage targets:** 100% of event handler branches (platform conditional, URL matching, dev vs production)
-- **Suggested test file location:** `src/test/electron/main/index.test.ts`
+- **Suggested test file location:** `electron/main/__tests__/index.test.ts`
 
 ## 2. `electron/main/window.ts`
 
@@ -34,7 +34,7 @@
   - IPC `window:set-mode` handler updates mode; listener cleaned up on window closed
 - **Mocking requirements:** `BrowserWindow`, `screen`, `app`, `ipcMain` from electron; mock `readFileSync`/`writeFileSync`/`existsSync` from `fs`
 - **Coverage targets:** 100% of conditionals (maximized vs not, clamp match vs no match, debounce cancel, minimizeToTray flag)
-- **Suggested test file location:** `src/test/electron/main/window.test.ts`
+- **Suggested test file location:** `electron/main/__tests__/window.test.ts`
 
 ## 3. `electron/main/encryption.ts`
 
@@ -50,7 +50,7 @@
   - `scheduleSave()`: debounces writes within 500ms window
 - **Mocking requirements:** `safeStorage` from electron; `readFileSync`/`writeFileSync`/`existsSync` from `fs`; `randomUUID` from `crypto`
 - **Coverage targets:** All `Result<T>` branches (`ok: true` / `ok: false`), every 10th call counter modulo, edge-case prefix length < 8
-- **Suggested test file location:** `src/test/electron/main/encryption.test.ts`
+- **Suggested test file location:** `electron/main/__tests__/encryption.test.ts`
 
 ## 4. `electron/main/sentry.ts`
 
@@ -62,7 +62,7 @@
   - `beforeSend` passes through all other events
 - **Mocking requirements:** `@sentry/electron/main` `init` function
 - **Coverage targets:** 100% of conditionals (DSN check, env check, 3 filter patterns)
-- **Suggested test file location:** `src/test/electron/main/sentry.test.ts`
+- **Suggested test file location:** `electron/main/__tests__/sentry.test.ts`
 
 ## 5. `electron/main/tray.ts`
 
@@ -77,7 +77,7 @@
   - `sendTrayAction()` sends message to main window; no-op if window destroyed
 - **Mocking requirements:** `Tray`, `Menu`, `nativeImage`, `app` from electron; `getMainWindow` from './window'
 - **Coverage targets:** All 6 status values, all menu enabled/disabled states, click handler conditionals, Linux path
-- **Suggested test file location:** `src/test/electron/main/tray.test.ts`
+- **Suggested test file location:** `electron/main/__tests__/tray.test.ts`
 
 ## 6. `electron/main/shortcuts.ts`
 
@@ -89,7 +89,7 @@
   - `isRegistered()` returns current registered state
 - **Mocking requirements:** `globalShortcut`, `BrowserWindow` from electron
 - **Coverage targets:** Registration success/failure; focused window destroyed vs alive
-- **Suggested test file location:** `src/test/electron/main/shortcuts.test.ts`
+- **Suggested test file location:** `electron/main/__tests__/shortcuts.test.ts`
 
 ## 7. `electron/main/notifications.ts`
 
@@ -101,7 +101,7 @@
   - `truncateWithEllipsis()`: returns text unchanged when under maxLen; truncates with ellipsis when over
 - **Mocking requirements:** `Notification`, `BrowserWindow` from electron
 - **Coverage targets:** Supported vs unsupported notification, pluralization, truncation
-- **Suggested test file location:** `src/test/electron/main/notifications.test.ts`
+- **Suggested test file location:** `electron/main/__tests__/notifications.test.ts`
 
 ## 8. `electron/main/updater.ts`
 
@@ -111,16 +111,25 @@
   - (Placeholder: confirm no side effects when called)
 - **Mocking requirements:** `app` from electron
 - **Coverage targets:** N/A (single code path)
-- **Suggested test file location:** `src/test/electron/main/updater.test.ts`
+- **Suggested test file location:** `electron/main/__tests__/updater.test.ts`
+
+---
 
 ---
 
 ## Global Rule
 
-All test files must be placed under `src/test/`. Mirror the source path structure:
+All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
+This keeps tests co-located with their source, making it easy to find and maintain related tests.
+All test files must be placed under ``. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.

@@ -12,7 +12,7 @@
   - Firestore fetch error caught with `console.warn` (no crash)
 - **Mocking requirements:** `react-router-dom` (Outlet, useNavigate); `firebase/firestore` (doc, getDoc); `../../lib/firebase` (db); `../../hooks/useAuth`; Sidebar, StatusBar, ProtectedRoute components
 - **Coverage targets:** Onboarding complete vs incomplete; user exists vs null; fetch success vs error
-- **Suggested test file location:** `src/test/components/layout/AppLayout.test.tsx`
+- **Suggested test file location:** `components/layout/__tests__/AppLayout.test.tsx`
 
 ## 2. `src/components/layout/ProtectedRoute.tsx`
 
@@ -23,7 +23,7 @@
   - When `user` exists: renders children
 - **Mocking requirements:** `react-router-dom` (Navigate, useLocation); `../../hooks/useAuth`
 - **Coverage targets:** All 3 states (loading, unauthenticated, authenticated)
-- **Suggested test file location:** `src/test/components/layout/ProtectedRoute.test.tsx`
+- **Suggested test file location:** `components/layout/__tests__/ProtectedRoute.test.tsx`
 
 ## 3. `src/components/layout/Sidebar.tsx`
 
@@ -39,7 +39,7 @@
   - Sign Out calls `signOut()` and navigates to `/login`
 - **Mocking requirements:** `react-router-dom` (NavLink, useNavigate); `../../hooks/useAuth`; `../../store/settingsStore`; Avatar, Button, DropdownMenu components
 - **Coverage targets:** Collapsed vs expanded; all 4 nav items; all 3 theme states; user with/without displayName; avatar with/without photoURL
-- **Suggested test file location:** `src/test/components/layout/Sidebar.test.tsx`
+- **Suggested test file location:** `components/layout/__tests__/Sidebar.test.tsx`
 
 ## 4. `src/components/layout/StatusBar.tsx`
 
@@ -53,16 +53,25 @@
   - Error in getAppVersion is caught silently
 - **Mocking requirements:** `../../store/executionStore`; `window.electronAPI.getAppVersion`
 - **Coverage targets:** All 6 status colors; version loaded vs not loaded; electronAPI absent
-- **Suggested test file location:** `src/test/components/layout/StatusBar.test.tsx`
+- **Suggested test file location:** `components/layout/__tests__/StatusBar.test.tsx`
+
+---
 
 ---
 
 ## Global Rule
 
-All test files must be placed under `src/test/`. Mirror the source path structure:
+All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
+This keeps tests co-located with their source, making it easy to find and maintain related tests.
+All test files must be placed under ``. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.

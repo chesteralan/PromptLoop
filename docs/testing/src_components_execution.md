@@ -14,7 +14,7 @@
   - `loading` sets `aria-busy` on container
 - **Mocking requirements:** Button component
 - **Coverage targets:** All 6 status values; loading disabled vs enabled; all button callbacks
-- **Suggested test file location:** `src/test/components/execution/ExecutionControls.test.tsx`
+- **Suggested test file location:** `components/execution/__tests__/ExecutionControls.test.tsx`
 
 ## 2. `src/components/execution/StreamingText.tsx`
 
@@ -27,7 +27,7 @@
   - Auto-scrolls to bottom when text changes (ref scrollTop = scrollHeight)
 - **Mocking requirements:** `navigator.clipboard.writeText`; ScrollArea, Button components
 - **Coverage targets:** Empty + not streaming; empty + streaming; has text + streaming; has text + not streaming; clipboard success vs failure
-- **Suggested test file location:** `src/test/components/execution/StreamingText.test.tsx`
+- **Suggested test file location:** `components/execution/__tests__/StreamingText.test.tsx`
 
 ## 3. `src/components/execution/ErrorDisplay.tsx`
 
@@ -43,16 +43,25 @@
   - `retryAfterMs` null/0: no progress bar rendered
 - **Mocking requirements:** `react-router-dom` useNavigate; Button, Progress components
 - **Coverage targets:** All 6 categories; auth vs non-auth retry suppression; retryAfterMs null/present; navigate call
-- **Suggested test file location:** `src/test/components/execution/ErrorDisplay.test.tsx`
+- **Suggested test file location:** `components/execution/__tests__/ErrorDisplay.test.tsx`
+
+---
 
 ---
 
 ## Global Rule
 
-All test files must be placed under `src/test/`. Mirror the source path structure:
+All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
+This keeps tests co-located with their source, making it easy to find and maintain related tests.
+All test files must be placed under ``. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.

@@ -1,6 +1,6 @@
 # Test Infrastructure — Testing Rules
 
-## 1. `src/test/setup.ts`
+## 1. `setup.ts`
 
 - **Test type:** Configuration
 - **Key scenarios:**
@@ -8,7 +8,7 @@
 - **Coverage targets:** N/A (setup only)
 - **Suggested test file location:** _(this is the setup file itself)_
 
-## 2. `src/test/example.test.ts`
+## 2. `example.test.ts`
 
 - **Test type:** Sanity
 - **Key scenarios:**
@@ -16,7 +16,7 @@
 - **Coverage targets:** N/A (sanity check)
 - **Suggested test file location:** _(this is the example test)_
 
-## 3. `src/test/auth.test.tsx`
+## 3. `auth.test.tsx`
 
 - **Test type:** Integration
 - **Key scenarios:**
@@ -26,9 +26,9 @@
   - `TestConsumer` renders different text based on auth state
   - `renderWithProviders` wraps in `MemoryRouter`
 - **Coverage targets:** Loading, authenticated, unauthenticated states
-- **Suggested test file location:** `src/test/auth.test.tsx` _(existing file)_
+- **Suggested test file location:** `auth.test.tsx` _(existing file)_
 
-## 4. `src/test/routes.test.tsx`
+## 4. `routes.test.tsx`
 
 - **Test type:** Integration
 - **Key scenarios:**
@@ -37,9 +37,9 @@
   - Authenticated user sees dashboard
   - Authenticated user on `/login` sees redirect
 - **Coverage targets:** 3 routing scenarios (unauth→login, auth→dashboard, auth→login→redirect)
-- **Suggested test file location:** `src/test/routes.test.tsx` _(existing file)_
+- **Suggested test file location:** `routes.test.tsx` _(existing file)_
 
-## 5. `src/test/stores.test.ts`
+## 5. `stores.test.ts`
 
 - **Test type:** Unit
 - **Key scenarios:**
@@ -48,16 +48,25 @@
   - settingsStore: all actions tested (setTheme, setWindowMode, toggleMinimizeToTray, toggleNotifications, setStartOnBoot, setUser, clearUser)
   - Each store resets state in `beforeEach`
 - **Coverage targets:** All store actions; log cap boundary condition
-- **Suggested test file location:** `src/test/stores.test.ts` _(existing file)_
+- **Suggested test file location:** `stores.test.ts` _(existing file)_
+
+---
 
 ---
 
 ## Global Rule
 
-All test files must be placed under `src/test/`. Mirror the source path structure:
+All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
+This keeps tests co-located with their source, making it easy to find and maintain related tests.
+All test files must be placed under ``. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.
