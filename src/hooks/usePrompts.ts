@@ -1,22 +1,122 @@
-import { useQuery } from '@tanstack/react-query'
-import { collection, getDocs, orderBy, query } from 'firebase/firestore'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  collection,
+  doc,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  orderBy,
+  writeBatch,
+} from 'firebase/firestore'
 import { db } from '../lib/firebase'
 import { useAuth } from './useAuth'
+import { promptConverter, type PromptData } from '../lib/converters'
 
-export function usePrompts(workflowId: string) {
+function promptsRef(userId: string, workflowId: string) {
+  return collection(db, 'users', userId, 'workflows', workflowId, 'prompts').withConverter(
+    promptConverter,
+  )
+}
+
+function promptRef(userId: string, workflowId: string, promptId: string) {
+  return doc(db, 'users', userId, 'workflows', workflowId, 'prompts', promptId).withConverter(
+    promptConverter,
+  )
+}
+
+export function usePrompts(workflowId: string | undefined) {
   const { user } = useAuth()
 
   return useQuery({
     queryKey: ['prompts', user?.uid, workflowId],
     queryFn: async () => {
-      if (!user) return []
-      const q = query(
-        collection(db, 'users', user.uid, 'workflows', workflowId, 'prompts'),
-        orderBy('position', 'asc'),
-      )
+      if (!user || !workflowId) return []
+      const q = query(promptsRef(user.uid, workflowId), orderBy('position', 'asc'))
       const snapshot = await getDocs(q)
       return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
     },
     enabled: !!user && !!workflowId,
+  })
+}
+
+export function useCreatePrompt(workflowId: string | undefined) {
+  const { user } = useAuth()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (data: Omit<PromptData, 'createdAt' | 'updatedAt'>) => {
+      if (!user || !workflowId) throw new Error('Not authenticated or missing workflow')
+      const now = new Date()
+      const docRef = await addDoc(promptsRef(user.uid, workflowId), {
+        ...data,
+        createdAt: now,
+        updatedAt: now,
+      })
+      return docRef.id
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['prompts', user?.uid, workflowId] })
+    },
+  })
+}
+
+export function useUpdatePrompt(workflowId: string | undefined) {
+  const { user } = useAuth()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({
+      promptId,
+      data,
+    }: {
+      promptId: string
+      data: Partial<Omit<PromptData, 'createdAt' | 'updatedAt'>>
+    }) => {
+      if (!user || !workflowId) throw new Error('Not authenticated or missing workflow')
+      await updateDoc(promptRef(user.uid, workflowId, promptId), {
+        ...data,
+        updatedAt: new Date(),
+      })
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['prompts', user?.uid, workflowId] })
+    },
+  })
+}
+
+export function useDeletePrompt(workflowId: string | undefined) {
+  const { user } = useAuth()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (promptId: string) => {
+      if (!user || !workflowId) throw new Error('Not authenticated or missing workflow')
+      await deleteDoc(promptRef(user.uid, workflowId, promptId))
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['prompts', user?.uid, workflowId] })
+    },
+  })
+}
+
+export function useReorderPrompts(workflowId: string | undefined) {
+  const { user } = useAuth()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (orderedIds: string[]) => {
+      if (!user || !workflowId) throw new Error('Not authenticated or missing workflow')
+      const batch = writeBatch(db)
+      orderedIds.forEach((id, index) => {
+        const ref = promptRef(user.uid, workflowId, id)
+        batch.update(ref, { position: index, updatedAt: new Date() })
+      })
+      await batch.commit()
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['prompts', user?.uid, workflowId] })
+    },
   })
 }

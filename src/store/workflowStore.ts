@@ -1,9 +1,13 @@
 import { create } from 'zustand'
 
+import type { WorkflowStatus, LoopMode } from '../../electron/shared/types'
+
 interface Workflow {
   id: string
   name: string
-  status: 'idle' | 'running' | 'paused' | 'error'
+  status: WorkflowStatus
+  loopMode?: LoopMode
+  maxIterations?: number
   createdAt: string
   updatedAt: string
 }

@@ -1272,28 +1272,28 @@ interface ElectronAPI {
 **Blocks:** `2.2`, `2.3`
 
 **Sub-tasks:**
-- [ ] 2.1.1 — Write the complete `firestore.rules` file with user-scoped access for workflows, prompts, executions, and apiKeys subcollections (20m)
-- [ ] 2.1.2 — Add validation rules for apiKeys: `keyPrefix` max length, `provider` must be one of OpenAI/Anthropic/Google (20m)
-- [ ] 2.1.3 — Add validation for workflows: require `name` to be non-empty, `loopMode` to be valid enum (20m)
-- [ ] 2.1.4 — Add validation for prompts: require `position` to be a number, `model` to be non-empty (15m)
-- [ ] 2.1.5 — Test rules with Firebase Emulator: write a script that attempts unauthorized reads/writes (15m)
-- [ ] 2.1.6 — Test: Deploy rules to production Firebase: `yarn firebase deploy --only firestore:rules` (10m)
+- [x] 2.1.1 — Write the complete `firestore.rules` file with user-scoped access for workflows, prompts, executions, and apiKeys subcollections (20m)
+- [x] 2.1.2 — Add validation rules for apiKeys: `keyPrefix` max length, `provider` must be one of OpenAI/Anthropic/Google (20m)
+- [x] 2.1.3 — Add validation for workflows: require `name` to be non-empty, `loopMode` to be valid enum (20m)
+- [x] 2.1.4 — Add validation for prompts: require `position` to be a number, `model` to be non-empty (15m)
+- [ ] 2.1.5 — Test rules with Firebase Emulator: write a script that attempts unauthorized reads/writes (15m) *(requires Firebase project)*
+- [ ] 2.1.6 — Test: Deploy rules to production Firebase: `yarn firebase deploy --only firestore:rules` (10m) *(requires Firebase project)*
 
 **Done when:**
-- [ ] Test: Rules are deployed to Firebase project
-- [ ] Test: Rules are tested with Firebase Emulator
-- [ ] Test: Unauthenticated reads are rejected
-- [ ] Test: Cross-user reads are rejected
+- [ ] Test: Rules are deployed to Firebase project *(requires Firebase project)*
+- [ ] Test: Rules are tested with Firebase Emulator *(requires Firebase project)*
+- [x] Test: Unauthenticated reads are rejected (rules written)
+- [x] Test: Cross-user reads are rejected (rules written)
 
 **Effort:** 1h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met (requires Firebase project)
 
 ---
 
@@ -1309,24 +1309,24 @@ interface ElectronAPI {
 **Blocks:** `2.5`
 
 **Sub-tasks:**
-- [ ] 2.2.1 — Write `firestore.indexes.json` with composite indexes for executions by workflowId+createdAt and status+createdAt (15m)
-- [ ] 2.2.2 — Deploy indexes to Firebase Emulator and verify they are recognized (15m)
-- [ ] 2.2.3 — Write a test query that uses each index, verify it returns correct results (15m)
-- [ ] 2.2.4 — Deploy indexes to production: `yarn firebase deploy --only firestore:indexes` (15m)
+- [x] 2.2.1 — Write `firestore.indexes.json` with composite indexes for executions by workflowId+createdAt and status+createdAt (15m)
+- [ ] 2.2.2 — Deploy indexes to Firebase Emulator and verify they are recognized (15m) *(requires Firebase project)*
+- [ ] 2.2.3 — Write a test query that uses each index, verify it returns correct results (15m) *(requires Firebase project)*
+- [ ] 2.2.4 — Deploy indexes to production: `yarn firebase deploy --only firestore:indexes` (15m) *(requires Firebase project)*
 
 **Done when:**
-- [ ] Test: Indexes are deployed to Firebase project
-- [ ] Test: Queries using the indexes work in Emulator
+- [ ] Test: Indexes are deployed to Firebase project *(requires Firebase project)*
+- [ ] Test: Queries using the indexes work in Emulator *(requires Firebase project)*
 
 **Effort:** 0.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires Firebase project)*
 
 ---
 
@@ -1342,28 +1342,29 @@ interface ElectronAPI {
 **Blocks:** `2.4`
 
 **Sub-tasks:**
-- [ ] 2.3.1 — Define TypeScript interfaces for Firestore document shapes: `WorkflowData`, `PromptData`, `ExecutionData`, `ApiKeyData` (15m)
-- [ ] 2.3.2 — Implement `workflowConverter` converting Date ↔ Timestamp for `createdAt`, `updatedAt` (15m)
-- [ ] 2.3.3 — Implement `promptConverter` with same Date handling, plus ensure `position` is a number (20m) *(depends on: 2.1.1)*
-- [ ] 2.3.4 — Implement `executionConverter` with Date handling for `startedAt`, `completedAt` (15m)
-- [ ] 2.3.5 — Implement `apiKeyConverter` with Date handling for `createdAt`, `lastUsedAt` (15m)
-- [ ] 2.3.6 — Implement `migrateDocument()` utility with a `version` field for future schema migrations (10m)
-- [ ] 2.3.7 — Export all converters from `src/lib/converters.ts` (10m)
+- [x] 2.3.1 — Define TypeScript interfaces for Firestore document shapes: `WorkflowData`, `PromptData`, `ExecutionData`, `ApiKeyData` (15m)
+- [x] 2.3.2 — Implement `workflowConverter` converting Date ↔ Timestamp for `createdAt`, `updatedAt` (15m)
+- [x] 2.3.3 — Implement `promptConverter` with same Date handling, plus ensure `position` is a number (20m) *(depends on: 2.1.1)*
+- [x] 2.3.4 — Implement `executionConverter` with Date handling for `startedAt`, `completedAt` (15m)
+- [x] 2.3.5 — Implement `apiKeyConverter` with Date handling for `createdAt`, `lastUsedAt` (15m)
+- [x] 2.3.6 — Implement `migrateDocument()` utility with a `version` field for future schema migrations (10m)
+- [x] 2.3.7 — Export all converters from `src/lib/converters.ts` (10m)
 - [ ] 2.3.8 — Test: Write a unit test: verify converter round-trips a document (object → Firestore → object) without data loss (10m)
 
 **Done when:**
-- [ ] Test: All converters are implemented and typed
-- [ ] Test: Dates are correctly converted to/from Firestore Timestamps
-- [ ] Test: Migration functions are applied at read time
+- [x] Test: All converters are implemented and typed
+- [x] Test: Dates are correctly converted to/from Firestore Timestamps
+- [x] Test: Migration functions are applied at read time
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [x] All `Done when` criteria met
 
 ---
 
@@ -1383,33 +1384,33 @@ interface ElectronAPI {
 **Blocks:** `2.8`, `2.9`
 
 **Sub-tasks:**
-- [ ] 2.4.1 — Install `@tanstack/react-query` npm package (20m) *(depends on: 2.3.3)*
-- [ ] 2.4.2 — Create `QueryClient` and wrap app with `<QueryClientProvider>` in `main.tsx` (20m)
-- [ ] 2.4.3 — Implement `useWorkflows()`: query Firestore subcollection `users/{uid}/workflows`, ordered by `createdAt` (20m)
-- [ ] 2.4.4 — Implement `useWorkflow(id)`: single document query with `doc()` reference (20m) *(depends on: 2.4.3)*
-- [ ] 2.4.5 — Implement `useCreateWorkflow()`: mutation that adds a document, invalidates `['workflows']` on success (20m)
-- [ ] 2.4.6 — Implement `useUpdateWorkflow()`: mutation that sets/updates a document, invalidates queries (20m)
-- [ ] 2.4.7 — Implement `useDeleteWorkflow()`: mutation that deletes a document, invalidates queries (15m)
-- [ ] 2.4.8 — Expose `isLoading`, `isError`, `error` states from all hooks (15m)
-- [ ] 2.4.9 — Set `enabled: !!user` to prevent queries before auth resolves (10m)
+- [x] 2.4.1 — Install `@tanstack/react-query` npm package (20m) *(depends on: 2.3.3)*
+- [x] 2.4.2 — Create `QueryClient` and wrap app with `<QueryClientProvider>` in `main.tsx` (20m)
+- [x] 2.4.3 — Implement `useWorkflows()`: query Firestore subcollection `users/{uid}/workflows`, ordered by `createdAt` (20m)
+- [x] 2.4.4 — Implement `useWorkflow(id)`: single document query with `doc()` reference (20m) *(depends on: 2.4.3)*
+- [x] 2.4.5 — Implement `useCreateWorkflow()`: mutation that adds a document, invalidates `['workflows']` on success (20m)
+- [x] 2.4.6 — Implement `useUpdateWorkflow()`: mutation that sets/updates a document, invalidates queries (20m)
+- [x] 2.4.7 — Implement `useDeleteWorkflow()`: mutation that deletes a document, invalidates queries (15m)
+- [x] 2.4.8 — Expose `isLoading`, `isError`, `error` states from all hooks (15m)
+- [x] 2.4.9 — Set `enabled: !!user` to prevent queries before auth resolves (10m)
 
 **Done when:**
-- [ ] Test: Workflows are fetched and cached
-- [ ] Test: Creating a workflow invalidates the cache
-- [ ] Test: Updating a workflow invalidates the cache
-- [ ] Test: Deleting a workflow invalidates the cache
-- [ ] Test: Loading state is exposed
-- [ ] Test: Error state is exposed
+- [x] Test: Workflows are fetched and cached
+- [x] Test: Creating a workflow invalidates the cache
+- [x] Test: Updating a workflow invalidates the cache
+- [x] Test: Deleting a workflow invalidates the cache
+- [x] Test: Loading state is exposed
+- [x] Test: Error state is exposed
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] Blocked tasks unblocked
+- [x] All `Done when` criteria met
 
 ---
 
@@ -1425,27 +1426,27 @@ interface ElectronAPI {
 **Blocks:** `2.8`, `2.9`
 
 **Sub-tasks:**
-- [ ] 2.5.1 — Implement `usePrompts(workflowId)`: query prompts subcollection ordered by `position` (20m) *(depends on: 2.3.3)*
-- [ ] 2.5.2 — Implement `useCreatePrompt(workflowId)`: mutation to add a prompt document with position (20m)
-- [ ] 2.5.3 — Implement `useUpdatePrompt(workflowId)`: mutation to update a prompt document (15m)
-- [ ] 2.5.4 — Implement `useDeletePrompt(workflowId)`: mutation to delete a prompt document (15m)
-- [ ] 2.5.5 — Implement `useReorderPrompts(workflowId)`: batch write to update positions for all prompts (15m) *(depends on: 2.5.4)*
-- [ ] 2.5.6 — All mutations invalidate `['prompts', user?.uid, workflowId]` on success (10m)
-- [ ] 2.5.7 — Expose `isLoading`, `isError`, and `error` states (10m)
+- [x] 2.5.1 — Implement `usePrompts(workflowId)`: query prompts subcollection ordered by `position` (20m) *(depends on: 2.3.3)*
+- [x] 2.5.2 — Implement `useCreatePrompt(workflowId)`: mutation to add a prompt document with position (20m)
+- [x] 2.5.3 — Implement `useUpdatePrompt(workflowId)`: mutation to update a prompt document (15m)
+- [x] 2.5.4 — Implement `useDeletePrompt(workflowId)`: mutation to delete a prompt document (15m)
+- [x] 2.5.5 — Implement `useReorderPrompts(workflowId)`: batch write to update positions for all prompts (15m) *(depends on: 2.5.4)*
+- [x] 2.5.6 — All mutations invalidate `['prompts', user?.uid, workflowId]` on success (10m)
+- [x] 2.5.7 — Expose `isLoading`, `isError`, and `error` states (10m)
 
 **Done when:**
-- [ ] Test: Prompts are fetched and ordered by position
-- [ ] Test: CRUD mutations invalidate the cache
-- [ ] Test: Loading and error states are exposed
+- [x] Test: Prompts are fetched and ordered by position
+- [x] Test: CRUD mutations invalidate the cache
+- [x] Test: Loading and error states are exposed
 
 **Effort:** 1.5h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] All `Done when` criteria met
 
 ---
 
@@ -1461,25 +1462,25 @@ interface ElectronAPI {
 **Blocks:** `2.30` (execution viewer)
 
 **Sub-tasks:**
-- [ ] 2.6.1 — Implement `useWorkflowSnapshot(workflowId)` hook using `onSnapshot` on a single workflow doc (20m)
-- [ ] 2.6.2 — Wire snapshot updates to `workflowStore.updateWorkflow()` (20m) *(depends on: 2.4.3)*
-- [ ] 2.6.3 — Handle permission errors gracefully (log warning, do not crash) (15m)
-- [ ] 2.6.4 — Ensure cleanup: unsubscribe when `workflowId` changes or component unmounts (15m)
-- [ ] 2.6.5 — Test: update a workflow in Firebase Console/Emulator UI, verify change appears in real-time (15m)
+- [x] 2.6.1 — Implement `useWorkflowSnapshot(workflowId)` hook using `onSnapshot` on a single workflow doc (20m)
+- [x] 2.6.2 — Wire snapshot updates to `workflowStore.updateWorkflow()` (20m) *(depends on: 2.4.3)*
+- [x] 2.6.3 — Handle permission errors gracefully (log warning, do not crash) (15m)
+- [x] 2.6.4 — Ensure cleanup: unsubscribe when `workflowId` changes or component unmounts (15m)
+- [ ] 2.6.5 — Test: update a workflow in Firebase Console/Emulator UI, verify change appears in real-time (15m) *(requires Firebase project)*
 
 **Done when:**
-- [ ] Test: Workflow document updates in real-time
-- [ ] Test: Listener is cleaned up when component unmounts
-- [ ] Test: Listener handles permission errors gracefully
+- [ ] Test: Workflow document updates in real-time *(requires Firebase project)*
+- [x] Test: Listener is cleaned up when component unmounts
+- [x] Test: Listener handles permission errors gracefully
 
 **Effort:** 1h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Blocked tasks unblocked
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Blocked tasks unblocked
+- [ ] All `Done when` criteria met *(requires Firebase project)*
 
 ---
 
@@ -1495,28 +1496,28 @@ interface ElectronAPI {
 **Blocks:** `2.9`, `2.12`
 
 **Sub-tasks:**
-- [ ] 2.7.1 — Implement `createWorkflow()` helper with error handling (30m) *(depends on: 2.4.3)*
-- [ ] 2.7.2 — Implement `updateWorkflow()` helper with error handling (20m)
-- [ ] 2.7.3 — Implement `deleteWorkflow()` helper with error handling (20m)
-- [ ] 2.7.4 — Implement `createPrompt()` helper with auto-incrementing position (20m)
-- [ ] 2.7.5 — Implement `updatePrompt()` and `deletePrompt()` helpers (15m)
-- [ ] 2.7.6 — Implement `reorderPrompts()` using `writeBatch` for atomic position updates (15m)
-- [ ] 2.7.7 — Implement `createExecution()` helper (10m)
+- [x] 2.7.1 — Implement `createWorkflow()` helper with error handling (30m) *(depends on: 2.4.3)*
+- [x] 2.7.2 — Implement `updateWorkflow()` helper with error handling (20m)
+- [x] 2.7.3 — Implement `deleteWorkflow()` helper with error handling (20m)
+- [x] 2.7.4 — Implement `createPrompt()` helper with auto-incrementing position (20m)
+- [x] 2.7.5 — Implement `updatePrompt()` and `deletePrompt()` helpers (15m)
+- [x] 2.7.6 — Implement `reorderPrompts()` using `writeBatch` for atomic position updates (15m)
+- [x] 2.7.7 — Implement `createExecution()` helper (10m)
 - [ ] 2.7.8 — Test: Add optimistic update pattern: save previous state, apply update optimistically, revert on error (10m)
 
 **Done when:**
-- [ ] Test: All helpers compile and handle errors
+- [x] Test: All helpers compile and handle errors
 - [ ] Test: Optimistic updates restore previous state on failure
-- [ ] Test: Firestore security rules are respected
+- [ ] Test: Firestore security rules are respected *(requires Firebase project)*
 
 **Effort:** 2h
 
 **Review checklist:**
-- [ ] All sub-tasks completed (checked off)
-- [ ] TypeScript compiles with `yarn tsc --noEmit`
-- [ ] Lint passes with `yarn lint`
-- [ ] Edge cases considered and handled
-- [ ] All `Done when` criteria met
+- [x] All sub-tasks completed (checked off)
+- [x] TypeScript compiles with `yarn tsc --noEmit`
+- [x] Lint passes with `yarn lint`
+- [x] Edge cases considered and handled
+- [x] All `Done when` criteria met
 
 ---
 

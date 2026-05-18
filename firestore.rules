@@ -2,24 +2,76 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuth() && request.auth.uid == userId;
+    }
+
+    function isValidLoopMode(mode) {
+      return mode in ['infinite', 'fixed', 'single', 'scheduled'];
+    }
+
+    function isValidProvider(provider) {
+      return provider in ['openai', 'anthropic', 'google'];
+    }
+
+    function isValidWorkflowStatus(status) {
+      return status in ['idle', 'running', 'paused', 'completed', 'error', 'stopped'];
+    }
+
+    function isNonEmpty(v) {
+      return v is string && v.size() > 0;
+    }
+
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      allow read: if isOwner(userId);
 
       match /workflows/{workflowId} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId)
+          && isNonEmpty(request.resource.data.name)
+          && isValidLoopMode(request.resource.data.loopMode)
+          && request.resource.data.status == 'idle';
+        allow update: if isOwner(userId)
+          && (!request.resource.data.keys().hasAny(['name']) || isNonEmpty(request.resource.data.name))
+          && (!request.resource.data.keys().hasAny(['loopMode']) || isValidLoopMode(request.resource.data.loopMode))
+          && (!request.resource.data.keys().hasAny(['status']) || isValidWorkflowStatus(request.resource.data.status));
+        allow delete: if isOwner(userId);
 
         match /prompts/{promptId} {
-          allow read, write: if request.auth != null && request.auth.uid == userId;
+          allow read: if isOwner(userId);
+          allow create: if isOwner(userId)
+            && request.resource.data.position is number
+            && isNonEmpty(request.resource.data.model);
+          allow update: if isOwner(userId)
+            && (!request.resource.data.keys().hasAny(['position']) || request.resource.data.position is number)
+            && (!request.resource.data.keys().hasAny(['model']) || isNonEmpty(request.resource.data.model));
+          allow delete: if isOwner(userId);
         }
       }
 
       match /executions/{executionId} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId)
+          && isNonEmpty(request.resource.data.workflowId)
+          && isNonEmpty(request.resource.data.status);
+        allow update: if isOwner(userId);
+        allow delete: if false;
       }
 
       match /apiKeys/{keyId} {
-        allow read: if request.auth != null && request.auth.uid == userId;
-        allow write: if request.auth != null && request.auth.uid == userId;
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId)
+          && isValidProvider(request.resource.data.provider)
+          && request.resource.data.keyPrefix.size() <= 8;
+        allow update: if isOwner(userId)
+          && (!request.resource.data.keys().hasAny(['provider']) || isValidProvider(request.resource.data.provider))
+          && (!request.resource.data.keys().hasAny(['keyPrefix']) || request.resource.data.keyPrefix.size() <= 8);
+        allow delete: if isOwner(userId);
       }
     }
   }
