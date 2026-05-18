@@ -12,6 +12,14 @@
   resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.4.4.tgz#2856c55443d3d461693f32d2b96fb6ea92e1ffa9"
   integrity sha512-Elp+iwUx5rN5+Y8xLt5/GRoG20WGoDCQ/1Fb+1LiGtvwbDavuSk0jhD/eZdckHAuzcDzccnkv+rEjyWfRx18gg==
 
+"@ai-sdk/anthropic@^3.0.78":
+  version "3.0.78"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/anthropic/-/anthropic-3.0.78.tgz#1e444ee4cf9b2e920a2c504a1a2a266edefc3c36"
+  integrity sha512-0OY12G20cUt6iU6htpEA1491Oz++NVxZxlmWGX4B7rSbeZ5pnDmOu6YtW9BKzdZlNx5Gn23i6WMxyZFoMKNcgA==
+  dependencies:
+    "@ai-sdk/provider" "3.0.10"
+    "@ai-sdk/provider-utils" "4.0.27"
+
 "@ai-sdk/gateway@3.0.115":
   version "3.0.115"
   resolved "https://registry.yarnpkg.com/@ai-sdk/gateway/-/gateway-3.0.115.tgz#3127b2d0b2fbeb36df2eb3263a39813cfe426662"

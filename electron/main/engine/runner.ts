@@ -1,20 +1,8 @@
-import { OpenAIAdapter } from '../providers/openai'
-import type { ProviderAdapter } from '../providers/interface'
+import { getProviderAdapter, getProviderName } from '../providers/factory'
 import { QueueManager } from './queue'
 import { emit } from './events'
 import { executeWithRetry } from './retry'
 import type { RunnerState, WorkflowConfig, PromptConfig } from './types'
-
-const PROVIDERS: Record<string, ProviderAdapter> = {
-  openai: new OpenAIAdapter(),
-}
-
-function getProvider(modelId: string): ProviderAdapter | null {
-  if (modelId.startsWith('gpt') || modelId.startsWith('o')) return PROVIDERS['openai']
-  if (modelId.startsWith('claude')) return null
-  if (modelId.startsWith('gemini')) return null
-  return PROVIDERS['openai']
-}
 
 export class WorkflowRunner {
   private config: WorkflowConfig
@@ -137,14 +125,15 @@ export class WorkflowRunner {
   }
 
   private async executePrompt(prompt: PromptConfig): Promise<void> {
-    const provider = getProvider(prompt.model)
-    if (!provider) {
+    const provider = getProviderAdapter(prompt.model)
+    const providerName = getProviderName(prompt.model)
+    if (!provider || !providerName) {
       const error = `No provider available for model: ${prompt.model}`
       emit('execution:failed', { workflowId: this.config.id, promptId: prompt.id, error })
       return
     }
 
-    const apiKey = this.apiKeys[prompt.model.split('-')[0]] ?? ''
+    const apiKey = this.apiKeys[providerName] ?? ''
     if (!apiKey) {
       const error = `No API key for provider: ${prompt.model}`
       emit('execution:failed', { workflowId: this.config.id, promptId: prompt.id, error })

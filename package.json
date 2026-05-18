@@ -26,6 +26,7 @@
     ]
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.78",
     "@ai-sdk/openai": "^3.0.64",
     "@base-ui/react": "^1.4.1",
     "@fontsource-variable/geist": "^5.2.9",
