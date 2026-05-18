@@ -54,3 +54,15 @@
 - **Mocking requirements:** `../../store/executionStore`; `window.electronAPI.getAppVersion`
 - **Coverage targets:** All 6 status colors; version loaded vs not loaded; electronAPI absent
 - **Suggested test file location:** `src/test/components/layout/StatusBar.test.tsx`
+
+---
+
+## Global Rule
+
+All test files must be placed under `src/test/`. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.

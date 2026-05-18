@@ -84,3 +84,15 @@
 - **Mocking requirements:** `getProviderAdapter`, `getProviderName` from factory; `QueueManager`; `emit` from events; `executeWithRetry` from retry; `sendWorkflowCompleted`, `sendWorkflowFailed` from notifications; `BrowserWindow` from electron
 - **Coverage targets:** All state transitions (idle→running→paused→running→completed, idle→running→stopped); all loop modes (4); enabled/disabled prompt filtering; abort signal; delay with abort
 - **Suggested test file location:** `src/test/electron/main/engine/runner.test.ts`
+
+---
+
+## Global Rule
+
+All test files must be placed under `src/test/`. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.

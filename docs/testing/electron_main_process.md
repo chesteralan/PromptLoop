@@ -112,3 +112,15 @@
 - **Mocking requirements:** `app` from electron
 - **Coverage targets:** N/A (single code path)
 - **Suggested test file location:** `src/test/electron/main/updater.test.ts`
+
+---
+
+## Global Rule
+
+All test files must be placed under `src/test/`. Mirror the source path structure:
+
+- `src/components/auth/AuthProvider.tsx` → `src/test/components/auth/AuthProvider.test.tsx`
+- `src/hooks/useWorkflows.ts` → `src/test/hooks/useWorkflows.test.ts`
+- `electron/main/encryption.ts` → `src/test/electron/main/encryption.test.ts`
+
+This keeps all tests colocated under a single `src/test/` root regardless of whether the source is in `src/` or `electron/`.
