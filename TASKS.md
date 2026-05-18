@@ -321,7 +321,7 @@ interface ElectronAPI {
 - [ ] 1.7.5 — Create `.env` file with `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID` (10m) *(depends on: 1.7.4)* *(manual step)*
 - [x] 1.7.6 — Create `.env.example` with placeholder values (no real secrets) (5m)
 - [x] 1.7.7 — Create `firebase.json` with project configuration (10m)
-- [ ] 1.7.8 — Create `.firebaserc` with project alias (10m)
+- [x] 1.7.8 — Create `.firebaserc` with project alias (10m)
 - [x] 1.7.9 — Create `firestore.rules` with per-user security rules (matching ARCHITECTURE.md) (10m)
 - [x] 1.7.10 — Create `firestore.indexes.json` with indexes for executions and prompts (5m)
 - [x] 1.7.11 — Add `.env` to `.gitignore` (never commit secrets), commit `.env.example` (5m)
@@ -1277,7 +1277,7 @@ interface ElectronAPI {
 - [x] 2.1.3 — Add validation for workflows: require `name` to be non-empty, `loopMode` to be valid enum (20m)
 - [x] 2.1.4 — Add validation for prompts: require `position` to be a number, `model` to be non-empty (15m)
 - [ ] 2.1.5 — Test rules with Firebase Emulator: write a script that attempts unauthorized reads/writes (15m) *(requires Firebase project)*
-- [ ] 2.1.6 — Test: Deploy rules to production Firebase: `yarn firebase deploy --only firestore:rules` (10m) *(requires Firebase project)*
+- [x] 2.1.6 — Test: Deploy rules to production Firebase: `yarn firebase deploy --only firestore:rules` (10m) *(requires Firebase project)*
 
 **Done when:**
 - [ ] Test: Rules are deployed to Firebase project *(requires Firebase project)*
@@ -1312,7 +1312,7 @@ interface ElectronAPI {
 - [x] 2.2.1 — Write `firestore.indexes.json` with composite indexes for executions by workflowId+createdAt and status+createdAt (15m)
 - [ ] 2.2.2 — Deploy indexes to Firebase Emulator and verify they are recognized (15m) *(requires Firebase project)*
 - [ ] 2.2.3 — Write a test query that uses each index, verify it returns correct results (15m) *(requires Firebase project)*
-- [ ] 2.2.4 — Deploy indexes to production: `yarn firebase deploy --only firestore:indexes` (15m) *(requires Firebase project)*
+- [x] 2.2.4 — Deploy indexes to production: `yarn firebase deploy --only firestore:indexes` (15m) *(requires Firebase project)*
 
 **Done when:**
 - [ ] Test: Indexes are deployed to Firebase project *(requires Firebase project)*
