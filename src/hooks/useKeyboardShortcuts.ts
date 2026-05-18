@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 interface UseKeyboardShortcutsOptions {
@@ -14,6 +14,8 @@ function isInputFocused(): boolean {
 
 export function useKeyboardShortcuts(options?: UseKeyboardShortcutsOptions) {
   const navigate = useNavigate()
+  const optionsRef = useRef(options)
+  optionsRef.current = options
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -22,16 +24,19 @@ export function useKeyboardShortcuts(options?: UseKeyboardShortcutsOptions) {
       if (isCmd && e.key === 'n') {
         e.preventDefault()
         if (!isInputFocused()) navigate('/workflows/new')
+        return
       }
 
       if (isCmd && e.key === ',') {
         e.preventDefault()
         if (!isInputFocused()) navigate('/settings')
+        return
       }
 
       if (isCmd && e.key === 's') {
         e.preventDefault()
-        options?.onSave?.()
+        optionsRef.current?.onSave?.()
+        return
       }
 
       if (e.key === 'Escape') {
@@ -39,15 +44,16 @@ export function useKeyboardShortcuts(options?: UseKeyboardShortcutsOptions) {
           '[data-slot="sheet-close"], [data-slot="dialog-close"]',
         )
         closeBtn?.click()
+        return
       }
 
-      if (e.key === ' ' && options?.onPlayPause && !isInputFocused()) {
+      if (e.key === ' ' && !isInputFocused()) {
         e.preventDefault()
-        options.onPlayPause()
+        optionsRef.current?.onPlayPause?.()
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [navigate, options])
+  }, [navigate])
 }

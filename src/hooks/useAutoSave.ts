@@ -5,36 +5,27 @@ interface UseAutoSaveOptions<T> {
   isNew: boolean
   save: (data: T) => Promise<void>
   delay?: number
-  onSaveStart?: () => void
-  onSaveEnd?: () => void
 }
 
-export function useAutoSave<T>({
-  data,
-  isNew,
-  save,
-  delay = 2000,
-  onSaveStart,
-  onSaveEnd,
-}: UseAutoSaveOptions<T>) {
+export function useAutoSave<T>({ data, isNew, save, delay = 2000 }: UseAutoSaveOptions<T>) {
   const [isDirty, setIsDirty] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const lastSavedRef = useRef(JSON.stringify(data))
+  const saveRef = useRef(save)
+  saveRef.current = save
 
   const saveNow = useCallback(async () => {
     if (isNew) return
     setIsSaving(true)
-    onSaveStart?.()
     try {
-      await save(data)
+      await saveRef.current(data)
       lastSavedRef.current = JSON.stringify(data)
       setIsDirty(false)
     } finally {
       setIsSaving(false)
-      onSaveEnd?.()
     }
-  }, [data, isNew, save, onSaveStart, onSaveEnd])
+  }, [data, isNew])
 
   useEffect(() => {
     if (isNew) return

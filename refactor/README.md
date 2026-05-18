@@ -109,9 +109,9 @@
 - [ ] `src/hooks/useExecutions.ts` → `refactor/src_hooks_useExecutions.md`
 - [ ] `src/hooks/useWorkflowSnapshot.ts` → `refactor/src_hooks_useWorkflowSnapshot.md`
 - [x] `src/hooks/useIpc.ts` → `refactor/src_hooks_useIpc.md`
-- [ ] `src/hooks/useAutoSave.ts` → `refactor/src_hooks_useAutoSave.md`
+- [x] `src/hooks/useAutoSave.ts` → `refactor/src_hooks_useAutoSave.md`
 - [ ] `src/hooks/useConfiguredProviders.ts` → `refactor/src_hooks_useConfiguredProviders.md`
-- [ ] `src/hooks/useKeyboardShortcuts.ts` → `refactor/src_hooks_useKeyboardShortcuts.md`
+- [x] `src/hooks/useKeyboardShortcuts.ts` → `refactor/src_hooks_useKeyboardShortcuts.md`
 
 ## Lib
 
