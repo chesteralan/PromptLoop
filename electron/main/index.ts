@@ -1,4 +1,9 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
+
+declare global {
+  // eslint-disable-next-line no-var
+  var __isQuitting: boolean | undefined
+}
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { createWindow } from './window'
@@ -6,6 +11,8 @@ import { registerWorkflowIpc } from './ipc/workflow'
 import { registerExecutionIpc } from './ipc/execution'
 import { registerApiKeysIpc } from './ipc/api-keys'
 import { registerAppIpc } from './ipc/app'
+import { createTray, destroyTray, setTrayStatus } from './tray'
+import { registerShortcuts, unregisterShortcuts } from './shortcuts'
 import { initSentry } from './sentry'
 
 initSentry()
@@ -27,6 +34,15 @@ registerExecutionIpc()
 registerApiKeysIpc()
 registerAppIpc()
 
+app.on('before-quit', () => {
+  globalThis.__isQuitting = true
+})
+
+app.on('will-quit', () => {
+  unregisterShortcuts()
+  destroyTray()
+})
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
@@ -39,6 +55,16 @@ app.on('activate', () => {
   }
 })
 
+ipcMain.on('tray:action', (_event, action: string) => {
+  if (action === 'start') {
+    setTrayStatus('running', 'Active Workflow')
+  } else if (action === 'pause') {
+    setTrayStatus('paused')
+  } else if (action === 'stop') {
+    setTrayStatus('idle')
+  }
+})
+
 app.whenReady().then(() => {
   const win = createWindow()
   const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
@@ -48,4 +74,7 @@ app.whenReady().then(() => {
   } else {
     win.loadFile(path.join(RENDERER_DIST, 'index.html'))
   }
+
+  createTray()
+  registerShortcuts()
 })

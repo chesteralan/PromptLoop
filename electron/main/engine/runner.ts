@@ -2,6 +2,7 @@ import { getProviderAdapter, getProviderName } from '../providers/factory'
 import { QueueManager } from './queue'
 import { emit } from './events'
 import { executeWithRetry } from './retry'
+import { sendWorkflowCompleted, sendWorkflowFailed } from '../notifications'
 import type { RunnerState, WorkflowConfig, PromptConfig } from './types'
 
 export class WorkflowRunner {
@@ -114,6 +115,7 @@ export class WorkflowRunner {
         workflowId: this.config.id,
         iterations: this.loopIteration + 1,
       })
+      sendWorkflowCompleted(this.config.name, this.loopIteration + 1)
       emit('execution:status', {
         workflowId: this.config.id,
         currentIndex: 0,
@@ -188,6 +190,7 @@ export class WorkflowRunner {
         promptId: prompt.id,
         error: message,
       })
+      sendWorkflowFailed(this.config.name, message)
     }
   }
 
