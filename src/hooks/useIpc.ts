@@ -14,7 +14,6 @@ export function useExecutionListener() {
 
     const cleanupCompleted = window.electronAPI.onExecutionCompleted((data) => {
       addLog({
-        id: data.promptId,
         workflowId: data.workflowId,
         promptId: data.promptId,
         status: 'completed',
@@ -27,7 +26,6 @@ export function useExecutionListener() {
 
     const cleanupFailed = window.electronAPI.onExecutionFailed((data) => {
       addLog({
-        id: data.promptId,
         workflowId: data.workflowId,
         promptId: data.promptId,
         status: 'failed',

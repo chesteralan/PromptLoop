@@ -40,7 +40,6 @@ describe('executionStore', () => {
   it('adds logs capped at 100', () => {
     for (let i = 0; i < 105; i++) {
       useExecutionStore.getState().addLog({
-        id: String(i),
         workflowId: 'wf-1',
         promptId: 'p-1',
         status: 'completed',

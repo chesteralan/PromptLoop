@@ -13,13 +13,15 @@ export function StatusBar() {
       .catch(() => {})
   }, [])
 
-  const statusColor = {
+  const statusColors: Record<string, string> = {
     idle: 'text-muted-foreground',
     running: 'text-green-500',
     paused: 'text-yellow-500',
+    completed: 'text-blue-500',
     stopped: 'text-muted-foreground',
     error: 'text-red-500',
-  }[executionStatus]
+  }
+  const statusColor = statusColors[executionStatus] ?? 'text-muted-foreground'
 
   return (
     <footer className="flex h-7 items-center justify-between border-t px-3 text-xs text-muted-foreground">

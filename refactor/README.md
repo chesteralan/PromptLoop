@@ -126,7 +126,7 @@
 
 ## Stores
 
-- [ ] `src/store/executionStore.ts` → `refactor/src_store_executionStore.md`
+- [x] `src/store/executionStore.ts` → `refactor/src_store_executionStore.md`
 - [ ] `src/store/workflowStore.ts` → `refactor/src_store_workflowStore.md`
 - [ ] `src/store/settingsStore.ts` → `refactor/src_store_settingsStore.md`
 - [ ] `src/store/index.ts` → `refactor/src_store_index.md`
