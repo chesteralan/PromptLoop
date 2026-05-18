@@ -29,6 +29,14 @@
     "@ai-sdk/provider-utils" "4.0.27"
     "@vercel/oidc" "3.2.0"
 
+"@ai-sdk/google@^3.0.75":
+  version "3.0.75"
+  resolved "https://registry.yarnpkg.com/@ai-sdk/google/-/google-3.0.75.tgz#7b5e52df11a60897152f02dd48c895c8015b9916"
+  integrity sha512-XAm31ftiOrzlb8NjDzT7kw0xw+4lmgFdGFn1QKM73nXFFKyN1kWLESBV75UGNfjXP8X1YJ0YydnMVqO0jaPghw==
+  dependencies:
+    "@ai-sdk/provider" "3.0.10"
+    "@ai-sdk/provider-utils" "4.0.27"
+
 "@ai-sdk/openai@^3.0.64":
   version "3.0.64"
   resolved "https://registry.yarnpkg.com/@ai-sdk/openai/-/openai-3.0.64.tgz#b708104a997b7ecd721de18492e005a033006179"

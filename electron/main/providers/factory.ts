@@ -1,6 +1,7 @@
 import type { ProviderAdapter } from './interface'
 import { OpenAIAdapter } from './openai'
 import { AnthropicAdapter } from './anthropic'
+import { GoogleAdapter } from './google'
 
 type ModelMatcher = (modelId: string) => boolean
 
@@ -17,6 +18,7 @@ const registered: AdapterEntry[] = [
     adapter: new OpenAIAdapter(),
   },
   { name: 'anthropic', matcher: (id) => id.startsWith('claude'), adapter: new AnthropicAdapter() },
+  { name: 'google', matcher: (id) => id.startsWith('gemini'), adapter: new GoogleAdapter() },
 ]
 
 export function getProviderAdapter(modelId: string): ProviderAdapter | null {

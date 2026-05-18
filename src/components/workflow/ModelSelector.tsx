@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Search } from 'lucide-react'
+import { Search, Key } from 'lucide-react'
 import {
   Select,
   SelectContent,
@@ -11,6 +11,7 @@ import {
 } from '../ui/select'
 import { Input } from '../ui/input'
 import { MODELS, PROVIDER_LABELS, type ModelInfo } from '../../lib/models'
+import { useConfiguredProviders } from '../../hooks/useConfiguredProviders'
 
 interface ModelSelectorProps {
   value: string
@@ -26,10 +27,13 @@ const groupedModels = Object.entries(
 
 export function ModelSelector({ value, onChange }: ModelSelectorProps) {
   const [search, setSearch] = useState('')
+  const { configuredProviders, loading } = useConfiguredProviders()
   const selected = MODELS.find((m) => m.id === value)
 
+  const visibleGroups = groupedModels.filter(([provider]) => configuredProviders.includes(provider))
+
   const filtered = search
-    ? groupedModels
+    ? visibleGroups
         .map(
           ([provider, models]) =>
             [
@@ -42,14 +46,18 @@ export function ModelSelector({ value, onChange }: ModelSelectorProps) {
             ] as const,
         )
         .filter(([, models]) => models.length > 0)
-    : groupedModels
+    : visibleGroups
+
+  const noKeysConfigured = !loading && configuredProviders.length === 0
 
   return (
     <div className="space-y-2">
       <Select value={value} onValueChange={(v) => v && onChange(v)}>
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full" disabled={noKeysConfigured}>
           <SelectValue>
-            {selected ? (
+            {noKeysConfigured ? (
+              'Add an API key first'
+            ) : selected ? (
               <span>
                 {selected.name}{' '}
                 <span className="text-muted-foreground">
@@ -62,29 +70,39 @@ export function ModelSelector({ value, onChange }: ModelSelectorProps) {
           </SelectValue>
         </SelectTrigger>
         <SelectContent align="start" className="w-72">
-          <div className="relative px-1 pb-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Search models..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-7"
-              onClick={(e) => e.stopPropagation()}
-            />
-          </div>
-          {filtered.map(([provider, models]) => (
-            <SelectGroup key={provider}>
-              <SelectLabel>{PROVIDER_LABELS[provider] ?? provider}</SelectLabel>
-              {models.map((m) => (
-                <SelectItem key={m.id} value={m.id}>
-                  <span>{m.name}</span>
-                  <span className="text-xs text-muted-foreground">
-                    {Math.round(m.maxTokens / 1000)}k
-                  </span>
-                </SelectItem>
+          {noKeysConfigured ? (
+            <div className="flex flex-col items-center gap-2 px-4 py-6 text-center text-xs text-muted-foreground">
+              <Key className="size-6" />
+              <span>No API keys configured</span>
+              <span>Add API keys in Settings to select a model</span>
+            </div>
+          ) : (
+            <>
+              <div className="relative px-1 pb-1">
+                <Search className="pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Search models..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-7"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+              {filtered.map(([provider, models]) => (
+                <SelectGroup key={provider}>
+                  <SelectLabel>{PROVIDER_LABELS[provider] ?? provider}</SelectLabel>
+                  {models.map((m) => (
+                    <SelectItem key={m.id} value={m.id}>
+                      <span>{m.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {Math.round(m.maxTokens / 1000)}k
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
               ))}
-            </SelectGroup>
-          ))}
+            </>
+          )}
         </SelectContent>
       </Select>
 
