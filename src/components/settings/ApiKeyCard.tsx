@@ -45,7 +45,7 @@ export function ApiKeyCard({ id, provider, keyPrefix, createdAt, onDelete }: Api
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <span className="font-medium capitalize">{provider}</span>
-              <span className={providerColors[provider] ?? ''}>
+              <span className={providerColors[provider] ?? providerColors.openai}>
                 <Badge variant="secondary" className="text-[10px]">
                   {keyPrefix}...
                 </Badge>

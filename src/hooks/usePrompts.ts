@@ -10,6 +10,7 @@ import {
   orderBy,
   writeBatch,
 } from 'firebase/firestore'
+import { toast } from 'sonner'
 import { db } from '../lib/firebase'
 import { useAuth } from './useAuth'
 import { promptConverter, type PromptData } from '../lib/converters'
@@ -26,11 +27,21 @@ function promptRef(userId: string, workflowId: string, promptId: string) {
   )
 }
 
+function promptsKey(userId: string | undefined, workflowId: string | undefined) {
+  return ['prompts', userId, workflowId] as const
+}
+
+type CreatePromptInput = Omit<PromptData, 'workflowId' | 'createdAt' | 'updatedAt'>
+type UpdatePromptInput = {
+  promptId: string
+  data: Partial<Omit<PromptData, 'createdAt' | 'updatedAt'>>
+}
+
 export function usePrompts(workflowId: string | undefined) {
   const { user } = useAuth()
 
   return useQuery({
-    queryKey: ['prompts', user?.uid, workflowId],
+    queryKey: promptsKey(user?.uid, workflowId),
     queryFn: async () => {
       if (!user || !workflowId) return []
       const q = query(promptsRef(user.uid, workflowId), orderBy('position', 'asc'))
@@ -46,18 +57,22 @@ export function useCreatePrompt(workflowId: string | undefined) {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (data: Omit<PromptData, 'createdAt' | 'updatedAt'>) => {
+    mutationFn: async (data: CreatePromptInput) => {
       if (!user || !workflowId) throw new Error('Not authenticated or missing workflow')
       const now = new Date()
       const docRef = await addDoc(promptsRef(user.uid, workflowId), {
         ...data,
+        workflowId,
         createdAt: now,
         updatedAt: now,
       })
       return docRef.id
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['prompts', user?.uid, workflowId] })
+      queryClient.invalidateQueries({ queryKey: promptsKey(user?.uid, workflowId) })
+    },
+    onError: (err) => {
+      toast.error(err instanceof Error ? err.message : 'Failed to create prompt')
     },
   })
 }
@@ -67,13 +82,7 @@ export function useUpdatePrompt(workflowId: string | undefined) {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({
-      promptId,
-      data,
-    }: {
-      promptId: string
-      data: Partial<Omit<PromptData, 'createdAt' | 'updatedAt'>>
-    }) => {
+    mutationFn: async ({ promptId, data }: UpdatePromptInput) => {
       if (!user || !workflowId) throw new Error('Not authenticated or missing workflow')
       await updateDoc(promptRef(user.uid, workflowId, promptId), {
         ...data,
@@ -81,7 +90,10 @@ export function useUpdatePrompt(workflowId: string | undefined) {
       })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['prompts', user?.uid, workflowId] })
+      queryClient.invalidateQueries({ queryKey: promptsKey(user?.uid, workflowId) })
+    },
+    onError: (err) => {
+      toast.error(err instanceof Error ? err.message : 'Failed to update prompt')
     },
   })
 }
@@ -96,7 +108,10 @@ export function useDeletePrompt(workflowId: string | undefined) {
       await deleteDoc(promptRef(user.uid, workflowId, promptId))
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['prompts', user?.uid, workflowId] })
+      queryClient.invalidateQueries({ queryKey: promptsKey(user?.uid, workflowId) })
+    },
+    onError: (err) => {
+      toast.error(err instanceof Error ? err.message : 'Failed to delete prompt')
     },
   })
 }
@@ -116,7 +131,10 @@ export function useReorderPrompts(workflowId: string | undefined) {
       await batch.commit()
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['prompts', user?.uid, workflowId] })
+      queryClient.invalidateQueries({ queryKey: promptsKey(user?.uid, workflowId) })
+    },
+    onError: (err) => {
+      toast.error(err instanceof Error ? err.message : 'Failed to reorder prompts')
     },
   })
 }

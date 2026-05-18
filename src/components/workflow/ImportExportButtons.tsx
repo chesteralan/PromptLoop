@@ -84,11 +84,13 @@ export function ImportExportButtons({
         return
       }
 
-      for (const p of data.prompts) {
-        if (!p.title || !p.model || typeof p.position !== 'number') {
-          toast.error('Invalid prompt data in file')
-          return
-        }
+      const invalidPrompts = data.prompts.filter(
+        (p) => !p.title || !p.model || typeof p.position !== 'number',
+      )
+      if (invalidPrompts.length > 0) {
+        const names = invalidPrompts.map((p) => `"${p.title || 'untitled'}"`).join(', ')
+        toast.error(`Invalid prompt data in file: ${names}`)
+        return
       }
 
       await onImport(data)

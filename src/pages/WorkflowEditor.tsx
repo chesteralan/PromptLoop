@@ -153,7 +153,6 @@ export function WorkflowEditorPage() {
   const handleCreatePrompt = useCallback(async () => {
     if (!workflowId || isNew) return
     const newId = await createPrompt.mutateAsync({
-      workflowId,
       title: 'New Prompt',
       content: '',
       model: 'gpt-4o',
@@ -201,7 +200,6 @@ export function WorkflowEditorPage() {
       for (let i = 0; i < importData.prompts.length; i++) {
         const p = importData.prompts[i]
         await createPrompt.mutateAsync({
-          workflowId: newId,
           title: p.title || 'Untitled',
           content: p.content || '',
           systemPrompt: p.systemPrompt,

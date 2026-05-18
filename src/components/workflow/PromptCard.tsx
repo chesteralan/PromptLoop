@@ -61,7 +61,13 @@ export function PromptCard({
 
             <Switch checked={prompt.enabled} onCheckedChange={onToggle} size="sm" />
 
-            <Button variant="ghost" size="icon" className="size-7" onClick={onSelect}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-7"
+              onClick={onSelect}
+              aria-label={`Edit ${prompt.title}`}
+            >
               <Pencil className="size-3.5" />
             </Button>
 
@@ -70,6 +76,7 @@ export function PromptCard({
               size="icon"
               className="size-7 text-destructive/70 hover:text-destructive"
               onClick={() => setShowDelete(true)}
+              aria-label={`Delete ${prompt.title}`}
             >
               <Trash2 className="size-3.5" />
             </Button>

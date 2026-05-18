@@ -33,6 +33,8 @@ export function ExecutionViewerPage() {
   const responseBuffer = useExecutionStore((s) => s.responseBuffer)
   const loopIteration = useExecutionStore((s) => s.loopIteration)
   const recentLogs = useExecutionStore((s) => s.recentLogs)
+  const clearResponse = useExecutionStore((s) => s.clearResponse)
+  const resetExecution = useExecutionStore((s) => s.resetExecution)
 
   const [loading, setLoading] = useState(false)
   const [promptStatuses, setPromptStatuses] = useState<Record<string, PromptRunStatus>>({})
@@ -53,7 +55,7 @@ export function ExecutionViewerPage() {
     if (!workflowId) return
     setLoading(true)
     setPromptStatuses({})
-    useExecutionStore.getState().clearResponse()
+    clearResponse()
 
     const promptConfigs: PromptConfig[] = enabledPrompts.map((p) => ({
       id: p.id,
@@ -78,7 +80,7 @@ export function ExecutionViewerPage() {
 
     useExecutionStore.getState().setExecutionStatus('running')
     setLoading(false)
-  }, [workflowId, enabledPrompts, workflow, control])
+  }, [workflowId, enabledPrompts, workflow, control, clearResponse])
 
   const handlePause = useCallback(async () => {
     if (!workflowId) return
@@ -102,9 +104,9 @@ export function ExecutionViewerPage() {
     await control.retryWorkflow(workflowId)
     useExecutionStore.getState().setExecutionStatus('idle')
     setPromptStatuses({})
-    useExecutionStore.getState().clearResponse()
+    clearResponse()
     setLoading(false)
-  }, [workflowId, control])
+  }, [workflowId, control, clearResponse])
 
   if (isLoading) {
     return (
@@ -175,11 +177,7 @@ export function ExecutionViewerPage() {
                   <Separator />
                   <div className="flex items-center justify-between">
                     <h3 className="text-sm font-semibold">Logs</h3>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => useExecutionStore.getState().setExecutionStatus('idle')}
-                    >
+                    <Button variant="ghost" size="sm" onClick={() => resetExecution()}>
                       <ListRestart className="mr-1 size-3" />
                       Clear
                     </Button>

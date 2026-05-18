@@ -3,6 +3,12 @@ import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import type { LoopMode } from '../../../electron/shared/types'
 
+const LOOP_MODES = ['infinite', 'fixed', 'single', 'scheduled'] as const
+
+function isValidLoopMode(v: string): v is LoopMode {
+  return (LOOP_MODES as readonly string[]).includes(v)
+}
+
 interface WorkflowSettingsProps {
   loopMode: LoopMode
   maxIterations?: number
@@ -27,7 +33,10 @@ export function WorkflowSettings({
     <div className="space-y-4">
       <div>
         <Label>Loop Mode</Label>
-        <Select value={loopMode} onValueChange={(v) => onLoopModeChange(v as LoopMode)}>
+        <Select
+          value={loopMode}
+          onValueChange={(v) => v && isValidLoopMode(v) && onLoopModeChange(v)}
+        >
           <SelectTrigger className="mt-1.5 w-full">
             <SelectValue />
           </SelectTrigger>

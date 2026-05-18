@@ -1,10 +1,11 @@
 import { cn } from '../../lib/utils'
+import type { WorkflowStatus } from '../../../electron/shared/types'
 
 interface WorkflowStatusBadgeProps {
-  status: string
+  status: WorkflowStatus
 }
 
-const statusConfig: Record<string, { label: string; className: string }> = {
+const statusConfig: Record<WorkflowStatus, { label: string; className: string }> = {
   idle: { label: 'Idle', className: 'bg-muted-foreground/20 text-muted-foreground' },
   running: {
     label: 'Running',

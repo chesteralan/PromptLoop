@@ -1,8 +1,12 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { User } from 'firebase/auth'
 
 type Theme = 'light' | 'dark' | 'system'
+
+interface StoredUser {
+  uid: string
+  email: string | null
+}
 
 interface SettingsStore {
   theme: Theme
@@ -10,15 +14,14 @@ interface SettingsStore {
   minimizeToTrayOnClose: boolean
   notificationsEnabled: boolean
   startOnBoot: boolean
-  user: User | null
-  isAuthenticated: boolean
+  user: StoredUser | null
 
   setTheme: (theme: Theme) => void
   setWindowMode: (mode: 'full' | 'compact') => void
   toggleMinimizeToTray: () => void
   toggleNotifications: () => void
   setStartOnBoot: (enabled: boolean) => void
-  setUser: (user: User | null) => void
+  setUser: (user: StoredUser | null) => void
   clearUser: () => void
 }
 
@@ -31,15 +34,14 @@ export const useSettingsStore = create<SettingsStore>()(
       notificationsEnabled: true,
       startOnBoot: false,
       user: null,
-      isAuthenticated: false,
 
       setTheme: (theme) => set({ theme }),
       setWindowMode: (mode) => set({ windowMode: mode }),
       toggleMinimizeToTray: () => set((s) => ({ minimizeToTrayOnClose: !s.minimizeToTrayOnClose })),
       toggleNotifications: () => set((s) => ({ notificationsEnabled: !s.notificationsEnabled })),
       setStartOnBoot: (startOnBoot) => set({ startOnBoot }),
-      setUser: (user) => set({ user, isAuthenticated: user !== null }),
-      clearUser: () => set({ user: null, isAuthenticated: false }),
+      setUser: (user) => set({ user }),
+      clearUser: () => set({ user: null }),
     }),
     {
       name: 'promptloop-settings',

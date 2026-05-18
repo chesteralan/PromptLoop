@@ -3,7 +3,8 @@ import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { Route, Routes } from 'react-router-dom'
 import { ProtectedRoute } from '../components/layout/ProtectedRoute'
-import { AuthProvider, useAuth } from '../components/auth/AuthProvider'
+import { AuthProvider } from '../components/auth/AuthProvider'
+import { useAuth } from '../hooks/useAuth'
 
 const mockOnAuthStateChanged = vi.fn()
 

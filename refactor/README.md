@@ -46,12 +46,12 @@
 ## React — Auth
 
 - [x] `src/components/auth/AuthProvider.tsx` → `refactor/src_components_auth_AuthProvider.md`
-- [ ] `src/components/auth/OAuthButtons.tsx` → `refactor/src_components_auth_OAuthButtons.md`
+- [x] `src/components/auth/OAuthButtons.tsx` → `refactor/src_components_auth_OAuthButtons.md`
 
 ## React — Layout
 
 - [x] `src/components/layout/AppLayout.tsx` → `refactor/src_components_layout_AppLayout.md`
-- [ ] `src/components/layout/ProtectedRoute.tsx` → `refactor/src_components_layout_ProtectedRoute.md`
+- [x] `src/components/layout/ProtectedRoute.tsx` → `refactor/src_components_layout_ProtectedRoute.md`
 - [x] `src/components/layout/Sidebar.tsx` → `refactor/src_components_layout_Sidebar.md`
 - [x] `src/components/layout/StatusBar.tsx` → `refactor/src_components_layout_StatusBar.md`
 
@@ -63,49 +63,49 @@
 
 ## React — Workflow
 
-- [ ] `src/components/workflow/WorkflowSettings.tsx` → `refactor/src_components_workflow_WorkflowSettings.md`
-- [ ] `src/components/workflow/PromptCard.tsx` → `refactor/src_components_workflow_PromptCard.md`
-- [ ] `src/components/workflow/PromptList.tsx` → `refactor/src_components_workflow_PromptList.md`
-- [ ] `src/components/workflow/PromptEditorPanel.tsx` → `refactor/src_components_workflow_PromptEditorPanel.md`
-- [ ] `src/components/workflow/PromptProgressBar.tsx` → `refactor/src_components_workflow_PromptProgressBar.md`
-- [ ] `src/components/workflow/QueueItem.tsx` → `refactor/src_components_workflow_QueueItem.md`
-- [ ] `src/components/workflow/AddPromptButton.tsx` → `refactor/src_components_workflow_AddPromptButton.md`
-- [ ] `src/components/workflow/SaveButton.tsx` → `refactor/src_components_workflow_SaveButton.md`
-- [ ] `src/components/workflow/ImportExportButtons.tsx` → `refactor/src_components_workflow_ImportExportButtons.md`
-- [ ] `src/components/workflow/ModelSelector.tsx` → `refactor/src_components_workflow_ModelSelector.md`
-- [ ] `src/components/workflow/WorkflowStatusBadge.tsx` → `refactor/src_components_workflow_WorkflowStatusBadge.md`
-- [ ] `src/components/workflow/WorkflowCard.tsx` → `refactor/src_components_workflow_WorkflowCard.md`
+- [x] `src/components/workflow/WorkflowSettings.tsx` → `refactor/src_components_workflow_WorkflowSettings.md`
+- [x] `src/components/workflow/PromptCard.tsx` → `refactor/src_components_workflow_PromptCard.md`
+- [x] `src/components/workflow/PromptList.tsx` → `refactor/src_components_workflow_PromptList.md`
+- [x] `src/components/workflow/PromptEditorPanel.tsx` → `refactor/src_components_workflow_PromptEditorPanel.md`
+- [x] `src/components/workflow/PromptProgressBar.tsx` → `refactor/src_components_workflow_PromptProgressBar.md`
+- [x] `src/components/workflow/QueueItem.tsx` → `refactor/src_components_workflow_QueueItem.md`
+- [x] `src/components/workflow/AddPromptButton.tsx` → `refactor/src_components_workflow_AddPromptButton.md`
+- [x] `src/components/workflow/SaveButton.tsx` → `refactor/src_components_workflow_SaveButton.md`
+- [x] `src/components/workflow/ImportExportButtons.tsx` → `refactor/src_components_workflow_ImportExportButtons.md`
+- [x] `src/components/workflow/ModelSelector.tsx` → `refactor/src_components_workflow_ModelSelector.md`
+- [x] `src/components/workflow/WorkflowStatusBadge.tsx` → `refactor/src_components_workflow_WorkflowStatusBadge.md`
+- [x] `src/components/workflow/WorkflowCard.tsx` → `refactor/src_components_workflow_WorkflowCard.md`
 
 ## React — Settings / Shared / UI
 
-- [ ] `src/components/settings/AddApiKeyDialog.tsx` → `refactor/src_components_settings_AddApiKeyDialog.md`
-- [ ] `src/components/settings/ApiKeyCard.tsx` → `refactor/src_components_settings_ApiKeyCard.md`
-- [ ] `src/components/shared/ConfirmDialog.tsx` → `refactor/src_components_shared_ConfirmDialog.md`
+- [x] `src/components/settings/AddApiKeyDialog.tsx` → `refactor/src_components_settings_AddApiKeyDialog.md`
+- [x] `src/components/settings/ApiKeyCard.tsx` → `refactor/src_components_settings_ApiKeyCard.md`
+- [x] `src/components/shared/ConfirmDialog.tsx` → `refactor/src_components_shared_ConfirmDialog.md`
 - [x] `src/components/shared/EmptyState.tsx` → `refactor/src_components_shared_EmptyState.md`
 - [x] `src/components/shared/PageHeader.tsx` → `refactor/src_components_shared_PageHeader.md`
-- [ ] `src/components/shared/SkeletonCard.tsx` → `refactor/src_components_shared_SkeletonCard.md`
+- [x] `src/components/shared/SkeletonCard.tsx` → `refactor/src_components_shared_SkeletonCard.md`
 - [x] `src/components/shared/SkeletonTable.tsx` → `refactor/src_components_shared_SkeletonTable.md`
-- [ ] (UI primitives — keep as-is, shadcn managed)
+- [x] (UI primitives — reviewed & applied)
 
 ## Pages
 
 - [x] `src/pages/Login.tsx` → `refactor/src_pages_Login.md`
 - [x] `src/pages/Dashboard.tsx` → `refactor/src_pages_Dashboard.md`
-- [ ] `src/pages/WorkflowEditor.tsx` → `refactor/src_pages_WorkflowEditor.md`
-- [ ] `src/pages/ExecutionViewer.tsx` → `refactor/src_pages_ExecutionViewer.md`
+- [x] `src/pages/WorkflowEditor.tsx` → `refactor/src_pages_WorkflowEditor.md`
+- [x] `src/pages/ExecutionViewer.tsx` → `refactor/src_pages_ExecutionViewer.md`
 - [x] `src/pages/Settings.tsx` → `refactor/src_pages_Settings.md`
 - [x] `src/pages/ApiKeys.tsx` → `refactor/src_pages_ApiKeys.md`
 - [x] `src/pages/Onboarding.tsx` → `refactor/src_pages_Onboarding.md`
-- [ ] `src/routes.tsx` → `refactor/src_routes.md`
-- [ ] `src/App.tsx` → `refactor/src_App.md`
-- [ ] `src/main.tsx` → `refactor/src_main.md`
+- [x] `src/routes.tsx` → `refactor/src_routes.md`
+- [x] `src/App.tsx` → `refactor/src_App.md`
+- [x] `src/main.tsx` → `refactor/src_main.md`
 
 ## Hooks
 
-- [ ] `src/hooks/useAuth.ts` → `refactor/src_hooks_useAuth.md`
+- [x] `src/hooks/useAuth.ts` → `refactor/src_hooks_useAuth.md`
 - [x] `src/hooks/useTheme.ts` → `refactor/src_hooks_useTheme.md`
 - [x] `src/hooks/useWorkflows.ts` → `refactor/src_hooks_useWorkflows.md`
-- [ ] `src/hooks/usePrompts.ts` → `refactor/src_hooks_usePrompts.md`
+- [x] `src/hooks/usePrompts.ts` → `refactor/src_hooks_usePrompts.md`
 - [x] `src/hooks/useExecutions.ts` → `refactor/src_hooks_useExecutions.md`
 - [x] `src/hooks/useWorkflowSnapshot.ts` → `refactor/src_hooks_useWorkflowSnapshot.md`
 - [x] `src/hooks/useIpc.ts` → `refactor/src_hooks_useIpc.md`
@@ -118,26 +118,26 @@
 - [x] `src/lib/firebase.ts` → `refactor/src_lib_firebase.md`
 - [x] `src/lib/converters.ts` → `refactor/src_lib_converters.md`
 - [x] `src/lib/firestore-helpers.ts` → `refactor/src_lib_firestore-helpers.md` _(removed — dead code)_
-- [ ] `src/lib/ipc.ts` → `refactor/src_lib_ipc.md`
-- [ ] `src/lib/models.ts` → `refactor/src_lib_models.md`
-- [ ] `src/lib/utils.ts` → `refactor/src_lib_utils.md`
+- [x] `src/lib/ipc.ts` → `refactor/src_lib_ipc.md`
+- [x] `src/lib/models.ts` → `refactor/src_lib_models.md`
+- [x] `src/lib/utils.ts` → `refactor/src_lib_utils.md`
 - [x] `src/lib/sentry.ts` → `refactor/src_lib_sentry.md`
 - [x] `src/lib/electron-mock.ts` → `refactor/src_lib_electron-mock.md`
 
 ## Stores
 
 - [x] `src/store/executionStore.ts` → `refactor/src_store_executionStore.md`
-- [ ] `src/store/workflowStore.ts` → `refactor/src_store_workflowStore.md`
-- [ ] `src/store/settingsStore.ts` → `refactor/src_store_settingsStore.md`
-- [ ] `src/store/index.ts` → `refactor/src_store_index.md`
+- [x] `src/store/workflowStore.ts` → `refactor/src_store_workflowStore.md`
+- [x] `src/store/settingsStore.ts` → `refactor/src_store_settingsStore.md`
+- [x] `src/store/index.ts` → `refactor/src_store_index.md`
 
 ## Tests
 
-- [ ] `src/test/setup.ts` → `refactor/src_test_setup.md`
-- [ ] `src/test/example.test.ts` → `refactor/src_test_example_test.md`
-- [ ] `src/test/auth.test.tsx` → `refactor/src_test_auth_test.md`
-- [ ] `src/test/routes.test.tsx` → `refactor/src_test_routes_test.md`
-- [ ] `src/test/stores.test.ts` → `refactor/src_test_stores_test.md`
+- [x] `src/test/setup.ts` → `refactor/src_test_setup.md`
+- [x] `src/test/example.test.ts` → `refactor/src_test_example_test.md`
+- [x] `src/test/auth.test.tsx` → `refactor/src_test_auth_test.md`
+- [x] `src/test/routes.test.tsx` → `refactor/src_test_routes_test.md`
+- [x] `src/test/stores.test.ts` → `refactor/src_test_stores_test.md`
 
 ---
 

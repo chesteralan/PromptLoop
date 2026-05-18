@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { AuthProvider, useAuth } from '../components/auth/AuthProvider'
+import { AuthProvider } from '../components/auth/AuthProvider'
+import { useAuth } from '../hooks/useAuth'
 
 const mockOnAuthStateChanged = vi.fn()
 

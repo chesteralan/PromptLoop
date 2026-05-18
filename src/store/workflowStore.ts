@@ -15,7 +15,6 @@ interface Workflow {
 interface WorkflowStore {
   workflows: Workflow[]
   activeWorkflowId: string | null
-  isLoading: boolean
 
   setWorkflows: (workflows: Workflow[]) => void
   addWorkflow: (workflow: Workflow) => void
@@ -27,7 +26,6 @@ interface WorkflowStore {
 export const useWorkflowStore = create<WorkflowStore>((set) => ({
   workflows: [],
   activeWorkflowId: null,
-  isLoading: false,
 
   setWorkflows: (workflows) => set({ workflows }),
   addWorkflow: (workflow) => set((s) => ({ workflows: [...s.workflows, workflow] })),

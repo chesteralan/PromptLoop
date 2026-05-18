@@ -58,7 +58,6 @@ describe('workflowStore', () => {
     useWorkflowStore.setState({
       workflows: [],
       activeWorkflowId: null,
-      isLoading: false,
     })
   })
 
@@ -111,7 +110,6 @@ describe('settingsStore', () => {
       notificationsEnabled: true,
       startOnBoot: false,
       user: null,
-      isAuthenticated: false,
     })
   })
 
@@ -143,14 +141,11 @@ describe('settingsStore', () => {
   })
 
   it('sets and clears user', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mockUser = { uid: 'abc', email: 'test@example.com' } as any
+    const mockUser = { uid: 'abc', email: 'test@example.com' }
     useSettingsStore.getState().setUser(mockUser)
-    expect(useSettingsStore.getState().user).toBe(mockUser)
-    expect(useSettingsStore.getState().isAuthenticated).toBe(true)
+    expect(useSettingsStore.getState().user).toEqual(mockUser)
 
     useSettingsStore.getState().clearUser()
     expect(useSettingsStore.getState().user).toBeNull()
-    expect(useSettingsStore.getState().isAuthenticated).toBe(false)
   })
 })

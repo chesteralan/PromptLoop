@@ -2,11 +2,12 @@ import { Pencil, Play, Trash2, Square } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Card, CardContent } from '../ui/card'
 import { WorkflowStatusBadge } from './WorkflowStatusBadge'
+import type { WorkflowStatus } from '../../../electron/shared/types'
 
 interface WorkflowCardProps {
   id: string
   name: string
-  status: string
+  status: WorkflowStatus
   promptCount: number
   loopMode?: string
   onStart: () => void

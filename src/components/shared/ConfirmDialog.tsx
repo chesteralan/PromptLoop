@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -29,12 +30,19 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      if (!open) onCancel()
+    },
+    [onCancel],
+  )
+
   return (
-    <Dialog open={open} onOpenChange={(open) => !open && onCancel()}>
-      <DialogContent>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogContent aria-describedby="confirm-dialog-description">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{message}</DialogDescription>
+          <DialogDescription id="confirm-dialog-description">{message}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={onCancel}>

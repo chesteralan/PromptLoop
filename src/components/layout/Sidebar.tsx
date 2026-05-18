@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard,
@@ -11,7 +12,7 @@ import {
   Moon,
   Monitor,
 } from 'lucide-react'
-import { useAuth } from '../auth/AuthProvider'
+import { useAuth } from '../../hooks/useAuth'
 import { useSettingsStore } from '../../store/settingsStore'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
@@ -52,10 +53,10 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 
   const ThemeIcon = theme === 'dark' ? Moon : theme === 'light' ? Sun : Monitor
 
-  const handleSignOut = async () => {
+  const handleSignOut = useCallback(async () => {
     await signOut()
     navigate('/login')
-  }
+  }, [signOut, navigate])
 
   return (
     <aside

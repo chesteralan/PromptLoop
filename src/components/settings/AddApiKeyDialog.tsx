@@ -22,14 +22,20 @@ interface AddApiKeyDialogProps {
 }
 
 export function AddApiKeyDialog({ open, onOpenChange, onSave }: AddApiKeyDialogProps) {
-  const [provider, setProvider] = useState('openai')
+  const [provider, setProvider] = useState<(typeof PROVIDERS)[number]>('openai')
   const [apiKey, setApiKey] = useState('')
   const [showKey, setShowKey] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [validationError, setValidationError] = useState<string | null>(null)
 
   async function handlePaste() {
-    const text = await navigator.clipboard.readText()
-    setApiKey(text.trim())
+    try {
+      const text = await navigator.clipboard.readText()
+      setApiKey(text.trim())
+      setValidationError(null)
+    } catch {
+      toast.error('Unable to read clipboard. Please paste manually.')
+    }
   }
 
   function validate(): string | null {
@@ -44,10 +50,11 @@ export function AddApiKeyDialog({ open, onOpenChange, onSave }: AddApiKeyDialogP
   async function handleSave() {
     const error = validate()
     if (error) {
-      toast.error(error)
+      setValidationError(error)
       return
     }
 
+    setValidationError(null)
     setSaving(true)
     try {
       await onSave(provider, apiKey.trim())
@@ -68,10 +75,22 @@ export function AddApiKeyDialog({ open, onOpenChange, onSave }: AddApiKeyDialogP
           <DialogTitle>Add API Key</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-4" role="form" aria-label="Add API Key form">
+          {validationError && (
+            <div
+              role="alert"
+              aria-live="polite"
+              className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive"
+            >
+              {validationError}
+            </div>
+          )}
           <div>
             <Label>Provider</Label>
-            <Select value={provider} onValueChange={(v) => v && setProvider(v)}>
+            <Select
+              value={provider}
+              onValueChange={(v) => v && (setProvider(v), setValidationError(null))}
+            >
               <SelectTrigger className="mt-1.5 w-full">
                 <SelectValue />
               </SelectTrigger>
