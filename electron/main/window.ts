@@ -1,14 +1,6 @@
 import { BrowserWindow, app, screen, ipcMain } from 'electron'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-
-declare global {
-  // eslint-disable-next-line no-var
-  var __isQuitting: boolean | undefined
-}
 
 interface PersistedState {
   x?: number
@@ -18,6 +10,9 @@ interface PersistedState {
   isMaximized: boolean
   mode: 'full' | 'compact'
 }
+
+const COMPACT_SIZE = 400
+const FULL_SIZE = 1200
 
 let mainWindow: BrowserWindow | null = null
 let minimizeToTray = true
@@ -64,7 +59,12 @@ function saveState(): void {
   }
 }
 
-function clampToDisplay(bounds: { x?: number; y?: number; width: number; height: number }): void {
+function clampToDisplay(bounds: { x?: number; y?: number; width: number; height: number }): {
+  x?: number
+  y?: number
+  width: number
+  height: number
+} {
   const displays = screen.getAllDisplays()
   for (const d of displays) {
     const { x, y, width, height } = d.bounds
@@ -76,15 +76,18 @@ function clampToDisplay(bounds: { x?: number; y?: number; width: number; height:
       bounds.y >= y &&
       bounds.y < y + height
     ) {
-      return
+      return bounds
     }
   }
   const primary = screen.getPrimaryDisplay()
-  bounds.x = primary.bounds.x + Math.max(0, (primary.bounds.width - bounds.width) / 2)
-  bounds.y = primary.bounds.y + Math.max(0, (primary.bounds.height - bounds.height) / 2)
+  return {
+    ...bounds,
+    x: primary.bounds.x + Math.max(0, (primary.bounds.width - bounds.width) / 2),
+    y: primary.bounds.y + Math.max(0, (primary.bounds.height - bounds.height) / 2),
+  }
 }
 
-let resizeTimer: ReturnType<typeof setTimeout> | null = null
+let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
 export function setMinimizeToTray(enabled: boolean): void {
   minimizeToTray = enabled
@@ -103,9 +106,9 @@ export function setWindowMode(mode: 'full' | 'compact'): void {
   if (!mainWindow) return
 
   if (mode === 'compact') {
-    mainWindow.setSize(400, 400)
+    mainWindow.setSize(COMPACT_SIZE, COMPACT_SIZE)
   } else {
-    mainWindow.setSize(1200, 800)
+    mainWindow.setSize(FULL_SIZE, 800)
   }
 
   const bounds = mainWindow.getBounds()
@@ -124,17 +127,17 @@ export function getMainWindow(): BrowserWindow | null {
 export function createWindow(): BrowserWindow {
   const saved = loadState()
   windowMode = saved.mode
-  clampToDisplay(saved)
+  const clamped = clampToDisplay(saved)
 
   mainWindow = new BrowserWindow({
     title: 'PromptLoop',
-    x: saved.x,
-    y: saved.y,
-    width: saved.width,
-    height: saved.height,
+    x: clamped.x,
+    y: clamped.y,
+    width: clamped.width,
+    height: clamped.height,
     show: false,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.mjs'),
+      preload: path.join(import.meta.dirname, 'preload.mjs'),
       contextIsolation: true,
       nodeIntegration: false,
     },
@@ -156,25 +159,27 @@ export function createWindow(): BrowserWindow {
     }
   })
 
-  mainWindow.on('closed', () => {
-    mainWindow = null
-  })
-
   mainWindow.on('resize', () => {
-    if (resizeTimer) clearTimeout(resizeTimer)
-    resizeTimer = setTimeout(saveState, 500)
+    if (debounceTimer) clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(saveState, 500)
   })
 
   mainWindow.on('move', () => {
-    if (resizeTimer) clearTimeout(resizeTimer)
-    resizeTimer = setTimeout(saveState, 500)
+    if (debounceTimer) clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(saveState, 500)
   })
 
   mainWindow.on('maximize', saveState)
   mainWindow.on('unmaximize', saveState)
 
-  ipcMain.on('window:set-mode', (_event, mode: 'full' | 'compact') => {
+  const setModeHandler = (_event: Electron.IpcMainEvent, mode: 'full' | 'compact') => {
     setWindowMode(mode)
+  }
+  ipcMain.on('window:set-mode', setModeHandler)
+
+  mainWindow.on('closed', () => {
+    ipcMain.removeListener('window:set-mode', setModeHandler)
+    mainWindow = null
   })
 
   return mainWindow

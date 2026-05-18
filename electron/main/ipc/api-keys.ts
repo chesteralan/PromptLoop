@@ -1,11 +1,20 @@
 import { ipcMain } from 'electron'
 import { encryptApiKey, decryptApiKey, listApiKeys, deleteApiKey } from '../encryption'
 
+const VALID_PROVIDERS = ['openai', 'anthropic', 'google'] as const
+
+function isValidProvider(p: string): p is 'openai' | 'anthropic' | 'google' {
+  return VALID_PROVIDERS.includes(p as (typeof VALID_PROVIDERS)[number])
+}
+
 export function registerApiKeysIpc(): void {
   ipcMain.handle(
     'api-key:encrypt',
     async (_event, { provider, key }: { provider: string; key: string }) => {
-      const result = encryptApiKey(provider as 'openai' | 'anthropic' | 'google', key)
+      if (!isValidProvider(provider)) {
+        return { success: false, error: `Invalid provider: ${provider}` }
+      }
+      const result = encryptApiKey(provider, key)
       if (!result.ok) return { success: false, error: result.error }
       return { success: true, id: result.value.id, keyPrefix: result.value.keyPrefix }
     },

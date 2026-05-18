@@ -8,27 +8,29 @@ interface SkeletonTableProps {
 
 export function SkeletonTable({ rows = 5, columns = 4 }: SkeletonTableProps) {
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          {Array.from({ length: columns }).map((_, i) => (
-            <TableHead key={i}>
-              <Skeleton className="h-4 w-20" />
-            </TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {Array.from({ length: rows }).map((_, r) => (
-          <TableRow key={r}>
-            {Array.from({ length: columns }).map((_, c) => (
-              <TableCell key={c}>
-                <Skeleton className="h-4 w-full" />
-              </TableCell>
+    <div aria-busy="true">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {Array.from({ length: columns }, (_, i) => (
+              <TableHead key={i}>
+                <Skeleton className="h-4 w-20" />
+              </TableHead>
             ))}
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {Array.from({ length: rows }, (_, r) => (
+            <TableRow key={r}>
+              {Array.from({ length: columns }, (_, c) => (
+                <TableCell key={c}>
+                  <Skeleton className="h-4 w-full" />
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   )
 }

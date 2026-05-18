@@ -18,7 +18,9 @@ export function OnboardingPage() {
 
   useEffect(() => {
     if (!user) return
+    let cancelled = false
     getDoc(doc(db, 'users', user.uid)).then((snap) => {
+      if (cancelled) return
       if (snap.exists()) {
         const data = snap.data()
         if (data.onboardingComplete === true) {
@@ -29,6 +31,9 @@ export function OnboardingPage() {
       }
       setLoaded(true)
     })
+    return () => {
+      cancelled = true
+    }
   }, [user, navigate])
 
   async function handleComplete() {

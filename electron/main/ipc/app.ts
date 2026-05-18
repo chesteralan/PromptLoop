@@ -1,5 +1,5 @@
 import { ipcMain, app, BrowserWindow, dialog } from 'electron'
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFile, writeFile } from 'node:fs/promises'
 
 export function registerAppIpc(): void {
   ipcMain.handle('app:get-version', () => {
@@ -27,7 +27,7 @@ export function registerAppIpc(): void {
 
   ipcMain.handle('file:write', async (_event, filePath: string, content: string) => {
     try {
-      writeFileSync(filePath, content, 'utf-8')
+      await writeFile(filePath, content, 'utf-8')
       return { success: true }
     } catch (error) {
       return { success: false, error: String(error) }
@@ -36,7 +36,7 @@ export function registerAppIpc(): void {
 
   ipcMain.handle('file:read', async (_event, filePath: string) => {
     try {
-      const content = readFileSync(filePath, 'utf-8')
+      const content = await readFile(filePath, 'utf-8')
       return { success: true, content }
     } catch (error) {
       return { success: false, error: String(error) }

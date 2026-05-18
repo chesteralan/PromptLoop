@@ -86,8 +86,10 @@ export function useUpdateWorkflow() {
       data: Partial<Omit<WorkflowData, 'createdAt' | 'updatedAt'>>
     }) => {
       if (!user) throw new Error('Not authenticated')
+      const safeData = { ...data } as Record<string, unknown>
+      delete safeData.id
       await updateDoc(workflowRef(user.uid, workflowId), {
-        ...data,
+        ...safeData,
         updatedAt: new Date(),
       })
     },

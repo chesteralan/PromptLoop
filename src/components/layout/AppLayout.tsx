@@ -24,7 +24,7 @@ export function AppLayout() {
           navigate('/onboarding', { replace: true })
         }
       })
-      .catch(() => {})
+      .catch((err) => console.warn('Failed to check onboarding status:', err))
       .finally(() => setChecking(false))
   }, [user, navigate])
 

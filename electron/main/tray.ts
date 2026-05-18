@@ -1,6 +1,8 @@
 import { Tray, Menu, nativeImage, app } from 'electron'
 import { getMainWindow } from './window'
 
+export type TrayStatus = 'idle' | 'running' | 'paused' | 'error' | 'completed' | 'stopped'
+
 let tray: Tray | null = null
 
 function generateIcon(color: string): Electron.NativeImage {
@@ -15,16 +17,26 @@ function generateIcon(color: string): Electron.NativeImage {
   return nativeImage.createFromDataURL(dataUrl).resize({ width: 16, height: 16 })
 }
 
-const STATUS_ICONS: Record<string, () => Electron.NativeImage> = {
-  idle: () => generateIcon('#888888'),
-  running: () => generateIcon('#22c55e'),
-  paused: () => generateIcon('#eab308'),
-  error: () => generateIcon('#ef4444'),
-  completed: () => generateIcon('#3b82f6'),
+const iconCache = new Map<string, Electron.NativeImage>()
+
+function getCachedIcon(color: string): Electron.NativeImage {
+  if (!iconCache.has(color)) {
+    iconCache.set(color, generateIcon(color))
+  }
+  return iconCache.get(color)!
 }
 
-function getStatusLabel(status: string): string {
-  const labels: Record<string, string> = {
+const STATUS_ICONS: Record<TrayStatus, Electron.NativeImage> = {
+  idle: getCachedIcon('#888888'),
+  running: getCachedIcon('#22c55e'),
+  paused: getCachedIcon('#eab308'),
+  error: getCachedIcon('#ef4444'),
+  completed: getCachedIcon('#3b82f6'),
+  stopped: getCachedIcon('#888888'),
+}
+
+function getStatusLabel(status: TrayStatus): string {
+  const labels: Record<TrayStatus, string> = {
     idle: 'Idle',
     running: 'Running',
     paused: 'Paused',
@@ -32,14 +44,13 @@ function getStatusLabel(status: string): string {
     completed: 'Completed',
     stopped: 'Stopped',
   }
-  return labels[status] ?? status
+  return labels[status]
 }
 
-export function setTrayStatus(status: string, workflowName?: string): void {
+export function setTrayStatus(status: TrayStatus, workflowName?: string): void {
   if (!tray) return
 
-  const icon = STATUS_ICONS[status]?.() ?? STATUS_ICONS.idle!()
-  tray.setImage(icon)
+  tray.setImage(STATUS_ICONS[status] ?? STATUS_ICONS.idle)
 
   const tooltip = workflowName
     ? `PromptLoop: ${getStatusLabel(status)} - ${workflowName}`
@@ -49,7 +60,13 @@ export function setTrayStatus(status: string, workflowName?: string): void {
   rebuildMenu(status)
 }
 
-function rebuildMenu(status: string): void {
+function sendTrayAction(action: string): void {
+  const win = getMainWindow()
+  if (!win || win.webContents.isDestroyed()) return
+  win.webContents.send('tray:action', action)
+}
+
+function rebuildMenu(status: TrayStatus): void {
   if (!tray) return
 
   const contextMenu = Menu.buildFromTemplate([
@@ -67,23 +84,17 @@ function rebuildMenu(status: string): void {
     {
       label: 'Start',
       enabled: status === 'idle',
-      click: () => {
-        getMainWindow()?.webContents.send('tray:action', 'start')
-      },
+      click: () => sendTrayAction('start'),
     },
     {
       label: 'Pause',
       enabled: status === 'running',
-      click: () => {
-        getMainWindow()?.webContents.send('tray:action', 'pause')
-      },
+      click: () => sendTrayAction('pause'),
     },
     {
       label: 'Stop',
       enabled: status === 'running' || status === 'paused',
-      click: () => {
-        getMainWindow()?.webContents.send('tray:action', 'stop')
-      },
+      click: () => sendTrayAction('stop'),
     },
     { type: 'separator' },
     {
@@ -91,8 +102,6 @@ function rebuildMenu(status: string): void {
       click: () => {
         const win = getMainWindow()
         if (win) win.destroy()
-        tray?.destroy()
-        tray = null
         app.quit()
       },
     },
@@ -103,9 +112,11 @@ function rebuildMenu(status: string): void {
 
 export function createTray(): void {
   if (tray) return
+  if (process.platform === 'linux' && !app.isPackaged) {
+    console.warn('Tray may not be supported on this Linux desktop environment')
+  }
 
-  const icon = STATUS_ICONS.idle()
-  tray = new Tray(icon)
+  tray = new Tray(STATUS_ICONS.idle)
   tray.setToolTip('PromptLoop: Idle')
 
   tray.on('click', () => {
@@ -129,5 +140,4 @@ export function createTray(): void {
 
 export function destroyTray(): void {
   tray?.destroy()
-  tray = null
 }

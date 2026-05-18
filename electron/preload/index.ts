@@ -6,6 +6,16 @@ import type {
   WorkflowComplete,
 } from '../shared/types'
 
+function assertSuccess<T extends { success: boolean; error?: string }>(
+  r: T,
+): Omit<T, 'success' | 'error'> {
+  if (!r.success) throw new Error(r.error ?? 'Operation failed')
+  const rest = { ...r }
+  delete (rest as Record<string, unknown>).success
+  delete (rest as Record<string, unknown>).error
+  return rest as Omit<T, 'success' | 'error'>
+}
+
 export const api = {
   startWorkflow: (workflowId: string, config?: unknown, apiKeys?: Record<string, string>) =>
     ipcRenderer.invoke('workflow:start', { workflowId, config, apiKeys }),
@@ -42,24 +52,24 @@ export const api = {
     }
   },
 
-  encryptApiKey: (provider: string, key: string) =>
-    ipcRenderer
-      .invoke('api-key:encrypt', { provider, key })
-      .then((r: { success: boolean; id?: string; keyPrefix?: string; error?: string }) => {
-        if (!r.success) throw new Error(r.error ?? 'Encryption failed')
-        return { id: r.id!, keyPrefix: r.keyPrefix! }
-      }),
-  decryptApiKey: (keyId: string) =>
-    ipcRenderer
-      .invoke('api-key:decrypt', { keyId })
-      .then((r: { success: boolean; key?: string; error?: string }) => {
-        if (!r.success) throw new Error(r.error ?? 'Decryption failed')
-        return { key: r.key! }
-      }),
+  encryptApiKey: async (provider: string, key: string) => {
+    const r: { success: boolean; id?: string; keyPrefix?: string; error?: string } =
+      await ipcRenderer.invoke('api-key:encrypt', { provider, key })
+    const rest = assertSuccess(r)
+    if (!rest.id || !rest.keyPrefix) throw new Error('Encryption response missing fields')
+    return { id: rest.id as string, keyPrefix: rest.keyPrefix as string }
+  },
+  decryptApiKey: async (keyId: string) => {
+    const r: { success: boolean; key?: string; error?: string } = await ipcRenderer.invoke(
+      'api-key:decrypt',
+      { keyId },
+    )
+    const rest = assertSuccess(r)
+    if (!rest.key) throw new Error('Decryption response missing key')
+    return { key: rest.key as string }
+  },
   deleteApiKey: (keyId: string) =>
-    ipcRenderer.invoke('api-key:delete', { keyId }).then((r: { success: boolean }) => {
-      return { success: r.success }
-    }),
+    ipcRenderer.invoke('api-key:delete', { keyId }) as Promise<{ success: boolean }>,
   listApiKeys: () =>
     ipcRenderer
       .invoke('api-key:list')
@@ -67,9 +77,7 @@ export const api = {
         (r: {
           success: boolean
           keys?: { id: string; provider: string; keyPrefix: string; createdAt: string }[]
-        }) => {
-          return r.keys ?? []
-        },
+        }) => r.keys ?? [],
       ),
 
   minimizeToTray: () => ipcRenderer.send('app:minimize-to-tray'),
@@ -78,8 +86,16 @@ export const api = {
   showSaveDialog: (options: unknown) => ipcRenderer.invoke('dialog:show-save-dialog', options),
   showOpenDialog: (options: unknown) => ipcRenderer.invoke('dialog:show-open-dialog', options),
   writeFile: (filePath: string, content: string) =>
-    ipcRenderer.invoke('file:write', filePath, content),
-  readFile: (filePath: string) => ipcRenderer.invoke('file:read', filePath),
+    ipcRenderer.invoke('file:write', filePath, content) as Promise<{
+      success: boolean
+      error?: string
+    }>,
+  readFile: (filePath: string) =>
+    ipcRenderer.invoke('file:read', filePath) as Promise<{
+      success: boolean
+      content?: string
+      error?: string
+    }>,
 }
 
 contextBridge.exposeInMainWorld('electronAPI', api)

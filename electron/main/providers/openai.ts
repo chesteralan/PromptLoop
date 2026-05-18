@@ -19,7 +19,7 @@ const MODEL_TO_API: Record<string, string> = {
 }
 
 export class OpenAIAdapter implements ProviderAdapter {
-  async stream(prompt: string, options: StreamOptions): Promise<AsyncIterable<string>> {
+  stream(prompt: string, options: StreamOptions): AsyncIterable<string> {
     const modelId = MODEL_TO_API[options.model] ?? options.model
     const result = streamText({
       model: openai(modelId),

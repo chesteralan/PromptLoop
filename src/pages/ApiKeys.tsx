@@ -8,15 +8,8 @@ import { SkeletonCard } from '../components/shared/SkeletonCard'
 import { AddApiKeyDialog } from '../components/settings/AddApiKeyDialog'
 import { ApiKeyCard } from '../components/settings/ApiKeyCard'
 
-interface ApiKeyInfo {
-  id: string
-  provider: string
-  keyPrefix: string
-  createdAt: string
-}
-
 export function ApiKeysPage() {
-  const [keys, setKeys] = useState<ApiKeyInfo[]>([])
+  const [keys, setKeys] = useState<Awaited<ReturnType<typeof window.electronAPI.listApiKeys>>>([])
   const [loading, setLoading] = useState(true)
   const [showAdd, setShowAdd] = useState(false)
 

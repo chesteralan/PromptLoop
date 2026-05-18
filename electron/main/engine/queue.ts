@@ -2,7 +2,6 @@ import type { PromptConfig } from './types'
 
 export class QueueManager {
   private items: PromptConfig[] = []
-  private isProcessing = false
 
   enqueue(prompt: PromptConfig): void {
     this.items.push(prompt)
@@ -14,7 +13,6 @@ export class QueueManager {
 
   clear(): void {
     this.items = []
-    this.isProcessing = false
   }
 
   peek(): PromptConfig | undefined {
@@ -23,14 +21,6 @@ export class QueueManager {
 
   get length(): number {
     return this.items.length
-  }
-
-  get processing(): boolean {
-    return this.isProcessing
-  }
-
-  setProcessing(v: boolean): void {
-    this.isProcessing = v
   }
 
   getAll(): PromptConfig[] {

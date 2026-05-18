@@ -2,27 +2,37 @@ import { globalShortcut, BrowserWindow } from 'electron'
 
 let registered = false
 
+function getFocusedWindow(): BrowserWindow | null {
+  return BrowserWindow.getFocusedWindow()
+}
+
+function sendToFocusedWindow(action: string): void {
+  const win = getFocusedWindow()
+  if (win && !win.isDestroyed()) {
+    win.webContents.send('tray:action', action)
+  }
+}
+
 export function registerShortcuts(): void {
   if (registered) return
 
-  const send = (action: string) => {
-    const wins = BrowserWindow.getAllWindows()
-    for (const win of wins) {
-      if (!win.isDestroyed()) {
-        win.webContents.send('tray:action', action)
-      }
+  const results = [
+    { shortcut: 'CommandOrControl+Return', action: 'start' },
+    { shortcut: 'CommandOrControl+Shift+Return', action: 'pause' },
+    { shortcut: 'CommandOrControl+.', action: 'stop' },
+  ].map(({ shortcut, action }) => {
+    const ok = globalShortcut.register(shortcut, () => sendToFocusedWindow(action))
+    if (!ok) {
+      console.warn(`Failed to register global shortcut: ${shortcut}`)
     }
-  }
+    return ok
+  })
 
-  const registeredSuccess = [
-    globalShortcut.register('CommandOrControl+Return', () => send('start')),
-    globalShortcut.register('CommandOrControl+Shift+Return', () => send('pause')),
-    globalShortcut.register('CommandOrControl+.', () => send('stop')),
-  ].every(Boolean)
+  registered = results.every(Boolean)
+}
 
-  if (registeredSuccess) {
-    registered = true
-  }
+export function isRegistered(): boolean {
+  return registered
 }
 
 export function unregisterShortcuts(): void {

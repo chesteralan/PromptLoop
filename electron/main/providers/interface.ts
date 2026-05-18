@@ -14,7 +14,7 @@ export interface ModelInfo {
 }
 
 export interface ProviderAdapter {
-  stream(prompt: string, options: StreamOptions): Promise<AsyncIterable<string>>
+  stream(prompt: string, options: StreamOptions): AsyncIterable<string>
   models(): ModelInfo[]
   validateApiKey(apiKey: string): Promise<boolean>
   estimateCost(modelId: string, tokensIn: number, tokensOut: number): number

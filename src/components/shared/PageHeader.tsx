@@ -14,7 +14,7 @@ export function PageHeader({ title, description, actions, onBack }: PageHeaderPr
     <div className="mb-6 flex items-start justify-between">
       <div className="flex items-center gap-3">
         {onBack && (
-          <Button variant="ghost" size="icon" onClick={onBack}>
+          <Button variant="ghost" size="icon" onClick={onBack} aria-label="Go back">
             <ArrowLeft className="size-4" />
           </Button>
         )}

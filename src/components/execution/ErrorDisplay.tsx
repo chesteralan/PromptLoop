@@ -51,13 +51,7 @@ const categoryConfig: Record<
   },
 }
 
-export function ErrorDisplay({
-  category,
-  message: _message,
-  userMessage,
-  retryAfterMs,
-  onRetry,
-}: ErrorDisplayProps) {
+export function ErrorDisplay({ category, userMessage, retryAfterMs, onRetry }: ErrorDisplayProps) {
   const navigate = useNavigate()
   const config = categoryConfig[category] ?? categoryConfig.unknown
   const Icon = config.icon

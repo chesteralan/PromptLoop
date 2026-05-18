@@ -21,13 +21,14 @@ export function StatusBar() {
     stopped: 'text-muted-foreground',
     error: 'text-red-500',
   }
-  const statusColor = statusColors[executionStatus] ?? 'text-muted-foreground'
+  const displayStatus = executionStatus ?? 'idle'
+  const statusColor = statusColors[displayStatus] ?? 'text-muted-foreground'
 
   return (
     <footer className="flex h-7 items-center justify-between border-t px-3 text-xs text-muted-foreground">
       <div className="flex items-center gap-2">
         <Circle className={`size-2.5 fill-current ${statusColor}`} />
-        <span>{executionStatus}</span>
+        <span>{displayStatus}</span>
       </div>
       {appVersion && <span>v{appVersion}</span>}
     </footer>

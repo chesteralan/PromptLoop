@@ -19,8 +19,12 @@ export function StreamingText({ text, isStreaming }: StreamingTextProps) {
   }, [text])
 
   async function handleCopy() {
-    await navigator.clipboard.writeText(text)
-    setCopied(true)
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied(true)
+    } catch {
+      // Clipboard write failed (e.g. permission denied)
+    }
     setTimeout(() => setCopied(false), 2000)
   }
 

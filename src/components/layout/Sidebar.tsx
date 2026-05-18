@@ -37,6 +37,8 @@ const navItems = [
   { to: '/settings/api-keys', label: 'API Keys', icon: Key },
 ]
 
+const THEMES: Array<'light' | 'dark' | 'system'> = ['light', 'dark', 'system']
+
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const { user, signOut } = useAuth()
   const theme = useSettingsStore((s) => s.theme)
@@ -44,8 +46,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const navigate = useNavigate()
 
   const cycleTheme = () => {
-    const themes: Array<'light' | 'dark' | 'system'> = ['light', 'dark', 'system']
-    const next = themes[(themes.indexOf(theme) + 1) % themes.length]
+    const next = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length]
     setTheme(next)
   }
 

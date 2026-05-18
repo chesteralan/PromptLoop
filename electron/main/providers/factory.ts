@@ -21,14 +21,20 @@ const registered: AdapterEntry[] = [
   { name: 'google', matcher: (id) => id.startsWith('gemini'), adapter: new GoogleAdapter() },
 ]
 
-export function getProviderAdapter(modelId: string): ProviderAdapter | null {
+export function getProviderInfo(
+  modelId: string,
+): { name: string; adapter: ProviderAdapter } | null {
   const entry = registered.find((e) => e.matcher(modelId))
-  return entry?.adapter ?? null
+  if (!entry) return null
+  return { name: entry.name, adapter: entry.adapter }
+}
+
+export function getProviderAdapter(modelId: string): ProviderAdapter | null {
+  return getProviderInfo(modelId)?.adapter ?? null
 }
 
 export function getProviderName(modelId: string): string | null {
-  const entry = registered.find((e) => e.matcher(modelId))
-  return entry?.name ?? null
+  return getProviderInfo(modelId)?.name ?? null
 }
 
 export function getAllAdapters(): ProviderAdapter[] {

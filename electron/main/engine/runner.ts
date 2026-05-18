@@ -13,9 +13,12 @@ export class WorkflowRunner {
   private queue = new QueueManager()
   private currentIndex = 0
   private loopIteration = 0
-  constructor(config: WorkflowConfig, apiKeys: Record<string, string>) {
+  private maxRetries: number
+
+  constructor(config: WorkflowConfig, apiKeys: Record<string, string>, maxRetries = 3) {
     this.config = config
     this.apiKeys = apiKeys
+    this.maxRetries = maxRetries
   }
 
   get workflowId(): string {
@@ -66,13 +69,17 @@ export class WorkflowRunner {
     this.queue.clear()
   }
 
+  private shouldStop(): boolean {
+    return this.state !== 'running' || this.abortController.signal.aborted
+  }
+
   private async runLoop(): Promise<void> {
-    while (this.state === 'running' && !this.abortController.signal.aborted) {
+    while (!this.shouldStop()) {
       const prompts = this.queue.getAll()
       if (prompts.length === 0) break
 
       for (let i = 0; i < prompts.length; i++) {
-        if (this.state !== 'running' || this.abortController.signal.aborted) break
+        if (this.shouldStop()) break
 
         const prompt = prompts[i]
         this.currentIndex = i
@@ -87,7 +94,7 @@ export class WorkflowRunner {
 
         await this.executePrompt(prompt)
 
-        if (this.state !== 'running' || this.abortController.signal.aborted) break
+        if (this.shouldStop()) break
 
         if (i < prompts.length - 1 && (prompt.delayMs ?? 0) > 0) {
           emit('execution:status', {
@@ -101,7 +108,7 @@ export class WorkflowRunner {
         }
       }
 
-      if (this.state !== 'running' || this.abortController.signal.aborted) break
+      if (this.shouldStop()) break
 
       const shouldLoop = this.evaluateLoop()
       if (!shouldLoop) break
@@ -152,28 +159,31 @@ export class WorkflowRunner {
     })
 
     try {
-      const fullResponse = await executeWithRetry(async () => {
-        const stream = await provider.stream(prompt.content, {
-          apiKey,
-          model: prompt.model,
-          systemPrompt: prompt.systemPrompt,
-          temperature: prompt.temperature,
-          maxTokens: prompt.maxTokens,
-          signal: this.abortController.signal,
-        })
-
-        let accumulated = ''
-        for await (const chunk of stream) {
-          if (this.abortController.signal.aborted) break
-          accumulated += chunk
-          emit('execution:chunk', {
-            workflowId: this.config.id,
-            promptId: prompt.id,
-            chunk,
+      const fullResponse = await executeWithRetry(
+        async () => {
+          const stream = provider.stream(prompt.content, {
+            apiKey,
+            model: prompt.model,
+            systemPrompt: prompt.systemPrompt,
+            temperature: prompt.temperature,
+            maxTokens: prompt.maxTokens,
+            signal: this.abortController.signal,
           })
-        }
-        return accumulated
-      }, 2)
+
+          let accumulated = ''
+          for await (const chunk of stream) {
+            if (this.abortController.signal.aborted) break
+            accumulated += chunk
+            emit('execution:chunk', {
+              workflowId: this.config.id,
+              promptId: prompt.id,
+              chunk,
+            })
+          }
+          return accumulated
+        },
+        { maxRetries: this.maxRetries },
+      )
 
       if (this.abortController.signal.aborted) return
 

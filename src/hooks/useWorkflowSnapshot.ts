@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
-import { doc, onSnapshot, type DocumentData } from 'firebase/firestore'
+import { doc, onSnapshot } from 'firebase/firestore'
 import { db } from '../lib/firebase'
 import { useAuth } from './useAuth'
 import { useWorkflowStore } from '../store/workflowStore'
+import { workflowConverter } from '../lib/converters'
 
 export function useWorkflowSnapshot(workflowId: string | undefined) {
   const { user } = useAuth()
@@ -15,11 +16,18 @@ export function useWorkflowSnapshot(workflowId: string | undefined) {
     setActiveWorkflow(workflowId)
 
     const unsub = onSnapshot(
-      doc(db, 'users', user.uid, 'workflows', workflowId),
+      doc(db, 'users', user.uid, 'workflows', workflowId).withConverter(workflowConverter),
       (snapshot) => {
         if (snapshot.exists()) {
-          const data = snapshot.data() as DocumentData
-          updateWorkflow(workflowId, { id: workflowId, ...data })
+          const data = snapshot.data()
+          updateWorkflow(workflowId, {
+            id: workflowId,
+            ...data,
+            createdAt:
+              data.createdAt instanceof Date ? data.createdAt.toISOString() : data.createdAt,
+            updatedAt:
+              data.updatedAt instanceof Date ? data.updatedAt.toISOString() : data.updatedAt,
+          })
         }
       },
       (error) => {

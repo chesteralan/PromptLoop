@@ -21,7 +21,7 @@ export function ExecutionControls({
   loading,
 }: ExecutionControlsProps) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2" aria-busy={loading}>
       {status === 'idle' && (
         <Button size="sm" onClick={onStart} disabled={loading}>
           <Play className="mr-1.5 size-4" />
@@ -52,13 +52,7 @@ export function ExecutionControls({
           </Button>
         </>
       )}
-      {status === 'stopped' && (
-        <Button size="sm" variant="outline" onClick={onRetry} disabled={loading}>
-          <RotateCcw className="mr-1.5 size-4" />
-          Retry
-        </Button>
-      )}
-      {status === 'error' && (
+      {(status === 'stopped' || status === 'error') && (
         <Button size="sm" variant="outline" onClick={onRetry} disabled={loading}>
           <RotateCcw className="mr-1.5 size-4" />
           Retry

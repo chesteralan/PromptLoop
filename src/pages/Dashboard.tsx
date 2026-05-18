@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Plus, Workflow, Activity, CheckCircle2, XCircle, Play } from 'lucide-react'
 import { toast } from 'sonner'
@@ -8,8 +8,15 @@ import { PageHeader } from '../components/shared/PageHeader'
 import { SkeletonCard } from '../components/shared/SkeletonCard'
 import { ConfirmDialog } from '../components/shared/ConfirmDialog'
 import { WorkflowCard } from '../components/workflow/WorkflowCard'
+import { EmptyState } from '../components/shared/EmptyState'
 import { useWorkflows, useDeleteWorkflow } from '../hooks/useWorkflows'
 import { useExecutions } from '../hooks/useExecutions'
+
+function statColor(value: number): { color: string; bg: string } {
+  if (value > 80) return { color: 'text-green-500', bg: 'bg-green-100 dark:bg-green-900/20' }
+  if (value > 50) return { color: 'text-yellow-500', bg: 'bg-yellow-100 dark:bg-yellow-900/20' }
+  return { color: 'text-red-500', bg: 'bg-red-100 dark:bg-red-900/20' }
+}
 
 export function DashboardPage() {
   const navigate = useNavigate()
@@ -18,61 +25,53 @@ export function DashboardPage() {
   const deleteWorkflow = useDeleteWorkflow()
   const [deletingId, setDeletingId] = useState<string | null>(null)
 
-  type ExecItem = Record<string, unknown>
-  const execs = executions as ExecItem[]
-  const totalRuns = execs.length
-  const successRate =
-    totalRuns > 0
-      ? Math.round((execs.filter((e) => e.status === 'completed').length / totalRuns) * 100)
-      : 0
+  const stats = useMemo(() => {
+    const totalRuns = executions.length
+    const successRate =
+      totalRuns > 0
+        ? Math.round((executions.filter((e) => e.status === 'completed').length / totalRuns) * 100)
+        : 0
 
-  const failedToday = execs.filter((e) => {
-    const today = new Date().toDateString()
-    return (
-      e.status === 'failed' &&
-      typeof e.createdAt === 'string' &&
-      new Date(e.createdAt).toDateString() === today
-    )
-  }).length
+    const todayStart = new Date()
+    todayStart.setHours(0, 0, 0, 0)
 
-  const activeWorkflows = workflows?.filter((w) => w.status === 'running').length ?? 0
+    const failedToday = executions.filter(
+      (e) => e.status === 'failed' && e.createdAt >= todayStart,
+    ).length
 
-  const stats = [
-    {
-      label: 'Total Runs',
-      value: totalRuns,
-      icon: Activity,
-      color: 'text-blue-500',
-      bg: 'bg-blue-100 dark:bg-blue-900/20',
-    },
-    {
-      label: 'Success Rate',
-      value: `${successRate}%`,
-      icon: CheckCircle2,
-      color:
-        successRate > 80 ? 'text-green-500' : successRate > 50 ? 'text-yellow-500' : 'text-red-500',
-      bg:
-        successRate > 80
-          ? 'bg-green-100 dark:bg-green-900/20'
-          : successRate > 50
-            ? 'bg-yellow-100 dark:bg-yellow-900/20'
-            : 'bg-red-100 dark:bg-red-900/20',
-    },
-    {
-      label: 'Active Now',
-      value: activeWorkflows,
-      icon: Play,
-      color: 'text-green-500',
-      bg: 'bg-green-100 dark:bg-green-900/20',
-    },
-    {
-      label: 'Failed Today',
-      value: failedToday,
-      icon: XCircle,
-      color: 'text-destructive',
-      bg: 'bg-destructive/10',
-    },
-  ]
+    const activeWorkflows = workflows?.filter((w) => w.status === 'running').length ?? 0
+    const sc = statColor(successRate)
+
+    return [
+      {
+        label: 'Total Runs',
+        value: totalRuns,
+        icon: Activity,
+        color: 'text-blue-500',
+        bg: 'bg-blue-100 dark:bg-blue-900/20',
+      },
+      {
+        label: 'Success Rate',
+        value: `${successRate}%`,
+        icon: CheckCircle2,
+        ...sc,
+      },
+      {
+        label: 'Active Now',
+        value: activeWorkflows,
+        icon: Play,
+        color: 'text-green-500',
+        bg: 'bg-green-100 dark:bg-green-900/20',
+      },
+      {
+        label: 'Failed Today',
+        value: failedToday,
+        icon: XCircle,
+        color: 'text-destructive',
+        bg: 'bg-destructive/10',
+      },
+    ]
+  }, [executions, workflows])
 
   async function handleDelete(id: string) {
     try {
@@ -80,9 +79,8 @@ export function DashboardPage() {
       toast.success('Workflow deleted')
     } catch {
       toast.error('Failed to delete workflow')
-    } finally {
-      setDeletingId(null)
     }
+    setDeletingId(null)
   }
 
   return (
@@ -123,19 +121,13 @@ export function DashboardPage() {
           <SkeletonCard />
         </div>
       ) : !workflows || workflows.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-4 py-16 text-center">
-          <Workflow className="size-12 text-muted-foreground/50" />
-          <div>
-            <h3 className="text-lg font-medium">No workflows yet</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Create your first workflow to get started.
-            </p>
-          </div>
-          <Button onClick={() => navigate('/workflows/new')}>
-            <Plus className="mr-1.5 size-4" />
-            Create Workflow
-          </Button>
-        </div>
+        <EmptyState
+          icon={Workflow}
+          title="No workflows yet"
+          description="Create your first workflow to get started."
+          actionLabel="Create Workflow"
+          onAction={() => navigate('/workflows/new')}
+        />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {workflows.map((wf) => (

@@ -8,8 +8,7 @@ export type ErrorCategory =
 
 export interface ErrorClassification {
   category: ErrorCategory
-  recoverable: boolean
-  retryable: boolean
+  action: 'retry' | 'stop' | 'skip'
   message: string
   userMessage: string
   retryAfterMs?: number
@@ -50,8 +49,7 @@ export function classifyError(error: unknown): ErrorClassification {
   if (status === 429 || message.toLowerCase().includes('rate limit')) {
     return {
       category: 'rate_limit',
-      recoverable: true,
-      retryable: true,
+      action: 'retry',
       message,
       userMessage: `${isOpenAI ? 'OpenAI' : isAnthropic ? 'Anthropic' : isGoogle ? 'Google' : 'Provider'} rate limit reached. Retrying...`,
       retryAfterMs,
@@ -74,8 +72,7 @@ export function classifyError(error: unknown): ErrorClassification {
           : 'Provider'
     return {
       category: 'auth',
-      recoverable: true,
-      retryable: false,
+      action: 'stop',
       message,
       userMessage: `Invalid ${provider} API key. Go to Settings > API Keys to update your key.`,
     }
@@ -84,8 +81,7 @@ export function classifyError(error: unknown): ErrorClassification {
   if (status !== null && status >= 500) {
     return {
       category: 'server_error',
-      recoverable: true,
-      retryable: true,
+      action: 'retry',
       message,
       userMessage: 'Provider server error. Retrying...',
     }
@@ -98,8 +94,7 @@ export function classifyError(error: unknown): ErrorClassification {
   ) {
     return {
       category: 'timeout',
-      recoverable: true,
-      retryable: true,
+      action: 'retry',
       message,
       userMessage: 'Request timed out. Retrying...',
     }
@@ -113,8 +108,7 @@ export function classifyError(error: unknown): ErrorClassification {
   ) {
     return {
       category: 'network',
-      recoverable: true,
-      retryable: true,
+      action: 'retry',
       message,
       userMessage: 'Network error. Check your connection and retry.',
     }
@@ -122,48 +116,41 @@ export function classifyError(error: unknown): ErrorClassification {
 
   return {
     category: 'unknown',
-    recoverable: false,
-    retryable: true,
+    action: 'retry',
     message,
     userMessage: `Unexpected error: ${message}`,
   }
-}
-
-export interface RetryOptions {
-  maxRetries: number
-  baseDelayMs: number
-  maxDelayMs: number
 }
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+export interface ExecuteWithRetryOptions {
+  maxRetries?: number
+  baseDelayMs?: number
+  maxDelayMs?: number
+}
+
 export async function executeWithRetry<T>(
   fn: () => Promise<T>,
-  maxRetries = 3,
+  options?: ExecuteWithRetryOptions,
   onRetry?: (attempt: number, classification: ErrorClassification) => void,
 ): Promise<T> {
-  const options: RetryOptions = {
-    maxRetries,
-    baseDelayMs: 1000,
-    maxDelayMs: 60_000,
-  }
+  const { maxRetries = 3, baseDelayMs = 1000, maxDelayMs = 60_000 } = options ?? {}
 
-  for (let attempt = 1; attempt <= options.maxRetries; attempt++) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       return await fn()
     } catch (error) {
       const classification = classifyError(error)
 
-      if (attempt === options.maxRetries || !classification.retryable) {
+      if (attempt === maxRetries || classification.action === 'stop') {
         throw error
       }
 
-      const backoffMs = Math.min(
-        options.baseDelayMs * Math.pow(2, attempt - 1) + Math.random() * 1000,
-        options.maxDelayMs,
-      )
+      const jitter = 1 + Math.random() * 0.5
+      const backoffMs = Math.min(baseDelayMs * Math.pow(2, attempt - 1) * jitter, maxDelayMs)
       const waitMs = classification.retryAfterMs ?? backoffMs
 
       onRetry?.(attempt, classification)

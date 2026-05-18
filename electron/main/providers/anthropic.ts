@@ -21,7 +21,7 @@ const RATES: Record<string, [number, number]> = {
 }
 
 export class AnthropicAdapter implements ProviderAdapter {
-  async stream(prompt: string, options: StreamOptions): Promise<AsyncIterable<string>> {
+  stream(prompt: string, options: StreamOptions): AsyncIterable<string> {
     const modelId = MODEL_TO_API[options.model] ?? options.model
     const result = streamText({
       model: anthropic(modelId),

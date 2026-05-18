@@ -4,6 +4,14 @@ import type { WorkflowConfig } from '../engine/types'
 
 const runners = new Map<string, WorkflowRunner>()
 
+function cleanupRunner(workflowId: string): void {
+  const runner = runners.get(workflowId)
+  if (runner) {
+    runner.stop()
+    runners.delete(workflowId)
+  }
+}
+
 export function registerWorkflowIpc(): void {
   ipcMain.handle(
     'workflow:start',
@@ -23,9 +31,10 @@ export function registerWorkflowIpc(): void {
       const runner = new WorkflowRunner(config, apiKeys)
       runners.set(workflowId, runner)
 
-      runner.start().catch(() => {
-        runners.delete(workflowId)
-      })
+      runner.start().then(
+        () => cleanupRunner(workflowId),
+        () => cleanupRunner(workflowId),
+      )
 
       return { success: true, workflowId }
     },
@@ -39,10 +48,7 @@ export function registerWorkflowIpc(): void {
   })
 
   ipcMain.handle('workflow:stop', async (_event, { workflowId }: { workflowId: string }) => {
-    const runner = runners.get(workflowId)
-    if (!runner) return { success: false, error: 'Workflow not found' }
-    runner.stop()
-    runners.delete(workflowId)
+    cleanupRunner(workflowId)
     return { success: true, workflowId }
   })
 

@@ -51,12 +51,32 @@ export interface ApiKeyInfo {
 
 export interface ApiKeyEncryptPayload {
   provider: string
-  apiKey: string
+  key: string
 }
 
 export interface ApiKeyEncryptResponse {
   id: string
   keyPrefix: string
+}
+
+export interface ApiKeyListResponse {
+  id: string
+  provider: string
+  keyPrefix: string
+  createdAt: string
+}
+
+export interface ExecutionLog {
+  id: string
+  workflowId: string
+  promptId: string
+  result: string
+  tokensIn?: number
+  tokensOut?: number
+  durationMs?: number
+  error?: string
+  status: 'running' | 'completed' | 'failed'
+  createdAt: string
 }
 
 export interface AppUpdateEvent {
@@ -66,8 +86,8 @@ export interface AppUpdateEvent {
 }
 
 export interface WindowState {
-  x: number | undefined
-  y: number | undefined
+  x?: number
+  y?: number
   width: number
   height: number
   isMaximized: boolean
