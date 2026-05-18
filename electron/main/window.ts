@@ -127,6 +127,7 @@ export function createWindow(): BrowserWindow {
   clampToDisplay(saved)
 
   mainWindow = new BrowserWindow({
+    title: 'PromptLoop',
     x: saved.x,
     y: saved.y,
     width: saved.width,

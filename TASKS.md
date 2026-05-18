@@ -158,7 +158,7 @@
 - [x] 1.4.2 — Implement `createWindow()` in `electron/main/window.ts`: new `BrowserWindow` with `width: 1200, height: 800`, `contextIsolation: true`, `nodeIntegration: false` (20m) *(depends on: 1.1.4)*
 - [x] 1.4.3 — Configure the load URL: `process.env['VITE_DEV_SERVER_URL']` in dev, `path.join(RENDERER_DIST, 'index.html')` in production (15m)
 - [x] 1.4.4 — Handle `app.on('window-all-closed')` → `app.quit()` on non-macOS, `app.on('activate')` → recreate window on macOS (15m)
-- [ ] 1.4.5 — Set window title to "PromptLoop" via `mainWindow.setTitle()` (10m)
+- [x] 1.4.5 — Set window title to "PromptLoop" via `mainWindow.setTitle()` (10m)
 - [x] 1.4.6 — Add `mainWindow.on('closed')` handler to nullify the reference (20m) *(depends on: 1.4.1..1.4.5)*
 - [x] 1.4.7 — Wire up `vite-plugin-electron` to load vite dev server URL in development (15m)
 - [ ] 1.4.8 — Test: `yarn dev` opens native window with React app, verify `contextIsolation` in DevTools (5m)
@@ -266,7 +266,7 @@ interface ElectronAPI {
 - [x] 1.6.4 — Test: Run `yarn typecheck`, verify zero TypeScript errors (5m)
 - [x] 1.6.5 — Test: Run `yarn lint`, verify zero lint errors (5m)
 - [x] 1.6.6 — Test: Run `yarn build`, verify production output exists and is loadable (10m)
-- [ ] 1.6.7 — Doc: Document any non-standard setup steps in a minimal README.md (10m)
+- [x] 1.6.7 — Doc: Document any non-standard setup steps in a minimal README.md (10m)
 
 **Done when:**
 - [ ] Test: `yarn dev` → window opens, HMR works for React changes *(requires GUI)*
@@ -314,11 +314,11 @@ interface ElectronAPI {
 **Blocks:** `1.8`
 
 **Sub-tasks:**
-- [ ] 1.7.1 — Create Firebase project "promptloop" in Firebase Console (10m) *(manual step)*
-- [ ] 1.7.2 — Enable Authentication providers: Google, GitHub (10m) *(manual step)*
-- [ ] 1.7.3 — Create Firestore database in your preferred region (e.g., `us-central1`) (5m) *(manual step)*
-- [ ] 1.7.4 — Register a new Web app in Project Settings to obtain the Firebase config object (10m) *(manual step)*
-- [ ] 1.7.5 — Create `.env` file with `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID` (10m) *(depends on: 1.7.4)* *(manual step)*
+- [x] 1.7.1 — Create Firebase project "promptloopapp" in Firebase Console (10m) *(manual step)*
+- [x] 1.7.2 — Enable Authentication providers: Google, GitHub (10m) *(manual step)*
+- [x] 1.7.3 — Create Firestore database in your preferred region (e.g., `us-central1`) (5m) *(manual step)*
+- [x] 1.7.4 — Register a new Web app in Project Settings to obtain the Firebase config object (10m) *(manual step)*
+- [x] 1.7.5 — Create `.env` file with `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID` (10m) *(depends on: 1.7.4)* *(manual step)*
 - [x] 1.7.6 — Create `.env.example` with placeholder values (no real secrets) (5m)
 - [x] 1.7.7 — Create `firebase.json` with project configuration (10m)
 - [x] 1.7.8 — Create `.firebaserc` with project alias (10m)
