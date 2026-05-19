@@ -1,17 +1,18 @@
 import { useQuery } from '@tanstack/react-query'
-import { collection, getDocs, orderBy, query, limit, where } from 'firebase/firestore'
-import { db } from '../lib/firebase'
+import { getDocs, orderBy, query, limit, where } from 'firebase/firestore'
 import { useAuth } from './useAuth'
-import { executionConverter, type ExecutionData } from '../lib/converters'
+import { type ExecutionData } from '../lib/converters'
+import { executionsRef } from '../lib/firestore-refs'
+import { executionKeys } from '../lib/query-keys'
 
 export function useExecutions(workflowId?: string, resultLimit = 100) {
   const { user } = useAuth()
 
   return useQuery({
-    queryKey: ['executions', user?.uid, workflowId, resultLimit],
+    queryKey: executionKeys.all(user?.uid, workflowId, resultLimit),
     queryFn: async () => {
       if (!user) return []
-      const ref = collection(db, 'users', user.uid, 'executions').withConverter(executionConverter)
+      const ref = executionsRef(user.uid)
       const q = workflowId
         ? query(
             ref,

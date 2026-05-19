@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { doc, getDoc } from 'firebase/firestore'
-import { db } from '../lib/firebase'
+import { getDoc } from 'firebase/firestore'
 import { useAuth } from './useAuth'
+import { userDocRef } from '../lib/firestore-refs'
 
 export function useOnboardingRedirect() {
   const { user } = useAuth()
@@ -14,7 +14,7 @@ export function useOnboardingRedirect() {
       setChecking(false)
       return
     }
-    getDoc(doc(db, 'users', user.uid))
+    getDoc(userDocRef(user.uid))
       .then((snap) => {
         if (snap.exists() && snap.data().onboardingComplete === false) {
           navigate('/onboarding', { replace: true })

@@ -1,4 +1,9 @@
 import { init } from '@sentry/electron/renderer'
+import {
+  shouldIgnoreSentryEvent,
+  SENTRY_TRACES_SAMPLE_RATE_DEV,
+  SENTRY_TRACES_SAMPLE_RATE_PROD,
+} from './sentry-filter'
 
 export function initRendererSentry(): void {
   const dsn = import.meta.env.VITE_SENTRY_DSN
@@ -7,16 +12,11 @@ export function initRendererSentry(): void {
   init({
     dsn,
     environment: import.meta.env.DEV ? 'development' : 'production',
-    tracesSampleRate: import.meta.env.DEV ? 1.0 : 0.1,
+    tracesSampleRate: import.meta.env.DEV
+      ? SENTRY_TRACES_SAMPLE_RATE_DEV
+      : SENTRY_TRACES_SAMPLE_RATE_PROD,
     beforeSend(event) {
-      const msg = event.message || ''
-      if (
-        msg.includes('ResizeObserver') ||
-        msg.includes('Non-Error exception captured') ||
-        msg.includes('Script error.')
-      ) {
-        return null
-      }
+      if (shouldIgnoreSentryEvent(event)) return null
       return event
     },
   })

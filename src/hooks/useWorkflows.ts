@@ -1,32 +1,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import {
-  collection,
-  doc,
-  getDocs,
-  getDoc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  orderBy,
-} from 'firebase/firestore'
-import { db } from '../lib/firebase'
+import { getDocs, getDoc, addDoc, updateDoc, deleteDoc, query, orderBy } from 'firebase/firestore'
 import { useAuth } from './useAuth'
-import { workflowConverter, type WorkflowData } from '../lib/converters'
-
-function workflowsRef(userId: string) {
-  return collection(db, 'users', userId, 'workflows').withConverter(workflowConverter)
-}
-
-function workflowRef(userId: string, workflowId: string) {
-  return doc(db, 'users', userId, 'workflows', workflowId).withConverter(workflowConverter)
-}
+import { type WorkflowData } from '../lib/converters'
+import { workflowsRef, workflowRef } from '../lib/firestore-refs'
+import { workflowKeys } from '../lib/query-keys'
 
 export function useWorkflows() {
   const { user } = useAuth()
 
   return useQuery({
-    queryKey: ['workflows', user?.uid],
+    queryKey: workflowKeys.all(user?.uid),
     queryFn: async () => {
       if (!user) return []
       const q = query(workflowsRef(user.uid), orderBy('createdAt', 'desc'))
@@ -41,7 +24,7 @@ export function useWorkflow(id: string | undefined) {
   const { user } = useAuth()
 
   return useQuery({
-    queryKey: ['workflows', user?.uid, id],
+    queryKey: workflowKeys.detail(user?.uid, id),
     queryFn: async () => {
       if (!user || !id) return null
       const snapshot = await getDoc(workflowRef(user.uid, id))
@@ -68,7 +51,7 @@ export function useCreateWorkflow() {
       return docRef.id
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['workflows', user?.uid] })
+      queryClient.invalidateQueries({ queryKey: workflowKeys.all(user?.uid) })
     },
   })
 }
@@ -94,8 +77,10 @@ export function useUpdateWorkflow() {
       })
     },
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['workflows', user?.uid] })
-      queryClient.invalidateQueries({ queryKey: ['workflows', user?.uid, variables.workflowId] })
+      queryClient.invalidateQueries({ queryKey: workflowKeys.all(user?.uid) })
+      queryClient.invalidateQueries({
+        queryKey: workflowKeys.detail(user?.uid, variables.workflowId),
+      })
     },
   })
 }
@@ -110,7 +95,7 @@ export function useDeleteWorkflow() {
       await deleteDoc(workflowRef(user.uid, workflowId))
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['workflows', user?.uid] })
+      queryClient.invalidateQueries({ queryKey: workflowKeys.all(user?.uid) })
     },
   })
 }

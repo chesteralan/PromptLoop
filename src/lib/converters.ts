@@ -2,9 +2,9 @@ import {
   type FirestoreDataConverter,
   type QueryDocumentSnapshot,
   type SnapshotOptions,
-  Timestamp,
 } from 'firebase/firestore'
 import type { WorkflowStatus, ExecutionStatus, LoopMode } from '../../electron/shared/types'
+import { ts, fromTS, optTS } from './firestore-utils'
 
 export interface WorkflowData {
   name: string
@@ -51,21 +51,6 @@ export interface ApiKeyData {
   encryptedKey: string
   createdAt: Date
   lastUsedAt?: Date
-}
-
-function ts(d: Date): Timestamp {
-  return Timestamp.fromDate(d)
-}
-
-function fromTS(v: unknown): Date {
-  if (v instanceof Timestamp) return v.toDate()
-  if (v instanceof Date) return v
-  return new Date()
-}
-
-function optTS(v: unknown): Date | undefined {
-  if (v == null) return undefined
-  return fromTS(v)
 }
 
 const workflowConverter: FirestoreDataConverter<WorkflowData> = {

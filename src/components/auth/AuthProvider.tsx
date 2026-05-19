@@ -1,19 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useEffect, useState, useCallback, useMemo, type ReactNode } from 'react'
+import { signOut as firebaseSignOut, onAuthStateChanged, type User } from 'firebase/auth'
+import { auth } from '../../lib/firebase'
+import { ensureUserDocument } from '../../lib/user-service'
 import {
-  onAuthStateChanged,
-  signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
-  GoogleAuthProvider,
-  GithubAuthProvider,
-  signOut as firebaseSignOut,
-  browserPopupRedirectResolver,
-  type User,
-} from 'firebase/auth'
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore'
-import { auth, db } from '../../lib/firebase'
-import { isElectron } from '../../lib/env'
+  signInWithProvider as authSignInWithProvider,
+  handleRedirectResult,
+} from '../../lib/auth-service'
 
 interface AuthContextValue {
   user: User | null
@@ -25,44 +18,12 @@ interface AuthContextValue {
 
 export const AuthContext = createContext<AuthContextValue | null>(null)
 
-async function ensureUserDocument(user: User): Promise<void> {
-  const ref = doc(db, 'users', user.uid)
-  const snap = await getDoc(ref)
-
-  if (!snap.exists()) {
-    await setDoc(ref, {
-      name: user.displayName ?? '',
-      email: user.email ?? '',
-      photoURL: user.photoURL ?? '',
-      createdAt: serverTimestamp(),
-      lastLoginAt: serverTimestamp(),
-      onboardingComplete: false,
-    })
-  } else {
-    await setDoc(ref, { lastLoginAt: serverTimestamp() }, { merge: true })
-  }
-}
-
-function createSignInProvider(providerName: 'google' | 'github') {
-  return providerName === 'google' ? new GoogleAuthProvider() : new GithubAuthProvider()
-}
-
-function signInWithProvider(providerName: 'google' | 'github'): Promise<void> {
-  const provider = createSignInProvider(providerName)
-  if (isElectron) {
-    return signInWithRedirect(auth, provider, browserPopupRedirectResolver)
-  }
-  return signInWithPopup(auth, provider).then(() => undefined)
-}
-
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (isElectron) {
-      getRedirectResult(auth, browserPopupRedirectResolver).catch(() => {})
-    }
+    handleRedirectResult()
   }, [])
 
   useEffect(() => {
@@ -76,8 +37,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return unsubscribe
   }, [])
 
-  const signInWithGoogle = useCallback(() => signInWithProvider('google'), [])
-  const signInWithGitHub = useCallback(() => signInWithProvider('github'), [])
+  const signInWithGoogle = useCallback(() => authSignInWithProvider('google'), [])
+  const signInWithGitHub = useCallback(() => authSignInWithProvider('github'), [])
   const signOut = useCallback(async () => {
     await firebaseSignOut(auth)
   }, [])

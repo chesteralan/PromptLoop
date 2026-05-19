@@ -3,6 +3,7 @@ import { Download, Upload } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '../ui/button'
 import type { PromptData } from '../../lib/converters'
+import { showSaveDialog, showOpenDialog, writeFile, readFile } from '../../lib/file-service'
 
 interface WorkflowExport {
   version: number
@@ -40,7 +41,7 @@ export function ImportExportButtons({
       ),
     }
 
-    const result = await window.electronAPI.showSaveDialog({
+    const result = await showSaveDialog({
       title: 'Export Workflow',
       defaultPath: `${workflowName.replace(/[^a-zA-Z0-9]/g, '_')}.json`,
       filters: [{ name: 'JSON', extensions: ['json'] }],
@@ -48,10 +49,7 @@ export function ImportExportButtons({
 
     if (result.canceled || !result.filePath) return
 
-    const writeResult = await window.electronAPI.writeFile(
-      result.filePath,
-      JSON.stringify(data, null, 2),
-    )
+    const writeResult = await writeFile(result.filePath, JSON.stringify(data, null, 2))
 
     if (writeResult.success) {
       toast.success('Workflow exported successfully')
@@ -61,7 +59,7 @@ export function ImportExportButtons({
   }
 
   async function handleImport() {
-    const result = await window.electronAPI.showOpenDialog({
+    const result = await showOpenDialog({
       title: 'Import Workflow',
       filters: [{ name: 'JSON', extensions: ['json'] }],
       properties: ['openFile'],
@@ -71,7 +69,7 @@ export function ImportExportButtons({
 
     setLoading(true)
     try {
-      const readResult = await window.electronAPI.readFile(result.filePaths[0])
+      const readResult = await readFile(result.filePaths[0])
       if (!readResult.success || !readResult.content) {
         toast.error('Failed to read file')
         return
