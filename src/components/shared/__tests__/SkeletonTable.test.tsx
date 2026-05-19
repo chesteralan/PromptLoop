@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { SkeletonTable } from '../SkeletonTable'
 
-vi.mock('../../ui/table', () => ({
+vi.mock('@/components/ui/table', () => ({
   Table: ({ children }: any) => <table>{children}</table>,
   TableHeader: ({ children }: any) => <thead>{children}</thead>,
   TableBody: ({ children }: any) => <tbody>{children}</tbody>,
@@ -11,7 +11,7 @@ vi.mock('../../ui/table', () => ({
   TableCell: ({ children }: any) => <td>{children}</td>,
 }))
 
-vi.mock('../../ui/skeleton', () => ({
+vi.mock('@/components/ui/skeleton', () => ({
   Skeleton: ({ className }: any) => <div data-testid="skeleton" className={className} />,
 }))
 

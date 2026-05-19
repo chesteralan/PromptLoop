@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { EmptyState } from '../EmptyState'
 
-vi.mock('../../ui/button', () => ({
+vi.mock('@/components/ui/button', () => ({
   Button: ({ children, onClick, className }: any) => (
     <button onClick={onClick} className={className}>
       {children}

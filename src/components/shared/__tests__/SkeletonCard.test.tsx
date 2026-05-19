@@ -2,13 +2,13 @@ import { describe, it, expect } from 'vitest'
 import { render } from '@testing-library/react'
 import { SkeletonCard } from '../SkeletonCard'
 
-vi.mock('../../ui/card', () => ({
+vi.mock('@/components/ui/card', () => ({
   Card: ({ children }: any) => <div data-testid="card">{children}</div>,
   CardHeader: ({ children }: any) => <div data-testid="card-header">{children}</div>,
   CardContent: ({ children }: any) => <div data-testid="card-content">{children}</div>,
 }))
 
-vi.mock('../../ui/skeleton', () => ({
+vi.mock('@/components/ui/skeleton', () => ({
   Skeleton: ({ className }: any) => <div data-testid="skeleton" className={className} />,
 }))
 

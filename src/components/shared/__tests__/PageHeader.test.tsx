@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { PageHeader } from '../PageHeader'
 
-vi.mock('../../ui/button', () => ({
+vi.mock('@/components/ui/button', () => ({
   Button: ({ children, onClick, variant, size }: any) => (
     <button onClick={onClick} data-variant={variant} data-size={size}>
       {children}

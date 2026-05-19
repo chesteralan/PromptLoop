@@ -53,7 +53,7 @@ vi.mock('../../components/shared/ConfirmDialog', () => ({
 vi.mock('../../components/workflow/WorkflowCard', () => ({
   WorkflowCard: vi.fn(
     ({
-      id,
+      _id,
       name,
       status,
       onStart,
@@ -61,7 +61,7 @@ vi.mock('../../components/workflow/WorkflowCard', () => ({
       onEdit,
       onDelete,
     }: {
-      id: string
+      _id: string
       name: string
       status: string
       onStart: () => void

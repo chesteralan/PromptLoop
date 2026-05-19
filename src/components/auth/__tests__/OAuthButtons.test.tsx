@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { OAuthButtons } from '../OAuthButtons'
 
-vi.mock('../../ui/button', () => ({
+vi.mock('@/components/ui/button', () => ({
   Button: ({ children, onClick, disabled, variant, ...rest }: any) => (
     <button
       onClick={onClick}

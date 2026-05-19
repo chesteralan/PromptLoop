@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { ExecutionControls } from '../ExecutionControls'
 
-vi.mock('../../ui/button', () => ({
+vi.mock('@/components/ui/button', () => ({
   Button: ({ children, onClick, disabled, variant, size }: any) => (
     <button onClick={onClick} disabled={disabled} data-variant={variant} data-size={size}>
       {children}

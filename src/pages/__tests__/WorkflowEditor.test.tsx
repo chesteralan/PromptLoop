@@ -80,12 +80,12 @@ vi.mock('../../components/workflow/WorkflowSettings', () => ({
       loopMode,
       maxIterations,
       onLoopModeChange,
-      onMaxIterationsChange,
+      _onMaxIterationsChange,
     }: {
       loopMode: string
       maxIterations?: number
       onLoopModeChange: (m: string) => void
-      onMaxIterationsChange: (n: number | undefined) => void
+      _onMaxIterationsChange: (n: number | undefined) => void
     }) => (
       <div data-testid="workflow-settings">
         <span>loopMode: {loopMode}</span>
@@ -100,14 +100,14 @@ vi.mock('../../components/workflow/PromptList', () => ({
   PromptList: vi.fn(
     ({
       prompts,
-      selectedId,
+      _selectedId,
       onSelect,
       onToggle,
       onDelete,
       onReorder,
     }: {
       prompts: { id: string; title: string; enabled: boolean }[]
-      selectedId: string | null
+      _selectedId: string | null
       onSelect: (id: string) => void
       onToggle: (id: string, enabled: boolean) => void
       onDelete: (id: string) => void

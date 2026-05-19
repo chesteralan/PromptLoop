@@ -54,7 +54,9 @@
 
 ---
 
-## Global Rule
+## Global Rules
+
+### Test file placement
 
 All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
@@ -62,11 +64,20 @@ All test files must be placed in a `__tests__` directory within the same folder 
 - `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
 - `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
 
-This keeps tests co-located with their source, making it easy to find and maintain related tests.
-All test files must be placed under ``. Mirror the source path structure:
+### `vi.mock` paths must use `@/` aliases
 
-- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+Because `vitest.config.ts` defines a `resolve.alias` mapping `@` → `src/`, relative-path mocks like `vi.mock('../ui/button')` will **not** intercept imports correctly. The alias causes vitest to create a separate module entry for the resolved path, so the mock never applies to the source's import.
 
-This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.
+**Always use the `@/` alias in `vi.mock` paths:**
+
+```ts
+// ❌ WRONG — relative path (will not intercept the source's import)
+vi.mock('../ui/button', () => ({ Button: ... }))
+vi.mock('../../hooks/useAuth', () => ({ useAuth: ... }))
+
+// ✅ CORRECT — @/ alias path
+vi.mock('@/components/ui/button', () => ({ Button: ... }))
+vi.mock('@/hooks/useAuth', () => ({ useAuth: ... }))
+```
+
+This applies to any mock targeting a module inside `src/`. External npm packages (e.g., `@hello-pangea/dnd`, `sonner`, `@base-ui/react/*`) are unaffected — use their normal package names.

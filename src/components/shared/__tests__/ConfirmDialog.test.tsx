@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { ConfirmDialog } from '../ConfirmDialog'
 
-vi.mock('../../ui/dialog', () => ({
+vi.mock('@/components/ui/dialog', () => ({
   Dialog: ({ children, open }: any) => (open ? <div>{children}</div> : null),
   DialogClose: ({ children, onClick }: any) => (
     <button onClick={onClick}>{children || 'Cancel'}</button>
@@ -14,7 +14,7 @@ vi.mock('../../ui/dialog', () => ({
   DialogFooter: ({ children }: any) => <div>{children}</div>,
 }))
 
-vi.mock('../../ui/button', () => ({
+vi.mock('@/components/ui/button', () => ({
   Button: ({ children, onClick, variant, disabled }: any) => (
     <button onClick={onClick} data-variant={variant} disabled={disabled}>
       {children}

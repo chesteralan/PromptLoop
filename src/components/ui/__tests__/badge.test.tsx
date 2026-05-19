@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { Badge } from '../badge'
 
 vi.mock('@base-ui/react/merge-props', () => ({
@@ -7,7 +7,7 @@ vi.mock('@base-ui/react/merge-props', () => ({
 }))
 vi.mock('@base-ui/react/use-render', () => ({
   useRender: (opts: any) => {
-    const { defaultTagName, props, render: renderProp, state, ...rest } = opts
+    const { defaultTagName, props, render: renderProp } = opts
     const Tag = renderProp || defaultTagName
     return <Tag {...props} />
   },

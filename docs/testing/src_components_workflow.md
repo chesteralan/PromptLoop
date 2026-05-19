@@ -19,7 +19,7 @@
   - `handleImport()`: calls `showOpenDialog`; if not canceled, reads file; parses JSON; validates top-level fields (version, name, prompts array); validates each prompt (title, model, position number); calls `onImport` on success; shows error toast on invalid format or parse failure
   - Loading state disables both buttons
   - Import with invalid prompts shows error listing their names
-- **Mocking requirements:** `window.electronAPI.showSaveDialog`, `showOpenDialog`, `writeFile`, `readFile`; `sonner` toast
+- **Mocking requirements:** `@/components/ui/button`; `window.electronAPI` (`showSaveDialog`, `showOpenDialog`, `writeFile`, `readFile`); `sonner` toast
 - **Coverage targets:** Export canceled vs confirmed; write success vs error; import canceled; file read success vs error; JSON parse error; invalid top-level fields; invalid prompt fields; valid import
 - **Suggested test file location:** `components/workflow/__tests__/ImportExportButtons.test.tsx`
 
@@ -34,7 +34,7 @@
   - Selected model shows name and token count in trigger
   - Empty/unknown value shows "Select a model"
   - `onChange` fires with model ID on selection
-- **Mocking requirements:** `../../lib/models` (MODELS, PROVIDER_LABELS); `../../hooks/useConfiguredProviders`; Select, Input components
+- **Mocking requirements:** `@/lib/models` (MODELS, PROVIDER_LABELS); `@/hooks/useConfiguredProviders`; `@/components/ui/select`, `@/components/ui/input`
 - **Coverage targets:** No keys configured; keys configured with/without search match; selected vs unselected; all provider groups
 - **Suggested test file location:** `components/workflow/__tests__/ModelSelector.test.tsx`
 
@@ -48,7 +48,7 @@
   - SystemPrompt: empty string converts to `undefined`
   - Temperature slider: range 0-2, step 0.1
   - Enabled switch: boolean toggle
-- **Mocking requirements:** Sheet, Input, Textarea, Label, Switch, ModelSelector components
+- **Mocking requirements:** `@/components/ui/sheet`, `@/components/ui/input`, `@/components/ui/textarea`, `@/components/ui/label`, `@/components/ui/switch`, `@/components/workflow/ModelSelector`
 - **Coverage targets:** Null vs defined prompt; all field change handlers; systemPrompt undefined coalescing
 - **Suggested test file location:** `components/workflow/__tests__/PromptEditorPanel.test.tsx`
 
@@ -60,7 +60,7 @@
   - `handleDragEnd`: no-op if no destination or same index; reorders prompts array and calls `onReorder` with new ID order
   - Renders placeholder element
   - Each `PromptCard` receives correct props (key, index, isSelected, onSelect, onToggle, onDelete)
-- **Mocking requirements:** `@hello-pangea/dnd` (DragDropContext, Droppable); PromptCard component
+- **Mocking requirements:** `@hello-pangea/dnd` (DragDropContext, Droppable); `@/components/workflow/PromptCard`
 - **Coverage targets:** Drop to same position (no-op); drop to different position; empty prompts array
 - **Suggested test file location:** `components/workflow/__tests__/PromptList.test.tsx`
 
@@ -115,7 +115,7 @@
   - When loop mode is not `'fixed'`: hides Max Iterations input
   - `onLoopModeChange` fires with valid LoopMode value
   - `onMaxIterationsChange` fires with number value
-- **Mocking requirements:** Select, Input, Label components
+- **Mocking requirements:** `@/components/ui/select`, `@/components/ui/input`, `@/components/ui/label`
 - **Coverage targets:** All 4 loop modes; fixed vs non-fixed; invalid mode rejection
 - **Suggested test file location:** `components/workflow/__tests__/WorkflowSettings.test.tsx`
 
@@ -141,7 +141,7 @@
   - Always shows Edit button and Delete button (trash icon)
   - Delete button has destructive color
   - `onStart`, `onStop`, `onEdit`, `onDelete` fire correctly
-- **Mocking requirements:** Card, Button, WorkflowStatusBadge components
+- **Mocking requirements:** `@/components/ui/card`, `@/components/ui/button`, `@/components/workflow/WorkflowStatusBadge`
 - **Coverage targets:** All statuses for control buttons; prompt count singular/plural; loop mode present/absent
 - **Suggested test file location:** `components/workflow/__tests__/WorkflowCard.test.tsx`
 
@@ -158,27 +158,34 @@
   - Selected state applies `border-primary bg-accent/50`
   - Default state applies `bg-card hover:bg-accent/30`
   - ConfirmDialog: confirm calls `onDelete` and hides dialog; cancel hides dialog
-- **Mocking requirements:** `@hello-pangea/dnd` Draggable; Button, Badge, Switch, ConfirmDialog components
+- **Mocking requirements:** `@hello-pangea/dnd` Draggable; `@/components/ui/button`, `@/components/ui/badge`, `@/components/ui/switch`, `@/components/shared/ConfirmDialog`
 - **Coverage targets:** Dragging vs selected vs default state; delete confirm/cancel
 - **Suggested test file location:** `components/workflow/__tests__/PromptCard.test.tsx`
 
 ---
 
----
+## Global Rules
 
-## Global Rule
+### Test file placement
 
 All test files must be placed in a `__tests__` directory within the same folder as the source file:
 
-- `src/components/auth/AuthProvider.tsx` → `src/components/auth/__tests__/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `src/hooks/__tests__/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `electron/main/__tests__/encryption.test.ts`
+- `src/components/workflow/ModelSelector.tsx` → `src/components/workflow/__tests__/ModelSelector.test.tsx`
 
-This keeps tests co-located with their source, making it easy to find and maintain related tests.
-All test files must be placed under ``. Mirror the source path structure:
+### `vi.mock` paths must use `@/` aliases
 
-- `src/components/auth/AuthProvider.tsx` → `components/auth/AuthProvider.test.tsx`
-- `src/hooks/useWorkflows.ts` → `hooks/useWorkflows.test.ts`
-- `electron/main/encryption.ts` → `electron/main/encryption.test.ts`
+Because `vitest.config.ts` defines `resolve.alias: { '@': 'src/' }`, relative-path mocks like `vi.mock('../ui/button')` will **not** intercept imports correctly. Always use the `@/` alias:
 
-This keeps all tests colocated under a single ``root regardless of whether the source is in`src/`or`electron/`.
+```ts
+// ❌ vi.mock('../ui/select', ...) — will NOT intercept the source's import
+// ✅ vi.mock('@/components/ui/select', ...) — will intercept correctly
+```
+
+This also applies to hooks, stores, and libs:
+
+```ts
+// ❌ vi.mock('../../hooks/useConfiguredProviders', ...)
+// ✅ vi.mock('@/hooks/useConfiguredProviders', ...)
+```
+
+External npm packages (`@hello-pangea/dnd`, `@base-ui/react/*`, `sonner`, etc.) are unaffected — use their normal package names.
