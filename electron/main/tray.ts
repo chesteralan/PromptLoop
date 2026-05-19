@@ -141,3 +141,7 @@ export function createTray(): void {
 export function destroyTray(): void {
   tray?.destroy()
 }
+
+export function resetTray(): void {
+  tray = null
+}
