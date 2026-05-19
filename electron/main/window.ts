@@ -184,3 +184,10 @@ export function createWindow(): BrowserWindow {
 
   return mainWindow
 }
+
+export function resetWindow(): void {
+  mainWindow = null
+  minimizeToTray = true
+  windowMode = 'full'
+  debounceTimer = null
+}

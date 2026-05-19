@@ -15,6 +15,7 @@
     "preview": "vite preview",
     "dev:web": "vite -c vite.web.config.ts",
     "emulators": "firebase emulators:start",
+    "dev:all": "concurrently \"yarn dev\" \"yarn dev:web\" \"yarn emulators\"",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -60,6 +61,7 @@
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
     "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^9.2.1",
     "electron": "^30.0.1",
     "electron-builder": "^24.13.3",
     "eslint": "^8.57.0",
