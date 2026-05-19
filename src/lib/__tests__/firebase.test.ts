@@ -86,6 +86,7 @@ describe('firebase.ts', () => {
 
   it('connects to auth and firestore emulators in DEV mode', async () => {
     stubAllFirebaseVars()
+    vi.stubEnv('VITE_FIREBASE_USE_ONLINE', '')
     await import('../firebase')
     expect(mockConnectAuthEmulator).toHaveBeenCalledWith(
       { mockAuth: true },
@@ -95,8 +96,17 @@ describe('firebase.ts', () => {
     expect(mockConnectFirestoreEmulator).toHaveBeenCalledWith({ mockDb: true }, 'localhost', 8080)
   })
 
+  it('skips emulators when VITE_FIREBASE_USE_ONLINE is true', async () => {
+    stubAllFirebaseVars()
+    vi.stubEnv('VITE_FIREBASE_USE_ONLINE', 'true')
+    await import('../firebase')
+    expect(mockConnectAuthEmulator).not.toHaveBeenCalled()
+    expect(mockConnectFirestoreEmulator).not.toHaveBeenCalled()
+  })
+
   it('connects to emulators and handles connection errors silently', async () => {
     stubAllFirebaseVars()
+    vi.stubEnv('VITE_FIREBASE_USE_ONLINE', '')
     mockConnectAuthEmulator.mockImplementationOnce(() => {
       throw new Error('emulator not available')
     })
