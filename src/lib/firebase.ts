@@ -30,7 +30,9 @@ const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const db = getFirestore(app)
 
-if (import.meta.env.DEV) {
+const useEmulators = import.meta.env.DEV && !import.meta.env.VITE_FIREBASE_USE_ONLINE
+
+if (useEmulators) {
   try {
     connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true })
     connectFirestoreEmulator(db, 'localhost', 8080)

@@ -4,7 +4,7 @@ import {
   type SnapshotOptions,
 } from 'firebase/firestore'
 import type { WorkflowStatus, ExecutionStatus, LoopMode } from '../../electron/shared/types'
-import { ts, fromTS, optTS } from './firestore-utils'
+import { ts, fromTS, optTS, stripUndefined } from './firestore-utils'
 
 export interface WorkflowData {
   name: string
@@ -55,14 +55,14 @@ export interface ApiKeyData {
 
 const workflowConverter: FirestoreDataConverter<WorkflowData> = {
   toFirestore(model) {
-    return {
+    return stripUndefined({
       name: model.name,
       status: model.status,
       loopMode: model.loopMode,
       maxIterations: model.maxIterations,
       createdAt: ts(model.createdAt as Date),
       updatedAt: ts(model.updatedAt as Date),
-    }
+    })
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions) {
     const data = snapshot.data(options)
@@ -76,7 +76,7 @@ const workflowConverter: FirestoreDataConverter<WorkflowData> = {
 
 const promptConverter: FirestoreDataConverter<PromptData> = {
   toFirestore(model) {
-    return {
+    return stripUndefined({
       workflowId: model.workflowId,
       title: model.title,
       content: model.content,
@@ -89,7 +89,7 @@ const promptConverter: FirestoreDataConverter<PromptData> = {
       delayMs: model.delayMs,
       createdAt: ts(model.createdAt as Date),
       updatedAt: ts(model.updatedAt as Date),
-    }
+    })
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions) {
     const data = snapshot.data(options)
@@ -103,7 +103,7 @@ const promptConverter: FirestoreDataConverter<PromptData> = {
 
 const executionConverter: FirestoreDataConverter<ExecutionData> = {
   toFirestore(model) {
-    return {
+    return stripUndefined({
       workflowId: model.workflowId,
       promptId: model.promptId,
       status: model.status,
@@ -116,7 +116,7 @@ const executionConverter: FirestoreDataConverter<ExecutionData> = {
       startedAt: model.startedAt ? ts(model.startedAt as Date) : null,
       completedAt: model.completedAt ? ts(model.completedAt as Date) : null,
       createdAt: ts(model.createdAt as Date),
-    }
+    })
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions) {
     const data = snapshot.data(options)
@@ -131,13 +131,13 @@ const executionConverter: FirestoreDataConverter<ExecutionData> = {
 
 const apiKeyConverter: FirestoreDataConverter<ApiKeyData> = {
   toFirestore(model) {
-    return {
+    return stripUndefined({
       provider: model.provider,
       keyPrefix: model.keyPrefix,
       encryptedKey: model.encryptedKey,
       lastUsedAt: model.lastUsedAt ? ts(model.lastUsedAt as Date) : null,
       createdAt: ts(model.createdAt as Date),
-    }
+    })
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions) {
     const data = snapshot.data(options)

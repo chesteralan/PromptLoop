@@ -14,3 +14,13 @@ export function optTS(v: unknown): Date | undefined {
   if (v == null) return undefined
   return fromTS(v)
 }
+
+export function stripUndefined<T extends Record<string, unknown>>(obj: T): Record<string, unknown> {
+  const result: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(obj)) {
+    if (value !== undefined) {
+      result[key] = value
+    }
+  }
+  return result
+}
