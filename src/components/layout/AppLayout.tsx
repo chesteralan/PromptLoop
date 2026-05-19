@@ -1,32 +1,13 @@
-import { useState, useEffect } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
-import { doc, getDoc } from 'firebase/firestore'
-import { db } from '../../lib/firebase'
-import { useAuth } from '../../hooks/useAuth'
+import { useState } from 'react'
+import { Outlet } from 'react-router-dom'
+import { useOnboardingRedirect } from '../../hooks/useOnboardingRedirect'
 import { Sidebar } from './Sidebar'
 import { StatusBar } from './StatusBar'
 import { ProtectedRoute } from './ProtectedRoute'
 
 export function AppLayout() {
-  const { user } = useAuth()
-  const navigate = useNavigate()
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [checking, setChecking] = useState(true)
-
-  useEffect(() => {
-    if (!user) {
-      setChecking(false)
-      return
-    }
-    getDoc(doc(db, 'users', user.uid))
-      .then((snap) => {
-        if (snap.exists() && snap.data().onboardingComplete === false) {
-          navigate('/onboarding', { replace: true })
-        }
-      })
-      .catch((err) => console.warn('Failed to check onboarding status:', err))
-      .finally(() => setChecking(false))
-  }, [user, navigate])
+  const { checking } = useOnboardingRedirect()
 
   if (checking) {
     return (

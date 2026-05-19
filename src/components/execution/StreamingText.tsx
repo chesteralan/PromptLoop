@@ -1,7 +1,8 @@
-import { useRef, useEffect, useState } from 'react'
 import { Copy, Check } from 'lucide-react'
 import { Button } from '../ui/button'
 import { ScrollArea } from '../ui/scroll-area'
+import { useAutoScroll } from '../../hooks/useAutoScroll'
+import { useCopyToClipboard } from '../../hooks/useCopyToClipboard'
 
 interface StreamingTextProps {
   text: string
@@ -9,24 +10,8 @@ interface StreamingTextProps {
 }
 
 export function StreamingText({ text, isStreaming }: StreamingTextProps) {
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const [copied, setCopied] = useState(false)
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
-  }, [text])
-
-  async function handleCopy() {
-    try {
-      await navigator.clipboard.writeText(text)
-      setCopied(true)
-    } catch {
-      // Clipboard write failed (e.g. permission denied)
-    }
-    setTimeout(() => setCopied(false), 2000)
-  }
+  const { scrollRef } = useAutoScroll(text)
+  const { copied, copy } = useCopyToClipboard()
 
   if (!text && !isStreaming) {
     return (
@@ -42,7 +27,7 @@ export function StreamingText({ text, isStreaming }: StreamingTextProps) {
         <span className="text-xs font-medium text-muted-foreground">Response</span>
         <div className="flex items-center gap-2">
           {text && (
-            <Button variant="ghost" size="icon-sm" onClick={handleCopy}>
+            <Button variant="ghost" size="icon-sm" onClick={() => copy(text)}>
               {copied ? (
                 <Check className="size-3.5 text-green-500" />
               ) : (

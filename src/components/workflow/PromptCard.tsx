@@ -1,10 +1,10 @@
-import { useState } from 'react'
 import { Draggable } from '@hello-pangea/dnd'
 import { GripVertical, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { Switch } from '../ui/switch'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
+import { useConfirmDelete } from '../../hooks/useConfirmDelete'
 import type { PromptData } from '../../lib/converters'
 
 interface PromptCardProps {
@@ -24,7 +24,7 @@ export function PromptCard({
   onToggle,
   onDelete,
 }: PromptCardProps) {
-  const [showDelete, setShowDelete] = useState(false)
+  const { showDelete, requestConfirm, cancelConfirm } = useConfirmDelete()
 
   return (
     <>
@@ -75,7 +75,7 @@ export function PromptCard({
               variant="ghost"
               size="icon"
               className="size-7 text-destructive/70 hover:text-destructive"
-              onClick={() => setShowDelete(true)}
+              onClick={() => requestConfirm()}
               aria-label={`Delete ${prompt.title}`}
             >
               <Trash2 className="size-3.5" />
@@ -92,9 +92,9 @@ export function PromptCard({
         variant="destructive"
         onConfirm={() => {
           onDelete()
-          setShowDelete(false)
+          cancelConfirm()
         }}
-        onCancel={() => setShowDelete(false)}
+        onCancel={() => cancelConfirm()}
       />
     </>
   )

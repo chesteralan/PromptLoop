@@ -1,18 +1,11 @@
-import { useEffect, useState } from 'react'
 import { Circle } from 'lucide-react'
 import { useExecutionStore } from '../../store/executionStore'
 import { executionStatusColors } from '../../lib/status-config'
+import { useAppVersion } from '../../hooks/useAppVersion'
 
 export function StatusBar() {
   const executionStatus = useExecutionStore((s) => s.executionStatus)
-  const [appVersion, setAppVersion] = useState('')
-
-  useEffect(() => {
-    window.electronAPI
-      ?.getAppVersion()
-      .then(setAppVersion)
-      .catch(() => {})
-  }, [])
+  const { appVersion } = useAppVersion()
 
   const displayStatus = executionStatus ?? 'idle'
   const statusColor = executionStatusColors[displayStatus] ?? 'text-muted-foreground'

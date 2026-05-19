@@ -6,6 +6,7 @@ import { Badge } from '../ui/badge'
 import { Card, CardContent } from '../ui/card'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
 import { PROVIDER_COLORS } from '../../lib/provider-config'
+import { useConfirmDelete } from '../../hooks/useConfirmDelete'
 
 interface ApiKeyCardProps {
   id: string
@@ -16,7 +17,7 @@ interface ApiKeyCardProps {
 }
 
 export function ApiKeyCard({ id, provider, keyPrefix, createdAt, onDelete }: ApiKeyCardProps) {
-  const [showDelete, setShowDelete] = useState(false)
+  const { showDelete, requestConfirm, cancelConfirm } = useConfirmDelete()
   const [deleting, setDeleting] = useState(false)
 
   async function handleDelete() {
@@ -28,7 +29,7 @@ export function ApiKeyCard({ id, provider, keyPrefix, createdAt, onDelete }: Api
       toast.error('Failed to delete API key')
     } finally {
       setDeleting(false)
-      setShowDelete(false)
+      cancelConfirm()
     }
   }
 
@@ -54,7 +55,7 @@ export function ApiKeyCard({ id, provider, keyPrefix, createdAt, onDelete }: Api
             variant="ghost"
             size="icon"
             className="size-8 shrink-0 text-destructive/70 hover:text-destructive"
-            onClick={() => setShowDelete(true)}
+            onClick={() => requestConfirm()}
             disabled={deleting}
           >
             <Trash2 className="size-4" />
@@ -69,7 +70,7 @@ export function ApiKeyCard({ id, provider, keyPrefix, createdAt, onDelete }: Api
         confirmLabel="Delete"
         variant="destructive"
         onConfirm={handleDelete}
-        onCancel={() => setShowDelete(false)}
+        onCancel={() => cancelConfirm()}
       />
     </>
   )

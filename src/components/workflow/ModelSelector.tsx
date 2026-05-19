@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Search, Key } from 'lucide-react'
 import {
   Select,
@@ -10,45 +9,17 @@ import {
   SelectValue,
 } from '../ui/select'
 import { Input } from '../ui/input'
-import { MODELS, PROVIDER_LABELS, type ModelInfo } from '../../lib/models'
-import { useConfiguredProviders } from '../../hooks/useConfiguredProviders'
+import { MODELS, PROVIDER_LABELS } from '../../lib/models'
+import { useModelSearch } from '../../hooks/useModelSearch'
 
 interface ModelSelectorProps {
   value: string
   onChange: (modelId: string) => void
 }
 
-const groupedModels = Object.entries(
-  MODELS.reduce<Record<string, ModelInfo[]>>((acc, m) => {
-    ;(acc[m.provider] ??= []).push(m)
-    return acc
-  }, {}),
-)
-
 export function ModelSelector({ value, onChange }: ModelSelectorProps) {
-  const [search, setSearch] = useState('')
-  const { configuredProviders, loading } = useConfiguredProviders()
+  const { search, setSearch, filtered, noKeysConfigured } = useModelSearch()
   const selected = MODELS.find((m) => m.id === value)
-
-  const visibleGroups = groupedModels.filter(([provider]) => configuredProviders.includes(provider))
-
-  const filtered = search
-    ? visibleGroups
-        .map(
-          ([provider, models]) =>
-            [
-              provider,
-              models.filter(
-                (m) =>
-                  m.name.toLowerCase().includes(search.toLowerCase()) ||
-                  m.id.toLowerCase().includes(search.toLowerCase()),
-              ),
-            ] as const,
-        )
-        .filter(([, models]) => models.length > 0)
-    : visibleGroups
-
-  const noKeysConfigured = !loading && configuredProviders.length === 0
 
   return (
     <div className="space-y-2">

@@ -16,6 +16,7 @@ import { AddPromptButton } from '../components/workflow/AddPromptButton'
 import { SaveButton } from '../components/workflow/SaveButton'
 import { ImportExportButtons } from '../components/workflow/ImportExportButtons'
 import { useAutoSave } from '../hooks/useAutoSave'
+import { useConfirmDelete } from '../hooks/useConfirmDelete'
 import {
   useWorkflow,
   useCreateWorkflow,
@@ -54,7 +55,11 @@ export function WorkflowEditorPage() {
   const [name, setName] = useState('')
   const [loopMode, setLoopMode] = useState<LoopMode>('single')
   const [maxIterations, setMaxIterations] = useState<number | undefined>(1)
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const {
+    showDelete: showDeleteConfirm,
+    requestConfirm: requestDeleteConfirm,
+    cancelConfirm: cancelDeleteConfirm,
+  } = useConfirmDelete()
   const [isSaving, setIsSaving] = useState(false)
   const [selectedPromptId, setSelectedPromptId] = useState<string | null>(null)
   const [editorOpen, setEditorOpen] = useState(false)
@@ -260,7 +265,7 @@ export function WorkflowEditorPage() {
                   prompts={localPrompts}
                   onImport={handleImport}
                 />
-                <Button variant="destructive" size="sm" onClick={() => setShowDeleteConfirm(true)}>
+                <Button variant="destructive" size="sm" onClick={() => requestDeleteConfirm()}>
                   <Trash2 className="mr-1.5 size-4" />
                   Delete
                 </Button>
@@ -371,7 +376,7 @@ export function WorkflowEditorPage() {
         confirmLabel="Delete"
         variant="destructive"
         onConfirm={handleDelete}
-        onCancel={() => setShowDeleteConfirm(false)}
+        onCancel={() => cancelDeleteConfirm()}
       />
     </div>
   )
