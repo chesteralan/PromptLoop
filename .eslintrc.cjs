@@ -24,5 +24,11 @@ module.exports = {
         'react-refresh/only-export-components': 'off',
       },
     },
+    {
+      files: ['**/__tests__/**', '**/*.test.*', '**/*.spec.*'],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off',
+      },
+    },
   ],
 }
