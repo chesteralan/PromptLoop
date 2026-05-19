@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { getDoc, updateDoc } from 'firebase/firestore'
 import { Rocket } from 'lucide-react'
-import { db } from '../lib/firebase'
 import { useAuth } from '../hooks/useAuth'
 import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
+import { LoadingScreen } from '../components/shared/LoadingScreen'
+import { userDocRef } from '../lib/firestore-refs'
 import { toast } from 'sonner'
 
 export function OnboardingPage() {
@@ -19,7 +20,7 @@ export function OnboardingPage() {
   useEffect(() => {
     if (!user) return
     let cancelled = false
-    getDoc(doc(db, 'users', user.uid)).then((snap) => {
+    getDoc(userDocRef(user.uid)).then((snap) => {
       if (cancelled) return
       if (snap.exists()) {
         const data = snap.data()
@@ -40,7 +41,7 @@ export function OnboardingPage() {
     if (!user || !name.trim()) return
     setSaving(true)
     try {
-      await updateDoc(doc(db, 'users', user.uid), {
+      await updateDoc(userDocRef(user.uid), {
         name: name.trim(),
         onboardingComplete: true,
       })
@@ -54,11 +55,7 @@ export function OnboardingPage() {
   }
 
   if (!loaded) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="size-8 animate-spin rounded-full border-4 border-muted border-t-primary" />
-      </div>
-    )
+    return <LoadingScreen />
   }
 
   return (

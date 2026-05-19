@@ -4,17 +4,14 @@ import { useOnboardingRedirect } from '../../hooks/useOnboardingRedirect'
 import { Sidebar } from './Sidebar'
 import { StatusBar } from './StatusBar'
 import { ProtectedRoute } from './ProtectedRoute'
+import { LoadingScreen } from '../shared/LoadingScreen'
 
 export function AppLayout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const { checking } = useOnboardingRedirect()
 
   if (checking) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="size-8 animate-spin rounded-full border-4 border-muted border-t-primary" />
-      </div>
-    )
+    return <LoadingScreen />
   }
 
   return (

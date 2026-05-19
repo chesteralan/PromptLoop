@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { useAuth } from '../hooks/useAuth'
 import { OAuthButtons } from '../components/auth/OAuthButtons'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
+import { LoadingScreen } from '../components/shared/LoadingScreen'
 
 export function LoginPage() {
   const { user, loading, signInWithGoogle, signInWithGitHub } = useAuth()
@@ -32,11 +33,7 @@ export function LoginPage() {
   }, [signInWithGitHub])
 
   if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <div className="size-8 animate-spin rounded-full border-4 border-muted border-t-primary" />
-      </div>
-    )
+    return <LoadingScreen />
   }
 
   return (
