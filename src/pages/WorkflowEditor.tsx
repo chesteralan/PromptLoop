@@ -29,7 +29,7 @@ import {
   useDeletePrompt,
   useReorderPrompts,
 } from '../hooks/usePrompts'
-import type { LoopMode } from '../../electron/shared/types'
+import type { LoopMode } from '../lib/workflow-config'
 import type { PromptData } from '../lib/converters'
 
 const EMPTY_PROMPTS: (PromptData & { id: string })[] = []

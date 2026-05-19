@@ -13,8 +13,7 @@ import {
 } from 'firebase/auth'
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { auth, db } from '../../lib/firebase'
-
-const isElectron = typeof window !== 'undefined' && 'electronAPI' in window
+import { isElectron } from '../../lib/env'
 
 interface AuthContextValue {
   user: User | null

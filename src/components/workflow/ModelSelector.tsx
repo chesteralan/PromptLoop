@@ -90,7 +90,9 @@ export function ModelSelector({ value, onChange }: ModelSelectorProps) {
               </div>
               {filtered.map(([provider, models]) => (
                 <SelectGroup key={provider}>
-                  <SelectLabel>{PROVIDER_LABELS[provider] ?? provider}</SelectLabel>
+                  <SelectLabel>
+                    {PROVIDER_LABELS[provider as keyof typeof PROVIDER_LABELS] ?? provider}
+                  </SelectLabel>
                   {models.map((m) => (
                     <SelectItem key={m.id} value={m.id}>
                       <span>{m.name}</span>

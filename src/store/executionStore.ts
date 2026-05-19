@@ -1,6 +1,5 @@
 import { create } from 'zustand'
-
-export type ExecStatus = 'idle' | 'running' | 'paused' | 'completed' | 'stopped' | 'error'
+import type { ExecutionStatus } from '../lib/status-config'
 
 interface ExecutionLog {
   id: string
@@ -16,14 +15,14 @@ interface ExecutionLog {
 
 interface ExecutionStore {
   activeWorkflowId: string | null
-  executionStatus: ExecStatus
+  executionStatus: ExecutionStatus
   currentPromptIndex: number
   responseBuffer: string
   loopIteration: number
   recentLogs: ExecutionLog[]
 
   setActiveWorkflow: (id: string | null) => void
-  setExecutionStatus: (status: ExecStatus) => void
+  setExecutionStatus: (status: ExecutionStatus) => void
   setCurrentPromptIndex: (index: number) => void
   setLoopIteration: (iteration: number) => void
   appendResponseChunk: (chunk: string) => void
@@ -34,7 +33,7 @@ interface ExecutionStore {
 
 const initialState = {
   activeWorkflowId: null as string | null,
-  executionStatus: 'idle' as ExecStatus,
+  executionStatus: 'idle' as ExecutionStatus,
   currentPromptIndex: 0,
   responseBuffer: '',
   loopIteration: 0,

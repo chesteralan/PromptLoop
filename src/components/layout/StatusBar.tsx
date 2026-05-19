@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Circle } from 'lucide-react'
 import { useExecutionStore } from '../../store/executionStore'
+import { executionStatusColors } from '../../lib/status-config'
 
 export function StatusBar() {
   const executionStatus = useExecutionStore((s) => s.executionStatus)
@@ -13,16 +14,8 @@ export function StatusBar() {
       .catch(() => {})
   }, [])
 
-  const statusColors: Record<string, string> = {
-    idle: 'text-muted-foreground',
-    running: 'text-green-500',
-    paused: 'text-yellow-500',
-    completed: 'text-blue-500',
-    stopped: 'text-muted-foreground',
-    error: 'text-red-500',
-  }
   const displayStatus = executionStatus ?? 'idle'
-  const statusColor = statusColors[displayStatus] ?? 'text-muted-foreground'
+  const statusColor = executionStatusColors[displayStatus] ?? 'text-muted-foreground'
 
   return (
     <footer className="flex h-7 items-center justify-between border-t px-3 text-xs text-muted-foreground">

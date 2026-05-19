@@ -1,14 +1,10 @@
-import { Sun, Moon, Monitor, Minus } from 'lucide-react'
+import { Sun, Minus } from 'lucide-react'
 import { PageHeader } from '../components/shared/PageHeader'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
 import { Button } from '../components/ui/button'
 import { useSettingsStore } from '../store/settingsStore'
-
-const themes = [
-  { value: 'light', label: 'Light', icon: Sun },
-  { value: 'dark', label: 'Dark', icon: Moon },
-  { value: 'system', label: 'System', icon: Monitor },
-] as const
+import { isElectron } from '../lib/env'
+import { THEME_OPTIONS } from '../lib/theme-config'
 
 export function SettingsPage() {
   const theme = useSettingsStore((s) => s.theme)
@@ -30,7 +26,7 @@ export function SettingsPage() {
         </CardHeader>
         <CardContent>
           <div className="flex gap-2">
-            {themes.map(({ value, label, icon: Icon }) => (
+            {THEME_OPTIONS.map(({ value, label, icon: Icon }) => (
               <Button
                 key={value}
                 variant={theme === value ? 'default' : 'outline'}
@@ -45,7 +41,7 @@ export function SettingsPage() {
         </CardContent>
       </Card>
 
-      {typeof window !== 'undefined' && 'electronAPI' in window && (
+      {isElectron && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">

@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 
-import type { WorkflowStatus, LoopMode } from '../../electron/shared/types'
+import type { WorkflowStatus } from '../lib/status-config'
+import type { LoopMode } from '../lib/workflow-config'
 
 interface Workflow {
   id: string

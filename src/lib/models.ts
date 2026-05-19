@@ -1,3 +1,5 @@
+import { PROVIDER_LABELS } from './provider-config'
+
 export interface ModelInfo {
   id: string
   name: string
@@ -19,8 +21,4 @@ export const MODELS: ModelInfo[] = [
   { id: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash', provider: 'google', maxTokens: 1_048_576 },
 ]
 
-export const PROVIDER_LABELS: Record<string, string> = {
-  openai: 'OpenAI',
-  anthropic: 'Anthropic',
-  google: 'Google',
-}
+export { PROVIDER_LABELS }

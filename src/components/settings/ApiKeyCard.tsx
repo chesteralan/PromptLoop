@@ -5,12 +5,7 @@ import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { Card, CardContent } from '../ui/card'
 import { ConfirmDialog } from '../shared/ConfirmDialog'
-
-const providerColors: Record<string, string> = {
-  openai: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-  anthropic: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
-  google: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-}
+import { PROVIDER_COLORS } from '../../lib/provider-config'
 
 interface ApiKeyCardProps {
   id: string
@@ -45,7 +40,7 @@ export function ApiKeyCard({ id, provider, keyPrefix, createdAt, onDelete }: Api
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <span className="font-medium capitalize">{provider}</span>
-              <span className={providerColors[provider] ?? providerColors.openai}>
+              <span className={PROVIDER_COLORS[provider] ?? PROVIDER_COLORS.openai}>
                 <Badge variant="secondary" className="text-[10px]">
                   {keyPrefix}...
                 </Badge>

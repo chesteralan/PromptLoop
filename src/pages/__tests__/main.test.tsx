@@ -10,14 +10,20 @@ const { mockCreateRoot, mockRender, mockInjectElectronMock, mockInitSentry } = v
   }
 })
 
+const mockQueryClient = { _mock: true }
+
 vi.mock('react-dom/client', () => ({
   default: { createRoot: mockCreateRoot },
   createRoot: mockCreateRoot,
 }))
 
-vi.mock('../../lib/electron-mock', () => ({ injectElectronMock: mockInjectElectronMock }))
-vi.mock('../../lib/sentry', () => ({ initRendererSentry: mockInitSentry }))
-vi.mock('../../lib/firebase', () => ({ auth: {}, db: {} }))
+vi.mock('@/lib/electron-mock', () => ({ injectElectronMock: mockInjectElectronMock }))
+vi.mock('@/lib/sentry', () => ({ initRendererSentry: mockInitSentry }))
+vi.mock('@/lib/firebase', () => ({ auth: {}, db: {} }))
+vi.mock('@/lib/query-client', () => ({
+  createQueryClient: () => mockQueryClient,
+}))
+vi.mock('sonner', () => ({ toast: { error: vi.fn() }, Toaster: () => null }))
 
 vi.mock('react-router-dom', () => ({
   createHashRouter: () => ({}),
@@ -29,7 +35,6 @@ vi.mock('react-router-dom', () => ({
   useLocation: () => ({ pathname: '/', search: '' }),
   useSearchParams: () => [new URLSearchParams(), vi.fn()],
 }))
-vi.mock('sonner', () => ({ toast: { error: vi.fn() }, Toaster: () => null }))
 
 describe('main.tsx', () => {
   beforeEach(() => {

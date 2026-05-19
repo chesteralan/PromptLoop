@@ -1,10 +1,9 @@
 import { Play, Pause, Square, RotateCcw } from 'lucide-react'
 import { Button } from '../ui/button'
-
-type ExecStatus = 'idle' | 'running' | 'paused' | 'completed' | 'stopped' | 'error'
+import type { ExecutionStatus } from '../../lib/status-config'
 
 interface ExecutionControlsProps {
-  status: ExecStatus
+  status: ExecutionStatus
   onStart: () => void
   onPause: () => void
   onStop: () => void

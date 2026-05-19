@@ -1,9 +1,10 @@
 import { Loader2, CheckCircle2, XCircle, Circle } from 'lucide-react'
 import { cn } from '../../lib/utils'
+import { promptItemStatusColors, type PromptItemStatus } from '../../lib/status-config'
 
 interface QueueItemProps {
   title: string
-  status: 'pending' | 'running' | 'completed' | 'failed'
+  status: PromptItemStatus
   durationMs?: number
   error?: string
   isActive?: boolean
@@ -14,13 +15,6 @@ const statusIcon = {
   running: Loader2,
   completed: CheckCircle2,
   failed: XCircle,
-}
-
-const statusColor = {
-  pending: 'text-muted-foreground',
-  running: 'text-blue-500',
-  completed: 'text-green-500',
-  failed: 'text-destructive',
 }
 
 export function QueueItem({ title, status, durationMs, error, isActive }: QueueItemProps) {
@@ -37,7 +31,7 @@ export function QueueItem({ title, status, durationMs, error, isActive }: QueueI
       <Icon
         className={cn(
           'size-4 shrink-0',
-          statusColor[status],
+          promptItemStatusColors[status],
           status === 'running' && 'animate-spin',
         )}
       />

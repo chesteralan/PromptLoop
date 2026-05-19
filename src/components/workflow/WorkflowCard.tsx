@@ -2,7 +2,7 @@ import { Pencil, Play, Trash2, Square } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Card, CardContent } from '../ui/card'
 import { WorkflowStatusBadge } from './WorkflowStatusBadge'
-import type { WorkflowStatus } from '../../../electron/shared/types'
+import type { WorkflowStatus } from '../../lib/status-config'
 
 interface WorkflowCardProps {
   id: string

@@ -1,36 +1,13 @@
 import { cn } from '../../lib/utils'
-import type { WorkflowStatus } from '../../../electron/shared/types'
+import { workflowStatusConfig } from '../../lib/status-config'
+import type { WorkflowStatus } from '../../lib/status-config'
 
 interface WorkflowStatusBadgeProps {
   status: WorkflowStatus
 }
 
-const statusConfig: Record<WorkflowStatus, { label: string; className: string }> = {
-  idle: { label: 'Idle', className: 'bg-muted-foreground/20 text-muted-foreground' },
-  running: {
-    label: 'Running',
-    className: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-  },
-  paused: {
-    label: 'Paused',
-    className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
-  },
-  completed: {
-    label: 'Completed',
-    className: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-  },
-  error: {
-    label: 'Error',
-    className: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
-  },
-  stopped: {
-    label: 'Stopped',
-    className: 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400',
-  },
-}
-
 export function WorkflowStatusBadge({ status }: WorkflowStatusBadgeProps) {
-  const config = statusConfig[status] ?? {
+  const config = workflowStatusConfig[status] ?? {
     label: status,
     className: 'bg-muted-foreground/20 text-muted-foreground',
   }

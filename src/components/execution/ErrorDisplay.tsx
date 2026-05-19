@@ -1,59 +1,20 @@
-import { AlertTriangle, Key, RefreshCw, WifiOff, Clock, Server } from 'lucide-react'
+import { Key, RefreshCw } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../ui/button'
 import { Progress } from '../ui/progress'
+import { ERROR_CATEGORY_CONFIG, type ErrorCategory } from '../../lib/error-config'
 
 interface ErrorDisplayProps {
-  category: 'rate_limit' | 'auth' | 'server_error' | 'timeout' | 'network' | 'unknown'
+  category: ErrorCategory
   message: string
   userMessage: string
   retryAfterMs?: number
   onRetry?: () => void
 }
 
-const categoryConfig: Record<
-  string,
-  {
-    icon: typeof AlertTriangle
-    label: string
-    action?: { label: string; to?: string; handler?: () => void }
-  }
-> = {
-  rate_limit: {
-    icon: Clock,
-    label: 'Rate Limited',
-    action: { label: 'Wait', handler: undefined },
-  },
-  auth: {
-    icon: Key,
-    label: 'Invalid API Key',
-    action: { label: 'Configure API Key', to: '/settings/api-keys' },
-  },
-  server_error: {
-    icon: Server,
-    label: 'Server Error',
-    action: { label: 'Retry' },
-  },
-  timeout: {
-    icon: Clock,
-    label: 'Timed Out',
-    action: { label: 'Retry' },
-  },
-  network: {
-    icon: WifiOff,
-    label: 'Network Error',
-    action: { label: 'Check Connection' },
-  },
-  unknown: {
-    icon: AlertTriangle,
-    label: 'Unexpected Error',
-    action: { label: 'Retry' },
-  },
-}
-
 export function ErrorDisplay({ category, userMessage, retryAfterMs, onRetry }: ErrorDisplayProps) {
   const navigate = useNavigate()
-  const config = categoryConfig[category] ?? categoryConfig.unknown
+  const config = ERROR_CATEGORY_CONFIG[category] ?? ERROR_CATEGORY_CONFIG.unknown
   const Icon = config.icon
 
   return (

@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-
-type Theme = 'light' | 'dark' | 'system'
+import type { Theme } from '../lib/theme-config'
 
 interface StoredUser {
   uid: string

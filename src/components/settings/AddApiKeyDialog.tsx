@@ -6,14 +6,9 @@ import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-
-const PROVIDERS = ['openai', 'anthropic', 'google'] as const
-
-const KEY_PREFIXES: Record<string, RegExp> = {
-  openai: /^sk-/,
-  anthropic: /^sk-ant-/,
-  google: /^AIza/,
-}
+import { PROVIDERS } from '../../lib/provider-config'
+import { capitalizeProvider } from '../../lib/provider-config'
+import { validateApiKeyInput } from '../../lib/api-key-utils'
 
 interface AddApiKeyDialogProps {
   open: boolean
@@ -39,12 +34,8 @@ export function AddApiKeyDialog({ open, onOpenChange, onSave }: AddApiKeyDialogP
   }
 
   function validate(): string | null {
-    if (!apiKey.trim()) return 'API key is required'
-    const pattern = KEY_PREFIXES[provider]
-    if (pattern && !pattern.test(apiKey.trim())) {
-      return `Invalid key format for ${provider}. Expected format: ${provider === 'openai' ? 'sk-...' : provider === 'anthropic' ? 'sk-ant-...' : 'AIza...'}`
-    }
-    return null
+    const result = validateApiKeyInput(provider, apiKey)
+    return result.valid ? null : (result.error ?? 'Invalid API key')
   }
 
   async function handleSave() {
@@ -97,7 +88,7 @@ export function AddApiKeyDialog({ open, onOpenChange, onSave }: AddApiKeyDialogP
               <SelectContent>
                 {PROVIDERS.map((p) => (
                   <SelectItem key={p} value={p}>
-                    {p.charAt(0).toUpperCase() + p.slice(1)}
+                    {capitalizeProvider(p)}
                   </SelectItem>
                 ))}
               </SelectContent>

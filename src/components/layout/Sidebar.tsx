@@ -1,17 +1,6 @@
 import { useCallback } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import {
-  LayoutDashboard,
-  Play,
-  Settings,
-  Key,
-  LogOut,
-  PanelLeftClose,
-  PanelLeft,
-  Sun,
-  Moon,
-  Monitor,
-} from 'lucide-react'
+import { PanelLeftClose, PanelLeft, LogOut } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 import { useSettingsStore } from '../../store/settingsStore'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
@@ -25,20 +14,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
+import { NAV_ITEMS } from '../../lib/navigation'
+import { THEMES } from '../../lib/theme-config'
+import { THEME_ICON_MAP } from '../../lib/theme-config'
 
 interface SidebarProps {
   collapsed: boolean
   onToggle: () => void
 }
-
-const navItems = [
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/workflows/new', label: 'New Workflow', icon: Play },
-  { to: '/settings', label: 'Settings', icon: Settings },
-  { to: '/settings/api-keys', label: 'API Keys', icon: Key },
-]
-
-const THEMES: Array<'light' | 'dark' | 'system'> = ['light', 'dark', 'system']
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const { user, signOut } = useAuth()
@@ -51,7 +34,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     setTheme(next)
   }
 
-  const ThemeIcon = theme === 'dark' ? Moon : theme === 'light' ? Sun : Monitor
+  const ThemeIcon = THEME_ICON_MAP[theme]
 
   const handleSignOut = useCallback(async () => {
     await signOut()
@@ -74,7 +57,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       </div>
 
       <nav className="flex-1 space-y-1 p-2">
-        {navItems.map((item) => (
+        {NAV_ITEMS.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}

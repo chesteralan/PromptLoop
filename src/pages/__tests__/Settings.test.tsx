@@ -9,6 +9,27 @@ vi.mock('../../store/settingsStore', () => ({
   useSettingsStore: vi.fn(),
 }))
 
+let mockIsElectronValue = false
+
+vi.mock('@/lib/env', () => ({
+  get isElectron() {
+    return mockIsElectronValue
+  },
+}))
+
+vi.mock('@/lib/theme-config', async () => {
+  const { Sun, Moon, Monitor } = await import('lucide-react')
+  return {
+    THEMES: ['light', 'dark', 'system'],
+    THEME_OPTIONS: [
+      { value: 'light', label: 'Light', icon: Sun },
+      { value: 'dark', label: 'Dark', icon: Moon },
+      { value: 'system', label: 'System', icon: Monitor },
+    ],
+    THEME_ICON_MAP: { light: Sun, dark: Moon, system: Monitor },
+  }
+})
+
 import { useSettingsStore } from '../../store/settingsStore'
 
 function mockStore(overrides: Record<string, unknown> = {}) {
@@ -25,7 +46,7 @@ function mockStore(overrides: Record<string, unknown> = {}) {
 
 beforeEach(() => {
   vi.clearAllMocks()
-  delete (window as any).electronAPI
+  mockIsElectronValue = false
 })
 
 describe('SettingsPage', () => {
@@ -65,7 +86,7 @@ describe('SettingsPage', () => {
 
   it('renders window section when electronAPI is available', () => {
     mockStore()
-    ;(window as any).electronAPI = {}
+    mockIsElectronValue = true
     render(<SettingsPage />)
     expect(screen.getByText('Window')).toBeInTheDocument()
     expect(screen.getByText('Minimize to tray')).toBeInTheDocument()
@@ -80,7 +101,7 @@ describe('SettingsPage', () => {
 
   it('checkbox reflects minimizeToTrayOnClose state', () => {
     mockStore({ minimizeToTrayOnClose: true })
-    ;(window as any).electronAPI = {}
+    mockIsElectronValue = true
     render(<SettingsPage />)
     const checkbox = screen.getByRole('checkbox')
     expect(checkbox).toBeChecked()
@@ -88,7 +109,7 @@ describe('SettingsPage', () => {
 
   it('toggles minimize to tray on checkbox change', () => {
     mockStore()
-    ;(window as any).electronAPI = {}
+    mockIsElectronValue = true
     render(<SettingsPage />)
     fireEvent.click(screen.getByRole('checkbox'))
     expect(mockToggleMinimizeToTray).toHaveBeenCalledOnce()
