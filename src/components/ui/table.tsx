@@ -15,21 +15,13 @@ function Table({ className, ...props }: React.ComponentProps<'table'>) {
 }
 
 function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
-  return (
-    <thead
-      data-slot="table-header"
-      role="rowgroup"
-      className={cn('[&_tr]:border-b', className)}
-      {...props}
-    />
-  )
+  return <thead data-slot="table-header" className={cn('[&_tr]:border-b', className)} {...props} />
 }
 
 function TableBody({ className, ...props }: React.ComponentProps<'tbody'>) {
   return (
     <tbody
       data-slot="table-body"
-      role="rowgroup"
       className={cn('[&_tr:last-child]:border-0', className)}
       {...props}
     />

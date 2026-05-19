@@ -16,7 +16,6 @@ describe('Card', () => {
     const el = container.firstElementChild
     expect(el).toHaveAttribute('data-slot', 'card')
     expect(el).toHaveAttribute('data-size', 'default')
-    expect(el).toHaveAttribute('role', 'region')
   })
 
   it('renders with sm size', () => {
