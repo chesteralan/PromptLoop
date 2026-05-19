@@ -13,9 +13,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "preview": "vite preview",
-    "dev:web": "vite -c vite.web.config.ts",
+    "dev:desktop": "concurrently \"yarn dev\" \"yarn emulators\"",
+    "web": "vite -c vite.web.config.ts",
+    "dev:web": "concurrently \"yarn web\" \"yarn emulators\"",
     "emulators": "firebase emulators:start",
-    "dev:all": "concurrently \"yarn dev\" \"yarn dev:web\" \"yarn emulators\"",
     "prepare": "husky"
   },
   "lint-staged": {
