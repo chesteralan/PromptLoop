@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
-import { Route, Routes } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { ProtectedRoute } from '../components/layout/ProtectedRoute'
 import { AuthProvider } from '../components/auth/AuthProvider'
 import { useAuth } from '../hooks/useAuth'
@@ -12,7 +11,7 @@ vi.mock('firebase/app', () => ({
   initializeApp: vi.fn(() => ({})),
 }))
 
-vi.mock('../../lib/firebase', () => ({
+vi.mock('@/lib/firebase', () => ({
   auth: {},
   db: {},
 }))
@@ -30,6 +29,25 @@ vi.mock('firebase/auth', () => ({
 vi.mock('firebase/firestore', () => ({
   getFirestore: vi.fn(() => ({})),
   connectFirestoreEmulator: vi.fn(),
+}))
+
+vi.mock('@/lib/auth-service', () => ({
+  signInWithProvider: vi.fn(() => Promise.resolve()),
+  handleRedirectResult: vi.fn(() => Promise.resolve()),
+  createSignInProvider: vi.fn(),
+}))
+
+vi.mock('@/lib/user-service', () => ({
+  ensureUserDocument: vi.fn(() => Promise.resolve()),
+}))
+
+vi.mock('@/lib/sentry', () => ({
+  initRendererSentry: vi.fn(),
+}))
+
+vi.mock('@/lib/env', () => ({
+  isElectron: false,
+  isBrowser: true,
 }))
 
 function LoginPage() {
@@ -68,16 +86,20 @@ function renderWithRouter(initialRoute: string) {
   )
 }
 
+function simulateAuth(user: Record<string, string> | null) {
+  mockOnAuthStateChanged.mockImplementation((_auth: unknown, cb: (user: unknown) => void) => {
+    cb(user)
+    return vi.fn()
+  })
+}
+
 describe('ProtectedRoute', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
   it('redirects unauthenticated users to login', async () => {
-    mockOnAuthStateChanged.mockImplementation((_auth: unknown, cb: (user: unknown) => void) => {
-      cb(null)
-      return vi.fn()
-    })
+    simulateAuth(null)
 
     renderWithRouter('/dashboard')
 
@@ -85,12 +107,7 @@ describe('ProtectedRoute', () => {
   })
 
   it('renders children when authenticated', async () => {
-    const mockUser = { uid: '123', email: 'test@example.com' }
-
-    mockOnAuthStateChanged.mockImplementation((_auth: unknown, cb: (user: unknown) => void) => {
-      cb(mockUser)
-      return vi.fn()
-    })
+    simulateAuth({ uid: '123', email: 'test@example.com' })
 
     renderWithRouter('/dashboard')
 
@@ -98,12 +115,7 @@ describe('ProtectedRoute', () => {
   })
 
   it('redirects authenticated users away from login', async () => {
-    const mockUser = { uid: '123', email: 'test@example.com' }
-
-    mockOnAuthStateChanged.mockImplementation((_auth: unknown, cb: (user: unknown) => void) => {
-      cb(mockUser)
-      return vi.fn()
-    })
+    simulateAuth({ uid: '123', email: 'test@example.com' })
 
     renderWithRouter('/login')
 

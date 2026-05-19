@@ -2,17 +2,12 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { useExecutionStore } from '../store/executionStore'
 import { useWorkflowStore } from '../store/workflowStore'
 import { useSettingsStore } from '../store/settingsStore'
+import { resetExecutionStore, resetWorkflowStore, resetSettingsStore } from './helpers/resetStores'
+import { createMockWorkflow } from './helpers/createMockWorkflow'
 
 describe('executionStore', () => {
   beforeEach(() => {
-    useExecutionStore.setState({
-      activeWorkflowId: null,
-      executionStatus: 'idle',
-      currentPromptIndex: 0,
-      responseBuffer: '',
-      loopIteration: 0,
-      recentLogs: [],
-    })
+    resetExecutionStore()
   })
 
   it('sets active workflow', () => {
@@ -55,29 +50,24 @@ describe('executionStore', () => {
 
 describe('workflowStore', () => {
   beforeEach(() => {
-    useWorkflowStore.setState({
-      workflows: [],
-      activeWorkflowId: null,
-    })
+    resetWorkflowStore()
   })
 
   it('sets workflows', () => {
-    const workflows = [
-      { id: '1', name: 'Test', status: 'idle' as const, createdAt: '', updatedAt: '' },
-    ]
+    const workflows = [createMockWorkflow()]
     useWorkflowStore.getState().setWorkflows(workflows)
     expect(useWorkflowStore.getState().workflows).toEqual(workflows)
   })
 
   it('adds workflow', () => {
-    const wf = { id: '1', name: 'Test', status: 'idle' as const, createdAt: '', updatedAt: '' }
+    const wf = createMockWorkflow()
     useWorkflowStore.getState().addWorkflow(wf)
     expect(useWorkflowStore.getState().workflows).toHaveLength(1)
   })
 
   it('updates workflow', () => {
     useWorkflowStore.setState({
-      workflows: [{ id: '1', name: 'Old', status: 'idle' as const, createdAt: '', updatedAt: '' }],
+      workflows: [createMockWorkflow({ name: 'Old' })],
     })
     useWorkflowStore.getState().updateWorkflow('1', { name: 'Updated' })
     expect(useWorkflowStore.getState().workflows[0].name).toBe('Updated')
@@ -86,8 +76,8 @@ describe('workflowStore', () => {
   it('removes workflow', () => {
     useWorkflowStore.setState({
       workflows: [
-        { id: '1', name: 'A', status: 'idle' as const, createdAt: '', updatedAt: '' },
-        { id: '2', name: 'B', status: 'idle' as const, createdAt: '', updatedAt: '' },
+        createMockWorkflow({ id: '1', name: 'A' }),
+        createMockWorkflow({ id: '2', name: 'B' }),
       ],
     })
     useWorkflowStore.getState().removeWorkflow('1')
@@ -103,14 +93,7 @@ describe('workflowStore', () => {
 
 describe('settingsStore', () => {
   beforeEach(() => {
-    useSettingsStore.setState({
-      theme: 'system',
-      windowMode: 'full',
-      minimizeToTrayOnClose: false,
-      notificationsEnabled: true,
-      startOnBoot: false,
-      user: null,
-    })
+    resetSettingsStore()
   })
 
   it('sets theme', () => {

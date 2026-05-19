@@ -10,7 +10,7 @@ vi.mock('firebase/app', () => ({
   initializeApp: vi.fn(() => ({})),
 }))
 
-vi.mock('../../lib/firebase', () => ({
+vi.mock('@/lib/firebase', () => ({
   auth: {},
   db: {},
 }))
@@ -28,6 +28,25 @@ vi.mock('firebase/auth', () => ({
 vi.mock('firebase/firestore', () => ({
   getFirestore: vi.fn(() => ({})),
   connectFirestoreEmulator: vi.fn(),
+}))
+
+vi.mock('@/lib/auth-service', () => ({
+  signInWithProvider: vi.fn(() => Promise.resolve()),
+  handleRedirectResult: vi.fn(() => Promise.resolve()),
+  createSignInProvider: vi.fn(),
+}))
+
+vi.mock('@/lib/user-service', () => ({
+  ensureUserDocument: vi.fn(() => Promise.resolve()),
+}))
+
+vi.mock('@/lib/sentry', () => ({
+  initRendererSentry: vi.fn(),
+}))
+
+vi.mock('@/lib/env', () => ({
+  isElectron: false,
+  isBrowser: true,
 }))
 
 function TestConsumer() {
